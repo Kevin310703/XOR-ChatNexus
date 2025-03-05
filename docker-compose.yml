@@ -6,11 +6,14 @@ services:
     container_name: ChatNexus
     ports:
       - "${PORT}:${PORT}"
-      # - "5173:5173"
+      - "5173:5173"
     depends_on:
       - mongodb
       - rag_api
-    image: ghcr.io/x-or-cloud/chatnexus-dev:latest
+    # build:
+    #   context: .  # Thư mục chứa Dockerfile
+    #   dockerfile: Dockerfile.dev  # Sử dụng Dockerfile.dev cho dev
+    image: ghcr.io/kevin310703/chatnexus-dev:latest
     restart: always
     user: "${UID}:${GID}"
     extra_hosts:
@@ -28,9 +31,10 @@ services:
       - ./images:/app/client/public/images
       - ./uploads:/app/uploads
       - ./logs:/app/api/logs
-      - ./librechat.yaml:/app/chatnexus.yaml  # Thêm dòng này để mount file cấu hình
-    #   - ./client:/app/client
-    # command: bash -c "cd /app/api && npm run backend:dev & cd /app/client && npm run dev"  # Chạy cả backend và frontend
+      - ./chatnexus.yaml:/app/chatnexus.yaml  # Thêm dòng này để mount file cấu hình
+      - ./api:/app/api  # Mount backend để hot reload
+      - ./client:/app/client  # Mount frontend để hot reload
+      - ./packages:/app/packages  # Mount packages để hot reload 
   mongodb:
     container_name: chat-mongodb
     image: mongo
@@ -62,13 +66,16 @@ services:
       - pgdata2:/var/lib/postgresql/data
   rag_api:
     container_name: rag_api
-    image: ghcr.io/x-or-cloud/chatnexus-rag-api-dev-lite:latest
+    image: ghcr.io/kevin310703/chatnexus-rag-api-dev-lite:latest
     environment:
       - DB_HOST=vectordb
       - RAG_PORT=${RAG_PORT:-8000}
+      - RAG_OPENAI_API_KEY=${RAG_OPENAI_API_KEY}
     restart: always
     depends_on:
       - vectordb
+    volumes:
+      - ./rag_api:/app
     env_file:
       - .env
 

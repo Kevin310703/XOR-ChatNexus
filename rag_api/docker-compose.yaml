@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  vectordb:
+  db:
     image: ankane/pgvector:latest
     environment:
       POSTGRES_DB: mydatabase
@@ -12,18 +10,17 @@ services:
     ports:
       - "5433:5432"
 
-  rag_api:
-    image: ghcr.io/kevin310703/chatnexus-rag-api-dev-lite:latest
+  fastapi:
+    build: .
     environment:
-      - DB_HOST=vectordb
+      - DB_HOST=db
       - DB_PORT=5432
-      - POSTGRES_DB=mydatabase
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
     ports:
-      - "${RAG_PORT}:${RAG_PORT}"
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
     depends_on:
-      - vectordb
+      - db
     env_file:
       - .env
 

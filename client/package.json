@@ -60,6 +60,7 @@
     "cross-env": "^7.0.3",
     "date-fns": "^3.3.1",
     "downloadjs": "^1.4.7",
+    "esbuild": "^0.25.0",
     "export-from-json": "^1.7.2",
     "filenamify": "^6.0.0",
     "framer-motion": "^11.5.4",
@@ -141,8 +142,8 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.3.3",
     "vite": "^6.1.0",
-    "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-node-polyfills": "^0.17.0",
     "vite-plugin-pwa": "^0.21.1"
   }
 }

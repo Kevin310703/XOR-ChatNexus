@@ -10,7 +10,7 @@ import type { Plugin } from 'vite';
 export default defineConfig({
   server: {
     host: 'localhost',
-    port: 3090,
+    port: 5173,
     strictPort: false,
     proxy: {
       '/api': {
@@ -45,8 +45,8 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/oauth/],
       },
       manifest: {
-        name: 'LibreChat',
-        short_name: 'LibreChat',
+        name: 'ChatNexus',
+        short_name: 'ChatNexus',
         start_url: '/',
         display: 'standalone',
         background_color: '#000000',
