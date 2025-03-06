@@ -1,26 +1,14 @@
-const fs = require('fs').promises;
-const { nanoid } = require('nanoid');
-const {
-  FileContext,
-  Constants,
-  Tools,
-  SystemRoles,
-  actionDelimiter,
-} = require('librechat-data-provider');
-const {
-  getAgent,
-  createAgent,
-  updateAgent,
-  deleteAgent,
-  getListAgents,
-} = require('~/models/Agent');
-const { uploadImageBuffer, filterFile } = require('~/server/services/Files/process');
-const { getStrategyFunctions } = require('~/server/services/Files/strategies');
-const { updateAction, getActions } = require('~/models/Action');
-const { getProjectByName } = require('~/models/Project');
-const { updateAgentProjects } = require('~/models/Agent');
-const { deleteFileByFilter } = require('~/models/File');
-const { logger } = require('~/config');
+import { promises as fs } from 'fs';
+import { nanoid } from 'nanoid';
+import { FileContext, Constants, Tools, SystemRoles, actionDelimiter } from 'librechat-data-provider';
+import { getAgent, createAgent, updateAgent, deleteAgent, getListAgents } from '~/models/Agent';
+import { uploadImageBuffer, filterFile } from '~/server/services/Files/process';
+import { getStrategyFunctions } from '~/server/services/Files/strategies';
+import { updateAction, getActions } from '~/models/Action';
+import { getProjectByName } from '~/models/Project';
+import { updateAgentProjects } from '~/models/Agent';
+import { deleteFileByFilter } from '~/models/File';
+import { logger } from '~/config';
 
 const systemTools = {
   [Tools.execute_code]: true,
@@ -388,12 +376,10 @@ const uploadAgentAvatarHandler = async (req, res) => {
   }
 };
 
-module.exports = {
-  createAgent: createAgentHandler,
-  getAgent: getAgentHandler,
-  updateAgent: updateAgentHandler,
-  duplicateAgent: duplicateAgentHandler,
-  deleteAgent: deleteAgentHandler,
-  getListAgents: getListAgentsHandler,
-  uploadAgentAvatar: uploadAgentAvatarHandler,
-};
+export const createAgent = createAgentHandler;
+export const getAgent = getAgentHandler;
+export const updateAgent = updateAgentHandler;
+export const duplicateAgent = duplicateAgentHandler;
+export const deleteAgent = deleteAgentHandler;
+export const getListAgents = getListAgentsHandler;
+export const uploadAgentAvatar = uploadAgentAvatarHandler;

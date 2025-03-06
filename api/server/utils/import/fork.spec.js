@@ -1,4 +1,4 @@
-const { Constants, ForkOptions } = require('librechat-data-provider');
+import { Constants, ForkOptions } from 'librechat-data-provider';
 
 jest.mock('~/models/Conversation', () => ({
   getConvo: jest.fn(),
@@ -20,17 +20,16 @@ jest.mock('uuid', () => {
   };
 });
 
+import fork from './fork';
 const {
-  forkConversation,
-  splitAtTargetLevel,
-  getAllMessagesUpToParent,
-  getMessagesUpToTargetLevel,
-  cloneMessagesWithTimestamps,
-} = require('./fork');
-const { getConvo, bulkSaveConvos } = require('~/models/Conversation');
-const { getMessages, bulkSaveMessages } = require('~/models/Message');
-const { createImportBatchBuilder } = require('./importBatchBuilder');
-const BaseClient = require('~/app/clients/BaseClient');
+  forkConversation, splitAtTargetLevel, getAllMessagesUpToParent, getMessagesUpToTargetLevel, cloneMessagesWithTimestamps,
+} = fork;
+import _default from '~/models/Conversation';
+const { getConvo, bulkSaveConvos } = _default;
+import __default from '~/models/Message';
+const { getMessages, bulkSaveMessages } = __default;
+import { createImportBatchBuilder } from './importBatchBuilder';
+import BaseClient from '~/app/clients/BaseClient';
 
 /**
  *

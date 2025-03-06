@@ -3,6 +3,6 @@ const cleanUpPrimaryKeyValue = (value) => {
   return value.replace(/--/g, '|');
 };
 
-module.exports = {
+export default {
   cleanUpPrimaryKeyValue,
 };

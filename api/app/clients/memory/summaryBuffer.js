@@ -1,7 +1,8 @@
-const { ConversationSummaryBufferMemory, ChatMessageHistory } = require('langchain/memory');
-const { formatLangChainMessages, SUMMARY_PROMPT } = require('../prompts');
-const { predictNewSummary } = require('../chains');
-const { logger } = require('~/config');
+import { ConversationSummaryBufferMemory, ChatMessageHistory } from 'langchain/memory';
+import { formatLangChainMessages, SUMMARY_PROMPT } from '../prompts';
+import chains from '../chains';
+const { predictNewSummary } = chains;
+import { logger } from '~/config';
 
 const createSummaryBufferMemory = ({ llm, prompt, messages, ...rest }) => {
   const chatHistory = new ChatMessageHistory(messages);
@@ -63,4 +64,4 @@ const summaryBuffer = async ({
   return { role: 'system', content: predictSummary };
 };
 
-module.exports = { createSummaryBufferMemory, summaryBuffer };
+export default { createSummaryBufferMemory, summaryBuffer };

@@ -1,9 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const nodemailer = require('nodemailer');
-const handlebars = require('handlebars');
-const { isEnabled } = require('~/server/utils/handleText');
-const logger = require('~/config/winston');
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { createTransport } from 'nodemailer';
+import { compile } from 'handlebars';
+import handleText from './handleText.js';
+const { isEnabled } = handleText;
+import logger from '../../config/winston.js';
 
 /**
  * Sends an email using the specified template, subject, and payload.
@@ -62,10 +63,10 @@ const sendEmail = async ({ email, subject, payload, template, throwError = true 
       transporterOptions.port = process.env.EMAIL_PORT ?? 25;
     }
 
-    const transporter = nodemailer.createTransport(transporterOptions);
+    const transporter = createTransport(transporterOptions);
 
-    const source = fs.readFileSync(path.join(__dirname, 'emails', template), 'utf8');
-    const compiledTemplate = handlebars.compile(source);
+    const source = readFileSync(join(__dirname, 'emails', template), 'utf8');
+    const compiledTemplate = compile(source);
     const options = () => {
       return {
         // Header address should contain name-addr
@@ -95,4 +96,4 @@ const sendEmail = async ({ email, subject, payload, template, throwError = true 
   }
 };
 
-module.exports = sendEmail;
+export default sendEmail;

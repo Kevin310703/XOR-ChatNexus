@@ -1,33 +1,20 @@
-const Anthropic = require('@anthropic-ai/sdk');
-const { HttpsProxyAgent } = require('https-proxy-agent');
+import Anthropic from '@anthropic-ai/sdk';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { Constants, EModelEndpoint, anthropicSettings, getResponseSender, validateVisionModel } from 'librechat-data-provider';
+import { SplitStreamHandler as _Handler, GraphEvents } from '@librechat/agents';
+import promptsDefault from './prompts';
 const {
-  Constants,
-  EModelEndpoint,
-  anthropicSettings,
-  getResponseSender,
-  validateVisionModel,
-} = require('librechat-data-provider');
-const { SplitStreamHandler: _Handler, GraphEvents } = require('@librechat/agents');
-const {
-  truncateText,
-  formatMessage,
-  addCacheControl,
-  titleFunctionPrompt,
-  parseParamFromPrompt,
-  createContextHandlers,
-} = require('./prompts');
-const {
-  getClaudeHeaders,
-  configureReasoning,
-  checkPromptCacheSupport,
-} = require('~/server/services/Endpoints/anthropic/helpers');
-const { getModelMaxTokens, getModelMaxOutputTokens, matchModelName } = require('~/utils');
-const { spendTokens, spendStructuredTokens } = require('~/models/spendTokens');
-const { encodeAndFormat } = require('~/server/services/Files/images/encode');
-const Tokenizer = require('~/server/services/Tokenizer');
-const { logger, sendEvent } = require('~/config');
-const { sleep } = require('~/server/utils');
-const BaseClient = require('./BaseClient');
+  truncateText, formatMessage, addCacheControl, titleFunctionPrompt, parseParamFromPrompt, createContextHandlers,
+} = promptsDefault;
+import { getClaudeHeaders, configureReasoning, checkPromptCacheSupport } from '~/server/services/Endpoints/anthropic/helpers';
+import _default from '~/utils';
+const { getModelMaxTokens, getModelMaxOutputTokens, matchModelName } = _default;
+import { spendTokens, spendStructuredTokens } from '~/models/spendTokens';
+import { encodeAndFormat } from '~/server/services/Files/images/encode';
+import { getTokenCount as _getTokenCount } from '~/server/services/Tokenizer';
+import { logger, sendEvent } from '~/config';
+import { sleep } from '~/server/utils';
+import BaseClient from './BaseClient';
 
 const HUMAN_PROMPT = '\n\nHuman:';
 const AI_PROMPT = '\n\nAssistant:';
@@ -888,7 +875,7 @@ class AnthropicClient extends BaseClient {
    */
   getTokenCount(text) {
     const encoding = this.getEncoding();
-    return Tokenizer.getTokenCount(text, encoding);
+    return _getTokenCount(text, encoding);
   }
 
   /**
@@ -970,4 +957,4 @@ class AnthropicClient extends BaseClient {
   }
 }
 
-module.exports = AnthropicClient;
+export default AnthropicClient;

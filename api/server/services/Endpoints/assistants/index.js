@@ -1,8 +1,8 @@
-const addTitle = require('./title');
-const buildOptions = require('./build');
-const initializeClient = require('./initalize');
+import addTitle from './title';
+import buildOptions from './build';
+import initializeClient from './initalize';
 
-module.exports = {
+export default {
   addTitle,
   buildOptions,
   initializeClient,

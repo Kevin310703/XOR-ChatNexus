@@ -1,7 +1,8 @@
-const { EModelEndpoint } = require('librechat-data-provider');
-const { getUserKey, checkUserKeyExpiry } = require('~/server/services/UserService');
-const { getLLMConfig } = require('~/server/services/Endpoints/anthropic/llm');
-const { AnthropicClient } = require('~/app');
+import { EModelEndpoint } from 'librechat-data-provider';
+import { getUserKey, checkUserKeyExpiry } from '~/server/services/UserService';
+import { getLLMConfig } from '~/server/services/Endpoints/anthropic/llm';
+import app from '~/app';
+const { AnthropicClient } = app;
 
 const initializeClient = async ({ req, res, endpointOption, overrideModel, optionsOnly }) => {
   const { ANTHROPIC_API_KEY, ANTHROPIC_REVERSE_PROXY, PROXY } = process.env;
@@ -66,4 +67,4 @@ const initializeClient = async ({ req, res, endpointOption, overrideModel, optio
   };
 };
 
-module.exports = initializeClient;
+export default initializeClient;

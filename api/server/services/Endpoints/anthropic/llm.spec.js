@@ -1,5 +1,6 @@
-const { anthropicSettings } = require('librechat-data-provider');
-const { getLLMConfig } = require('~/server/services/Endpoints/anthropic/llm');
+import { anthropicSettings } from 'librechat-data-provider';
+import llm from '~/server/services/Endpoints/anthropic/llm';
+const { getLLMConfig } = llm;
 
 jest.mock('https-proxy-agent', () => ({
   HttpsProxyAgent: jest.fn().mockImplementation((proxy) => ({ proxy })),

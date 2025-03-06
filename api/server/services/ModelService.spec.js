@@ -1,15 +1,12 @@
-const axios = require('axios');
-const { EModelEndpoint, defaultModels } = require('librechat-data-provider');
-const { logger } = require('~/config');
+import { get as _get } from 'axios';
+import { EModelEndpoint, defaultModels } from 'librechat-data-provider';
+import config from '~/config';
+const { logger } = config;
 
+import _default from './ModelService';
 const {
-  fetchModels,
-  splitAndTrim,
-  getOpenAIModels,
-  getGoogleModels,
-  getBedrockModels,
-  getAnthropicModels,
-} = require('./ModelService');
+  fetchModels, splitAndTrim, getOpenAIModels, getGoogleModels, getBedrockModels, getAnthropicModels,
+} = _default;
 
 jest.mock('~/utils', () => {
   const originalUtils = jest.requireActual('~/utils');
@@ -40,7 +37,7 @@ jest.mock('./Config/EndpointService', () => ({
   },
 }));
 
-axios.get.mockResolvedValue({
+_get.mockResolvedValue({
   data: {
     data: [{ id: 'model-1' }, { id: 'model-2' }],
   },
@@ -56,7 +53,7 @@ describe('fetchModels', () => {
     });
 
     expect(models).toEqual(['model-1', 'model-2']);
-    expect(axios.get).toHaveBeenCalledWith(
+    expect(_get).toHaveBeenCalledWith(
       expect.stringContaining('https://api.test.com/models'),
       expect.any(Object),
     );
@@ -72,7 +69,7 @@ describe('fetchModels', () => {
     });
 
     expect(models).toEqual(['model-1', 'model-2']);
-    expect(axios.get).toHaveBeenCalledWith(
+    expect(_get).toHaveBeenCalledWith(
       expect.stringContaining('https://api.test.com/models?user=user123'),
       expect.any(Object),
     );
@@ -107,8 +104,8 @@ describe('fetchModels with createTokenConfig true', () => {
 
   beforeEach(() => {
     // Clears the mock's history before each test
-    const _utils = require('~/utils');
-    axios.get.mockResolvedValue({ data });
+    const _utils = require('~/utils').default;
+    _get.mockResolvedValue({ data });
   });
 
   it('creates and stores token configuration if createTokenConfig is true', async () => {
@@ -119,7 +116,7 @@ describe('fetchModels with createTokenConfig true', () => {
       createTokenConfig: true,
     });
 
-    const { processModelData } = require('~/utils');
+    const { processModelData } = require('~/utils').default;
     expect(processModelData).toHaveBeenCalled();
     expect(processModelData).toHaveBeenCalledWith(data);
   });
@@ -130,12 +127,12 @@ describe('getOpenAIModels', () => {
 
   beforeEach(() => {
     originalEnv = { ...process.env };
-    axios.get.mockRejectedValue(new Error('Network error'));
+    _get.mockRejectedValue(new Error('Network error'));
   });
 
   afterEach(() => {
     process.env = originalEnv;
-    axios.get.mockReset();
+    _get.mockReset();
   });
 
   it('returns default models when no environment configurations are provided (and fetch fails)', async () => {
@@ -162,7 +159,7 @@ describe('getOpenAIModels', () => {
   });
 
   it('utilizes proxy configuration when PROXY is set', async () => {
-    axios.get.mockResolvedValue({
+    _get.mockResolvedValue({
       data: {
         data: [],
       },
@@ -170,7 +167,7 @@ describe('getOpenAIModels', () => {
     process.env.PROXY = 'http://localhost:8888';
     await getOpenAIModels({ user: 'user456' });
 
-    expect(axios.get).toHaveBeenCalledWith(
+    expect(_get).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({
         httpsAgent: expect.anything(),
@@ -198,7 +195,7 @@ describe('getOpenAIModels with mocked config', () => {
     });
 
     jest.resetModules();
-    const { getOpenAIModels } = require('./ModelService');
+    const { getOpenAIModels } = require('./ModelService').default;
 
     const models = await getOpenAIModels({ user: 'user456' });
     expect(models).toContain('some-default-model');
@@ -207,7 +204,7 @@ describe('getOpenAIModels with mocked config', () => {
 
 describe('getOpenAIModels sorting behavior', () => {
   beforeEach(() => {
-    axios.get.mockResolvedValue({
+    _get.mockResolvedValue({
       data: {
         data: [
           { id: 'gpt-3.5-turbo-instruct-0914' },
@@ -259,7 +256,7 @@ describe('fetchModels with Ollama specific logic', () => {
   };
 
   beforeEach(() => {
-    axios.get.mockResolvedValue(mockOllamaData);
+    _get.mockResolvedValue(mockOllamaData);
   });
 
   afterEach(() => {
@@ -275,13 +272,13 @@ describe('fetchModels with Ollama specific logic', () => {
     });
 
     expect(models).toEqual(['Ollama-Base', 'Ollama-Advanced']);
-    expect(axios.get).toHaveBeenCalledWith('https://api.ollama.test.com/api/tags', {
+    expect(_get).toHaveBeenCalledWith('https://api.ollama.test.com/api/tags', {
       timeout: 5000,
     });
   });
 
   it('should handle errors gracefully when fetching Ollama models fails', async () => {
-    axios.get.mockRejectedValue(new Error('Network error'));
+    _get.mockRejectedValue(new Error('Network error'));
     const models = await fetchModels({
       user: 'user789',
       apiKey: 'testApiKey',
@@ -304,7 +301,7 @@ describe('fetchModels with Ollama specific logic', () => {
 
   it('should not fetch Ollama models if the name does not start with "ollama"', async () => {
     // Mock axios to return a different set of models for non-Ollama API calls
-    axios.get.mockResolvedValue({
+    _get.mockResolvedValue({
       data: {
         data: [{ id: 'model-1' }, { id: 'model-2' }],
       },
@@ -318,7 +315,7 @@ describe('fetchModels with Ollama specific logic', () => {
     });
 
     expect(models).toEqual(['model-1', 'model-2']);
-    expect(axios.get).toHaveBeenCalledWith(
+    expect(_get).toHaveBeenCalledWith(
       'https://api.test.com/models', // Ensure the correct API endpoint is called
       expect.any(Object), // Ensuring some object (headers, etc.) is passed
     );

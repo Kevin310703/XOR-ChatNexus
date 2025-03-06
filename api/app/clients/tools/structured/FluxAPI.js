@@ -1,11 +1,11 @@
-const { z } = require('zod');
-const axios = require('axios');
-const fetch = require('node-fetch');
-const { v4: uuidv4 } = require('uuid');
-const { Tool } = require('@langchain/core/tools');
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const { FileContext, ContentTypes } = require('librechat-data-provider');
-const { logger } = require('~/config');
+import { z } from 'zod';
+import { post, get } from 'axios';
+import fetch from 'node-fetch';
+import { v4 as uuidv4 } from 'uuid';
+import { Tool } from '@langchain/core/tools';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { FileContext, ContentTypes } from 'librechat-data-provider';
+import { logger } from '~/config';
 
 const displayMessage =
   'Flux displayed an image. All generated images are already plainly visible, so don\'t repeat the descriptions in detail. Do not list download links as they are available in the UI already. The user may download the images by clicking on them, but do not mention anything about downloading to the user.';
@@ -229,7 +229,7 @@ class FluxAPI extends Tool {
 
     let taskResponse;
     try {
-      taskResponse = await axios.post(generateUrl, payload, {
+      taskResponse = await post(generateUrl, payload, {
         headers: {
           'x-key': requestApiKey,
           'Content-Type': 'application/json',
@@ -256,7 +256,7 @@ class FluxAPI extends Tool {
       try {
         // Wait 2 seconds between polls
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        const resultResponse = await axios.get(resultUrl, {
+        const resultResponse = await get(resultUrl, {
           headers: {
             'x-key': requestApiKey,
             Accept: 'application/json',
@@ -365,7 +365,7 @@ class FluxAPI extends Tool {
       };
 
       // Get list of finetunes
-      const response = await axios.get(finetunesUrl, {
+      const response = await get(finetunesUrl, {
         headers,
         ...this.getAxiosConfig(),
       });
@@ -375,7 +375,7 @@ class FluxAPI extends Tool {
       const finetuneDetails = await Promise.all(
         finetunes.map(async (finetuneId) => {
           try {
-            const detailResponse = await axios.get(`${detailsUrl}?finetune_id=${finetuneId}`, {
+            const detailResponse = await get(`${detailsUrl}?finetune_id=${finetuneId}`, {
               headers,
               ...this.getAxiosConfig(),
             });
@@ -462,7 +462,7 @@ class FluxAPI extends Tool {
 
     let taskResponse;
     try {
-      taskResponse = await axios.post(generateUrl, payload, {
+      taskResponse = await post(generateUrl, payload, {
         headers: {
           'x-key': requestApiKey,
           'Content-Type': 'application/json',
@@ -488,7 +488,7 @@ class FluxAPI extends Tool {
       try {
         // Wait 2 seconds between polls
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        const resultResponse = await axios.get(resultUrl, {
+        const resultResponse = await get(resultUrl, {
           headers: {
             'x-key': requestApiKey,
             Accept: 'application/json',
@@ -551,4 +551,4 @@ class FluxAPI extends Tool {
   }
 }
 
-module.exports = FluxAPI;
+export default FluxAPI;

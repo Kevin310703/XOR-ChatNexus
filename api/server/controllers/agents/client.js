@@ -7,34 +7,17 @@
 // validateVisionModel,
 // mapModelToAzureConfig,
 // } = require('librechat-data-provider');
-const { Callback, createMetadataAggregator } = require('@librechat/agents');
-const {
-  Constants,
-  VisionModes,
-  openAISchema,
-  ContentTypes,
-  EModelEndpoint,
-  KnownEndpoints,
-  anthropicSchema,
-  isAgentsEndpoint,
-  bedrockInputSchema,
-  removeNullishValues,
-} = require('librechat-data-provider');
-const {
-  formatMessage,
-  addCacheControl,
-  formatAgentMessages,
-  formatContentStrings,
-  createContextHandlers,
-} = require('~/app/clients/prompts');
-const { spendTokens, spendStructuredTokens } = require('~/models/spendTokens');
-const { getBufferString, HumanMessage } = require('@langchain/core/messages');
-const { encodeAndFormat } = require('~/server/services/Files/images/encode');
-const { getCustomEndpointConfig } = require('~/server/services/Config');
-const Tokenizer = require('~/server/services/Tokenizer');
-const BaseClient = require('~/app/clients/BaseClient');
-const { createRun } = require('./run');
-const { logger } = require('~/config');
+import { Callback, createMetadataAggregator } from '@librechat/agents';
+import { Constants, VisionModes, openAISchema, ContentTypes, EModelEndpoint, KnownEndpoints, anthropicSchema, isAgentsEndpoint, bedrockInputSchema, removeNullishValues } from 'librechat-data-provider';
+import { formatMessage, addCacheControl, formatAgentMessages, formatContentStrings, createContextHandlers } from '~/app/clients/prompts';
+import { spendTokens, spendStructuredTokens } from '~/models/spendTokens';
+import { getBufferString, HumanMessage } from '@langchain/core/messages';
+import { encodeAndFormat } from '~/server/services/Files/images/encode';
+import { getCustomEndpointConfig } from '~/server/services/Config';
+import { getTokenCount as _getTokenCount } from '~/server/services/Tokenizer';
+import BaseClient from '~/app/clients/BaseClient';
+import { createRun } from './run';
+import { logger } from '~/config';
 
 /** @typedef {import('@librechat/agents').MessageContentComplex} MessageContentComplex */
 /** @typedef {import('@langchain/core/runnables').RunnableConfig} RunnableConfig */
@@ -906,8 +889,8 @@ class AgentClient extends BaseClient {
    */
   getTokenCount(text) {
     const encoding = this.getEncoding();
-    return Tokenizer.getTokenCount(text, encoding);
+    return _getTokenCount(text, encoding);
   }
 }
 
-module.exports = AgentClient;
+export default AgentClient;

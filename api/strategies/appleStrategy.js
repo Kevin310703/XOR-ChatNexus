@@ -1,7 +1,7 @@
-const socialLogin = require('./socialLogin');
-const { Strategy: AppleStrategy } = require('passport-apple');
-const { logger } = require('~/config');
-const jwt = require('jsonwebtoken');
+import socialLogin from './socialLogin.js';
+import { Strategy as AppleStrategy } from 'passport-apple';
+import { logger } from '../config/meiliLogger.js';
+import { decode } from 'jsonwebtoken';
 
 /**
  * Extract profile details from the decoded idToken
@@ -16,7 +16,7 @@ const getProfileDetails = ({ idToken, profile }) => {
     throw new Error('idToken is missing');
   }
 
-  const decoded = jwt.decode(idToken);
+  const decoded = decode(idToken);
 
   logger.debug(
     `Decoded Apple JWT: ${JSON.stringify(decoded, null, 2)}`,
@@ -39,7 +39,7 @@ const getProfileDetails = ({ idToken, profile }) => {
 // Initialize the social login handler for Apple
 const appleLogin = socialLogin('apple', getProfileDetails);
 
-module.exports = () =>
+export default () =>
   new AppleStrategy(
     {
       clientID: process.env.APPLE_CLIENT_ID,

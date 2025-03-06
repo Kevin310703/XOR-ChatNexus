@@ -32,7 +32,7 @@ function getSnippet(text) {
   return result.trim();
 }
 
-module.exports = {
+export default {
   escapeBraces,
   getSnippet,
 };

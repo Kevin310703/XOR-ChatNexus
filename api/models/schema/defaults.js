@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import { Schema } from 'mongoose';
 
 const conversationPreset = {
   // endpoint: [azureOpenAI, openAI, anthropic, chatGPTBrowser]
@@ -26,7 +26,7 @@ const conversationPreset = {
     required: false,
   },
   // for google only
-  examples: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
+  examples: { type: [{ type: Schema.Types.Mixed }], default: undefined },
   modelLabel: {
     type: String,
     required: false,
@@ -136,6 +136,6 @@ const conversationPreset = {
   },
 };
 
-module.exports = {
+export default {
   conversationPreset,
 };

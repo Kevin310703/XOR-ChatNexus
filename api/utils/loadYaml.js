@@ -1,13 +1,13 @@
-const fs = require('fs');
-const yaml = require('js-yaml');
+import { readFileSync } from 'fs';
+import { load } from 'js-yaml';
 
 function loadYaml(filepath) {
   try {
-    let fileContents = fs.readFileSync(filepath, 'utf8');
-    return yaml.load(fileContents);
+    let fileContents = readFileSync(filepath, 'utf8');
+    return load(fileContents);
   } catch (e) {
     return e;
   }
 }
 
-module.exports = loadYaml;
+export default loadYaml;

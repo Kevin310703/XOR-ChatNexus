@@ -1,25 +1,25 @@
-const { createContentAggregator, Providers } = require('@librechat/agents');
+import { createContentAggregator, Providers } from '@librechat/agents';
+import { EModelEndpoint, getResponseSender, providerEndpointMap } from 'librechat-data-provider';
+import callbacks from '~/server/controllers/agents/callbacks';
 const {
-  EModelEndpoint,
-  getResponseSender,
-  providerEndpointMap,
-} = require('librechat-data-provider');
-const {
-  getDefaultHandlers,
-  createToolEndCallback,
-} = require('~/server/controllers/agents/callbacks');
-const initAnthropic = require('~/server/services/Endpoints/anthropic/initialize');
-const getBedrockOptions = require('~/server/services/Endpoints/bedrock/options');
-const initOpenAI = require('~/server/services/Endpoints/openAI/initialize');
-const initCustom = require('~/server/services/Endpoints/custom/initialize');
-const initGoogle = require('~/server/services/Endpoints/google/initialize');
-const generateArtifactsPrompt = require('~/app/clients/prompts/artifacts');
-const { getCustomEndpointConfig } = require('~/server/services/Config');
-const { loadAgentTools } = require('~/server/services/ToolService');
-const AgentClient = require('~/server/controllers/agents/client');
-const { getModelMaxTokens } = require('~/utils');
-const { getAgent } = require('~/models/Agent');
-const { logger } = require('~/config');
+  getDefaultHandlers, createToolEndCallback,
+} = callbacks;
+import initAnthropic from '~/server/services/Endpoints/anthropic/initialize';
+import getBedrockOptions from '~/server/services/Endpoints/bedrock/options';
+import initOpenAI from '~/server/services/Endpoints/openAI/initialize';
+import initCustom from '~/server/services/Endpoints/custom/initialize';
+import initGoogle from '~/server/services/Endpoints/google/initialize';
+import generateArtifactsPrompt from '~/app/clients/prompts/artifacts';
+import _default from '~/server/services/Config';
+const { getCustomEndpointConfig } = _default;
+import { loadAgentTools } from '~/server/services/ToolService';
+import AgentClient from '~/server/controllers/agents/client';
+import __default from '~/utils';
+const { getModelMaxTokens } = __default;
+import ___default from '~/models/Agent';
+const { getAgent } = ___default;
+import ____default from '~/config';
+const { logger } = ____default;
 
 const providerConfigMap = {
   [Providers.OLLAMA]: initCustom,
@@ -256,4 +256,4 @@ const initializeClient = async ({ req, res, endpointOption }) => {
   return { client };
 };
 
-module.exports = { initializeClient };
+export default { initializeClient };

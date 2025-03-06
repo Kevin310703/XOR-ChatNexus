@@ -1,5 +1,5 @@
 // __tests__/openWeather.integration.test.js
-const OpenWeather = require('../OpenWeather');
+import OpenWeather from '../OpenWeather';
 
 describe('OpenWeather Tool (Integration Test)', () => {
   let tool;

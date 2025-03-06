@@ -1,6 +1,8 @@
-const { CacheKeys, findLastSeparatorIndex, SEPARATORS, Time } = require('librechat-data-provider');
-const { getMessage } = require('~/models/Message');
-const { getLogStores } = require('~/cache');
+import { CacheKeys, findLastSeparatorIndex, SEPARATORS, Time } from 'librechat-data-provider';
+import __default from '~/models/Message';
+const { getMessage } = __default;
+import _default from '~/cache';
+const { getLogStores } = _default;
 
 /**
  * @param {string[]} voiceIds - Array of voice IDs
@@ -196,7 +198,7 @@ async function* llmMessageSource(llmStream) {
   }
 }
 
-module.exports = {
+export default {
   findLastSeparatorIndex,
   createChunkProcessor,
   splitTextIntoChunks,

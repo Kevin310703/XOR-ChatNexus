@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
-const keySchema = require('./schema/key');
+import { model } from 'mongoose';
+import keySchema from './schema/key';
 
-module.exports = mongoose.model('Key', keySchema);
+export default model('Key', keySchema);

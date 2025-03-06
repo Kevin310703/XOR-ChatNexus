@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
-const { countTokens } = require('~/server/utils');
-const { logger } = require('~/config');
+import { Router } from 'express';
+const router = Router();
+import requireJwtAuth from '../middleware/requireJwtAuth.js';
+import { countTokens } from '../utils/index.js';
+import _default from '../../config/index.js';
+const { logger } = _default;
 
 router.post('/', requireJwtAuth, async (req, res) => {
   try {
@@ -15,4 +16,4 @@ router.post('/', requireJwtAuth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

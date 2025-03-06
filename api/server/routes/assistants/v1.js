@@ -1,11 +1,11 @@
-const express = require('express');
-const controllers = require('~/server/controllers/assistants/v1');
-const documents = require('./documents');
-const actions = require('./actions');
-const tools = require('./tools');
+import { Router } from 'express';
+import controllers from '~/server/controllers/assistants/v1';
+import documents from './documents';
+import actions from './actions';
+import tools from './tools';
 
-const router = express.Router();
-const avatar = express.Router();
+const router = Router();
+const avatar = Router();
 
 /**
  * Assistant actions route.
@@ -78,4 +78,4 @@ router.get('/', controllers.listAssistants);
  */
 avatar.post('/:assistant_id/avatar/', controllers.uploadAssistantAvatar);
 
-module.exports = { v1: router, avatar };
+export default { v1: router, avatar };

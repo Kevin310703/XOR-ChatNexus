@@ -1,5 +1,5 @@
-const { FileSources } = require('librechat-data-provider');
-const mongoose = require('mongoose');
+import { FileSources } from 'librechat-data-provider';
+import { Schema } from 'mongoose';
 
 /**
  * @typedef {Object} MongoFile
@@ -29,10 +29,10 @@ const mongoose = require('mongoose');
  */
 
 /** @type {MongooseSchema<MongoFile>} */
-const fileSchema = mongoose.Schema(
+const fileSchema = Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       index: true,
       required: true,
@@ -108,4 +108,4 @@ const fileSchema = mongoose.Schema(
 
 fileSchema.index({ createdAt: 1, updatedAt: 1 });
 
-module.exports = fileSchema;
+export default fileSchema;

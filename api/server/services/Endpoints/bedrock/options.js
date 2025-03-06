@@ -1,14 +1,9 @@
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const {
-  AuthType,
-  Constants,
-  EModelEndpoint,
-  bedrockInputParser,
-  bedrockOutputParser,
-  removeNullishValues,
-} = require('librechat-data-provider');
-const { getUserKey, checkUserKeyExpiry } = require('~/server/services/UserService');
-const { sleep } = require('~/server/utils');
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { AuthType, Constants, EModelEndpoint, bedrockInputParser, bedrockOutputParser, removeNullishValues } from 'librechat-data-provider';
+import __default from '~/server/services/UserService';
+const { getUserKey, checkUserKeyExpiry } = __default;
+import _default from '~/server/utils';
+const { sleep } = _default;
 
 const getOptions = async ({ req, overrideModel, endpointOption }) => {
   const {
@@ -106,4 +101,4 @@ const getOptions = async ({ req, overrideModel, endpointOption }) => {
   };
 };
 
-module.exports = getOptions;
+export default getOptions;

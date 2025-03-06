@@ -1,4 +1,4 @@
-const { logger } = require('~/config');
+import { logger } from '~/config';
 
 /**
  * Logs Axios errors based on the error object and a custom message.
@@ -34,4 +34,4 @@ const logAxiosError = ({ message, error }) => {
   }
 };
 
-module.exports = { logAxiosError };
+export default { logAxiosError };

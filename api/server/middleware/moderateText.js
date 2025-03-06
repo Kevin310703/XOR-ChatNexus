@@ -1,14 +1,15 @@
-const axios = require('axios');
-const { ErrorTypes } = require('librechat-data-provider');
-const denyRequest = require('./denyRequest');
-const { logger } = require('~/config');
+import { post } from 'axios';
+import { ErrorTypes } from 'librechat-data-provider';
+import denyRequest from './denyRequest';
+import _default from '~/config';
+const { logger } = _default;
 
 async function moderateText(req, res, next) {
   if (process.env.OPENAI_MODERATION === 'true') {
     try {
       const { text } = req.body;
 
-      const response = await axios.post(
+      const response = await post(
         process.env.OPENAI_MODERATION_REVERSE_PROXY || 'https://api.openai.com/v1/moderations',
         {
           input: text,
@@ -38,4 +39,4 @@ async function moderateText(req, res, next) {
   next();
 }
 
-module.exports = moderateText;
+export default moderateText;

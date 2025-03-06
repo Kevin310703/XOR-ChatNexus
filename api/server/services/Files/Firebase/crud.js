@@ -1,11 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-const fetch = require('node-fetch');
-const { ref, uploadBytes, getDownloadURL, deleteObject } = require('firebase/storage');
-const { getBufferMetadata } = require('~/server/utils');
-const { getFirebaseStorage } = require('./initialize');
-const { logger } = require('~/config');
+import { promises } from 'fs';
+import { basename } from 'path';
+import axios from 'axios';
+import fetch from 'node-fetch';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import utils from '~/server/utils';
+const { getBufferMetadata } = utils;
+import { getFirebaseStorage } from './initialize';
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * Deletes a file from Firebase Storage.
@@ -166,7 +168,7 @@ function extractFirebaseFilePath(urlString) {
 const deleteFirebaseFile = async (req, file) => {
   if (file.embedded && process.env.RAG_API_URL) {
     const jwtToken = req.headers.authorization.split(' ')[1];
-    axios.delete(`${process.env.RAG_API_URL}/documents`, {
+    delete(`${process.env.RAG_API_URL}/documents`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
         'Content-Type': 'application/json',
@@ -208,15 +210,15 @@ const deleteFirebaseFile = async (req, file) => {
  */
 async function uploadFileToFirebase({ req, file, file_id }) {
   const inputFilePath = file.path;
-  const inputBuffer = await fs.promises.readFile(inputFilePath);
+  const inputBuffer = await promises.readFile(inputFilePath);
   const bytes = Buffer.byteLength(inputBuffer);
   const userId = req.user.id;
 
-  const fileName = `${file_id}__${path.basename(inputFilePath)}`;
+  const fileName = `${file_id}__${basename(inputFilePath)}`;
 
   const downloadURL = await saveBufferToFirebase({ userId, buffer: inputBuffer, fileName });
 
-  await fs.promises.unlink(inputFilePath);
+  await promises.unlink(inputFilePath);
 
   return { filepath: downloadURL, bytes };
 }
@@ -248,7 +250,7 @@ async function getFirebaseFileStream(_req, filepath) {
   }
 }
 
-module.exports = {
+export default {
   deleteFile,
   getFirebaseURL,
   saveURLToFirebase,

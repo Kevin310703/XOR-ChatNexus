@@ -1,7 +1,8 @@
-const rateLimit = require('express-rate-limit');
-const { ViolationTypes } = require('librechat-data-provider');
-const { removePorts } = require('~/server/utils');
-const { logViolation } = require('~/cache');
+import rateLimit from 'express-rate-limit';
+import { ViolationTypes } from 'librechat-data-provider';
+import { removePorts } from '~/server/utils';
+import _default from '~/cache';
+const { logViolation } = _default;
 
 const {
   VERIFY_EMAIL_WINDOW = 2,
@@ -32,4 +33,4 @@ const verifyEmailLimiter = rateLimit({
   keyGenerator: removePorts,
 });
 
-module.exports = verifyEmailLimiter;
+export default verifyEmailLimiter;

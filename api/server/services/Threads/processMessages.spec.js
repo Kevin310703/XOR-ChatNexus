@@ -1,5 +1,6 @@
-const { retrieveAndProcessFile } = require('~/server/services/Files/process');
-const { processMessages } = require('./manage');
+import { retrieveAndProcessFile } from '../../services/Files/process.js';
+import manageDefault from './manage.js';
+const { processMessages } = manageDefault;
 
 jest.mock('~/server/services/Files/process', () => ({
   retrieveAndProcessFile: jest.fn(),

@@ -1,4 +1,4 @@
-const dedent = require('dedent');
+import dedent from 'dedent';
 
 /**
  * Generate system prompt for AI-assisted React component creation
@@ -45,6 +45,6 @@ function generateShadcnPrompt(options) {
   return systemPrompt;
 }
 
-module.exports = {
+export default {
   generateShadcnPrompt,
 };

@@ -1,10 +1,9 @@
-const fs = require('fs');
-const LdapStrategy = require('passport-ldapauth');
-const { SystemRoles } = require('librechat-data-provider');
-const { findUser, createUser, updateUser } = require('~/models/userMethods');
-const { countUsers } = require('~/models/userMethods');
-const { isEnabled } = require('~/server/utils');
-const logger = require('~/utils/logger');
+import { readFileSync } from 'fs';
+import LdapStrategy from 'passport-ldapauth';
+import { SystemRoles } from 'librechat-data-provider';
+import { findUser, createUser, updateUser, countUsers } from '../models/userMethods.js';
+import { isEnabled } from '../server/utils/index.js';
+import logger from '../utils/index.js';
 
 const {
   LDAP_URL,
@@ -22,7 +21,7 @@ const {
 
 // Check required environment variables
 if (!LDAP_URL || !LDAP_USER_SEARCH_BASE) {
-  return null;
+  throw new Error('Missing required LDAP environment variables');
 }
 
 const searchAttributes = [
@@ -64,7 +63,7 @@ const ldapOptions = {
         rejectUnauthorized,
         ca: (() => {
           try {
-            return [fs.readFileSync(LDAP_CA_CERT_PATH)];
+            return [readFileSync(LDAP_CA_CERT_PATH)];
           } catch (err) {
             logger.error('[ldapStrategy]', 'Failed to read CA certificate', err);
             throw err;
@@ -141,4 +140,4 @@ const ldapLogin = new LdapStrategy(ldapOptions, async (userinfo, done) => {
   }
 });
 
-module.exports = ldapLogin;
+export default ldapLogin;

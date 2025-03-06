@@ -1,5 +1,5 @@
-const z = require('zod');
-const { EModelEndpoint } = require('librechat-data-provider');
+import { object, string, number, array } from 'zod';
+import { EModelEndpoint } from 'librechat-data-provider';
 
 const openAIModels = {
   'o3-mini': 195000, // -5000 from max
@@ -338,17 +338,17 @@ function matchModelName(modelName, endpoint = EModelEndpoint.openAI) {
   return matchedPattern || modelName;
 }
 
-const modelSchema = z.object({
-  id: z.string(),
-  pricing: z.object({
-    prompt: z.string(),
-    completion: z.string(),
+const modelSchema = object({
+  id: string(),
+  pricing: object({
+    prompt: string(),
+    completion: string(),
   }),
-  context_length: z.number(),
+  context_length: number(),
 });
 
-const inputSchema = z.object({
-  data: z.array(modelSchema),
+const inputSchema = object({
+  data: array(modelSchema),
 });
 
 /**
@@ -426,7 +426,7 @@ const tiktokenModels = new Set([
   'gpt-3.5-turbo-0301',
 ]);
 
-module.exports = {
+export default {
   tiktokenModels,
   maxTokensMap,
   inputSchema,

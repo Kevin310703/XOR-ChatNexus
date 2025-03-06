@@ -1,14 +1,10 @@
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const {
-  SystemRoles,
-  PermissionTypes,
-  roleDefaults,
-  Permissions,
-} = require('librechat-data-provider');
-const { updateAccessPermissions, initializeRoles } = require('~/models/Role');
-const getLogStores = require('~/cache/getLogStores');
-const Role = require('~/models/schema/roleSchema');
+import { connect, disconnect } from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { SystemRoles, PermissionTypes, roleDefaults, Permissions } from 'librechat-data-provider';
+import _default from '~/models/Role';
+const { updateAccessPermissions, initializeRoles } = _default;
+import getLogStores from '~/cache/getLogStores';
+import Role from '~/models/schema/roleSchema';
 
 // Mock the cache
 jest.mock('~/cache/getLogStores', () => {
@@ -24,11 +20,11 @@ let mongoServer;
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
-  await mongoose.connect(mongoUri);
+  await connect(mongoUri);
 });
 
 afterAll(async () => {
-  await mongoose.disconnect();
+  await disconnect();
   await mongoServer.stop();
 });
 

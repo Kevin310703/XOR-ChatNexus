@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const fileSchema = require('./schema/fileSchema');
+import { model } from 'mongoose';
+import fileSchema from './schema/fileSchema';
 
-const File = mongoose.model('File', fileSchema);
+const File = model('File', fileSchema);
 
 /**
  * Finds a file by its file_id with additional query options.
@@ -105,7 +105,7 @@ const deleteFiles = async (file_ids, user) => {
   return await File.deleteMany(deleteQuery);
 };
 
-module.exports = {
+export default {
   File,
   findFileById,
   getFiles,

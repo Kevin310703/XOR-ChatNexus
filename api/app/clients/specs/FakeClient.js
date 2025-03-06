@@ -1,5 +1,6 @@
-const BaseClient = require('../BaseClient');
-const { getModelMaxTokens } = require('../../../utils');
+import BaseClient from '../BaseClient';
+import utils from '../../../utils';
+const { getModelMaxTokens } = utils;
 
 class FakeClient extends BaseClient {
   constructor(apiKey, options = {}) {
@@ -120,4 +121,4 @@ const initializeFakeClient = (apiKey, options, fakeMessages) => {
   return TestClient;
 };
 
-module.exports = { FakeClient, initializeFakeClient };
+export default { FakeClient, initializeFakeClient };

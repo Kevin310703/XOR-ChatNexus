@@ -1,8 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const { z } = require('zod');
-const { logger } = require('~/config');
-const { createOpenAPIPlugin } = require('~/app/clients/tools/dynamic/OpenAPIPlugin');
+import { promises, constants } from 'fs';
+import { join, extname } from 'path';
+import { z } from 'zod';
+import { logger } from '~/config';
+import OpenAPIPlugin from '~/app/clients/tools/dynamic/OpenAPIPlugin';
+const { createOpenAPIPlugin } = OpenAPIPlugin;
 
 // The minimum Manifest definition
 const ManifestDefinition = z.object({
@@ -38,16 +39,16 @@ function validateJson(json) {
 
 // omit the LLM to return the well known jsons as objects
 async function loadSpecs({ llm, user, message, tools = [], map = false, memory, signal }) {
-  const directoryPath = path.join(__dirname, '..', '.well-known');
+  const directoryPath = join(__dirname, '..', '.well-known');
   let files = [];
 
   for (let i = 0; i < tools.length; i++) {
-    const filePath = path.join(directoryPath, tools[i] + '.json');
+    const filePath = join(directoryPath, tools[i] + '.json');
 
     try {
       // If the access Promise is resolved, it means that the file exists
       // Then we can add it to the files array
-      await fs.promises.access(filePath, fs.constants.F_OK);
+      await promises.access(filePath, constants.F_OK);
       files.push(tools[i] + '.json');
     } catch (err) {
       logger.error(`[loadSpecs] File ${tools[i] + '.json'} does not exist`, err);
@@ -55,8 +56,8 @@ async function loadSpecs({ llm, user, message, tools = [], map = false, memory, 
   }
 
   if (files.length === 0) {
-    files = (await fs.promises.readdir(directoryPath)).filter(
-      (file) => path.extname(file) === '.json',
+    files = (await promises.readdir(directoryPath)).filter(
+      (file) => extname(file) === '.json',
     );
   }
 
@@ -66,9 +67,9 @@ async function loadSpecs({ llm, user, message, tools = [], map = false, memory, 
   logger.debug('[validateJson] files', files);
 
   for (const file of files) {
-    if (path.extname(file) === '.json') {
-      const filePath = path.join(directoryPath, file);
-      const fileContent = await fs.promises.readFile(filePath, 'utf8');
+    if (extname(file) === '.json') {
+      const filePath = join(directoryPath, file);
+      const fileContent = await promises.readFile(filePath, 'utf8');
       const json = JSON.parse(fileContent);
 
       if (!validateJson(json)) {
@@ -110,7 +111,7 @@ async function loadSpecs({ llm, user, message, tools = [], map = false, memory, 
   return plugins;
 }
 
-module.exports = {
+export default {
   loadSpecs,
   validateJson,
   ManifestDefinition,

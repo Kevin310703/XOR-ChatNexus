@@ -1,6 +1,6 @@
-const axios = require('axios');
-const { isEnabled } = require('~/server/utils');
-const { logger } = require('~/config');
+import { get, post } from 'axios';
+import { isEnabled } from '~/server/utils';
+import { logger } from '~/config';
 
 const footer = `Use the context as your learned knowledge to better answer the user.
 
@@ -23,14 +23,14 @@ function createContextHandlers(req, userMessageContent) {
 
   const query = async (file) => {
     if (useFullContext) {
-      return axios.get(`${process.env.RAG_API_URL}/documents/${file.file_id}/context`, {
+      return get(`${process.env.RAG_API_URL}/documents/${file.file_id}/context`, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
     }
 
-    return axios.post(
+    return post(
       `${process.env.RAG_API_URL}/query`,
       {
         file_id: file.file_id,
@@ -157,4 +157,4 @@ function createContextHandlers(req, userMessageContent) {
   };
 }
 
-module.exports = createContextHandlers;
+export default createContextHandlers;

@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
-const { logger } = require('~/config');
+import { Schema, models, model } from 'mongoose';
+import _default from '~/config';
+const { logger } = _default;
 
 const major = [0, 0];
 const minor = [0, 0];
 const patch = [0, 5];
 
-const configSchema = mongoose.Schema(
+const configSchema = Schema(
   {
     tag: {
       type: String,
@@ -64,23 +65,21 @@ configSchema.statics.updateByTag = async function (tag, update) {
   return await this.findOneAndUpdate({ tag }, update, { new: true });
 };
 
-const Config = mongoose.models.Config || mongoose.model('Config', configSchema);
+const Config = models.Config || model('Config', configSchema);
 
-module.exports = {
-  getConfigs: async (filter) => {
-    try {
-      return await Config.find(filter).lean();
-    } catch (error) {
-      logger.error('Error getting configs', error);
-      return { config: 'Error getting configs' };
-    }
-  },
-  deleteConfigs: async (filter) => {
-    try {
-      return await Config.deleteMany(filter);
-    } catch (error) {
-      logger.error('Error deleting configs', error);
-      return { config: 'Error deleting configs' };
-    }
-  },
-};
+export async function getConfigs(filter) {
+  try {
+    return await Config.find(filter).lean();
+  } catch (error) {
+    logger.error('Error getting configs', error);
+    return { config: 'Error getting configs' };
+  }
+}
+export async function deleteConfigs(filter) {
+  try {
+    return await Config.deleteMany(filter);
+  } catch (error) {
+    logger.error('Error deleting configs', error);
+    return { config: 'Error deleting configs' };
+  }
+}

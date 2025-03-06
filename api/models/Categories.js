@@ -1,4 +1,5 @@
-const { logger } = require('~/config');
+import config from '~/config';
+const { logger } = config;
 // const { Categories } = require('./schema/categories');
 
 const options = [
@@ -40,19 +41,12 @@ const options = [
   },
 ];
 
-module.exports = {
-  /**
-   * Retrieves the categories asynchronously.
-   * @returns {Promise<TGetCategoriesResponse>} An array of category objects.
-   * @throws {Error} If there is an error retrieving the categories.
-   */
-  getCategories: async () => {
-    try {
-      // const categories = await Categories.find();
-      return options;
-    } catch (error) {
-      logger.error('Error getting categories', error);
-      return [];
-    }
-  },
-};
+export async function getCategories() {
+  try {
+    // const categories = await Categories.find();
+    return options;
+  } catch (error) {
+    logger.error('Error getting categories', error);
+    return [];
+  }
+}

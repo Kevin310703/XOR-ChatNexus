@@ -1,9 +1,10 @@
-const express = require('express');
-const { getAvailablePluginsController } = require('../controllers/PluginController');
-const requireJwtAuth = require('../middleware/requireJwtAuth');
+import { Router } from 'express';
+import _default from '../controllers/PluginController';
+const { getAvailablePluginsController } = _default;
+import requireJwtAuth from '../middleware/requireJwtAuth';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', requireJwtAuth, getAvailablePluginsController);
 
-module.exports = router;
+export default router;

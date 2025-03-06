@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const bannerSchema = mongoose.Schema(
+const bannerSchema = Schema(
   {
     bannerId: {
       type: String,
@@ -32,5 +32,5 @@ const bannerSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-const Banner = mongoose.model('Banner', bannerSchema);
-module.exports = Banner;
+const Banner = model('Banner', bannerSchema);
+export default Banner;

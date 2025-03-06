@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
-const { v4: uuidv4 } = require('uuid');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const { Agent, addAgentResourceFile, removeAgentResourceFiles } = require('./Agent');
+import { connect, disconnect, Types } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import Agent from './Agent';
+const { Agent, addAgentResourceFile, removeAgentResourceFiles } = Agent;
 
 describe('Agent Resource File Operations', () => {
   let mongoServer;
@@ -9,11 +10,11 @@ describe('Agent Resource File Operations', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
-    await mongoose.connect(mongoUri);
+    await connect(mongoUri);
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await disconnect();
     await mongoServer.stop();
   });
 
@@ -28,7 +29,7 @@ describe('Agent Resource File Operations', () => {
       name: 'Test Agent',
       provider: 'test',
       model: 'test-model',
-      author: new mongoose.Types.ObjectId(),
+      author: new Types.ObjectId(),
     });
     return agent;
   };

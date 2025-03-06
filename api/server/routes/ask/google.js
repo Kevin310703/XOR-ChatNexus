@@ -1,15 +1,12 @@
-const express = require('express');
-const AskController = require('~/server/controllers/AskController');
-const { initializeClient, addTitle } = require('~/server/services/Endpoints/google');
+import { Router } from 'express';
+import AskController from '~/server/controllers/AskController';
+import { initializeClient, addTitle } from '~/server/services/Endpoints/google';
+import _default from '~/server/middleware';
 const {
-  setHeaders,
-  handleAbort,
-  validateModel,
-  validateEndpoint,
-  buildEndpointOption,
-} = require('~/server/middleware');
+  setHeaders, handleAbort, validateModel, validateEndpoint, buildEndpointOption,
+} = _default;
 
-const router = express.Router();
+const router = Router();
 
 router.post('/abort', handleAbort());
 
@@ -24,4 +21,4 @@ router.post(
   },
 );
 
-module.exports = router;
+export default router;

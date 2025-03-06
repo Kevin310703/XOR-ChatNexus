@@ -1,8 +1,9 @@
-const { MeiliSearch } = require('meilisearch');
-const Conversation = require('~/models/schema/convoSchema');
-const Message = require('~/models/schema/messageSchema');
-const { isEnabled } = require('~/server/utils');
-const { logger } = require('~/config');
+import { MeiliSearch } from 'meilisearch';
+import { countDocuments, syncWithMeili } from '../../models/schema/convoSchema.js';
+import { countDocuments as _countDocuments, syncWithMeili as _syncWithMeili } from '../../models/schema/messageSchema.js';
+import { isEnabled } from '../../server/utils/index.js';
+import config from '../../config/index.js';
+const { logger } = config;
 
 const searchEnabled = isEnabled(process.env.SEARCH);
 const indexingDisabled = isEnabled(process.env.MEILI_NO_SYNC);
@@ -43,8 +44,8 @@ async function indexSync() {
       return;
     }
 
-    const messageCount = await Message.countDocuments();
-    const convoCount = await Conversation.countDocuments();
+    const messageCount = await _countDocuments();
+    const convoCount = await countDocuments();
     const messages = await client.index('messages').getStats();
     const convos = await client.index('convos').getStats();
     const messagesIndexed = messages.numberOfDocuments;
@@ -55,20 +56,20 @@ async function indexSync() {
 
     if (messageCount !== messagesIndexed) {
       logger.debug('[indexSync] Messages out of sync, indexing');
-      Message.syncWithMeili();
+      _syncWithMeili();
     }
 
     if (convoCount !== convosIndexed) {
       logger.debug('[indexSync] Convos out of sync, indexing');
-      Conversation.syncWithMeili();
+      syncWithMeili();
     }
   } catch (err) {
     if (err.message.includes('not found')) {
       logger.debug('[indexSync] Creating indices...');
       currentTimeout = setTimeout(async () => {
         try {
-          await Message.syncWithMeili();
-          await Conversation.syncWithMeili();
+          await _syncWithMeili();
+          await syncWithMeili();
         } catch (err) {
           logger.error('[indexSync] Trouble creating indices, try restarting the server.', err);
         }
@@ -86,4 +87,4 @@ process.on('exit', () => {
   clearTimeout(currentTimeout);
 });
 
-module.exports = indexSync;
+export default indexSync;

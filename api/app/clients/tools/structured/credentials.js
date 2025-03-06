@@ -1,4 +1,4 @@
-const { getEnvironmentVariable } = require('@langchain/core/utils/env');
+import { getEnvironmentVariable } from '@langchain/core/utils/env';
 
 function getApiKey(envVar, override) {
   const key = getEnvironmentVariable(envVar);
@@ -8,6 +8,6 @@ function getApiKey(envVar, override) {
   return key;
 }
 
-module.exports = {
+export default {
   getApiKey,
 };

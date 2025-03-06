@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, models, model } from 'mongoose';
 
-const pluginAuthSchema = mongoose.Schema(
+const pluginAuthSchema = Schema(
   {
     authField: {
       type: String,
@@ -21,6 +21,6 @@ const pluginAuthSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-const PluginAuth = mongoose.models.Plugin || mongoose.model('PluginAuth', pluginAuthSchema);
+const PluginAuth = models.Plugin || model('PluginAuth', pluginAuthSchema);
 
-module.exports = PluginAuth;
+export default PluginAuth;

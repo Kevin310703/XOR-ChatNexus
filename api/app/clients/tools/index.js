@@ -1,16 +1,16 @@
-const availableTools = require('./manifest.json');
+import { forEach } from './manifest.json';
 
 // Structured Tools
-const DALLE3 = require('./structured/DALLE3');
-const FluxAPI = require('./structured/FluxAPI');
-const OpenWeather = require('./structured/OpenWeather');
-const StructuredWolfram = require('./structured/Wolfram');
-const createYouTubeTools = require('./structured/YouTube');
-const StructuredACS = require('./structured/AzureAISearch');
-const StructuredSD = require('./structured/StableDiffusion');
-const GoogleSearchAPI = require('./structured/GoogleSearch');
-const TraversaalSearch = require('./structured/TraversaalSearch');
-const TavilySearchResults = require('./structured/TavilySearchResults');
+import DALLE3 from './structured/DALLE3';
+import FluxAPI from './structured/FluxAPI';
+import OpenWeather from './structured/OpenWeather';
+import StructuredWolfram from './structured/Wolfram';
+import createYouTubeTools from './structured/YouTube';
+import StructuredACS from './structured/AzureAISearch';
+import StructuredSD from './structured/StableDiffusion';
+import GoogleSearchAPI from './structured/GoogleSearch';
+import TraversaalSearch from './structured/TraversaalSearch';
+import TavilySearchResults from './structured/TavilySearchResults';
 
 /** @type {Record<string, TPlugin | undefined>} */
 const manifestToolMap = {};
@@ -18,14 +18,14 @@ const manifestToolMap = {};
 /** @type {Array<TPlugin>} */
 const toolkits = [];
 
-availableTools.forEach((tool) => {
+forEach((tool) => {
   manifestToolMap[tool.pluginKey] = tool;
   if (tool.toolkit === true) {
     toolkits.push(tool);
   }
 });
 
-module.exports = {
+export default {
   toolkits,
   availableTools,
   manifestToolMap,

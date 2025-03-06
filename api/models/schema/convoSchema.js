@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const mongoMeili = require('../plugins/mongoMeili');
-const { conversationPreset } = require('./defaults');
-const convoSchema = mongoose.Schema(
+import { Schema, models, model } from 'mongoose';
+import mongoMeili from '../plugins/mongoMeili';
+import { conversationPreset } from './defaults';
+const convoSchema = Schema(
   {
     conversationId: {
       type: String,
@@ -19,9 +19,9 @@ const convoSchema = mongoose.Schema(
       type: String,
       index: true,
     },
-    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+    messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
     agentOptions: {
-      type: mongoose.Schema.Types.Mixed,
+      type: Schema.Types.Mixed,
     },
     ...conversationPreset,
     agent_id: {
@@ -56,6 +56,6 @@ convoSchema.index({ expiredAt: 1 }, { expireAfterSeconds: 0 });
 convoSchema.index({ createdAt: 1, updatedAt: 1 });
 convoSchema.index({ conversationId: 1, user: 1 }, { unique: true });
 
-const Conversation = mongoose.models.Conversation || mongoose.model('Conversation', convoSchema);
+const Conversation = models.Conversation || model('Conversation', convoSchema);
 
-module.exports = Conversation;
+export default Conversation;

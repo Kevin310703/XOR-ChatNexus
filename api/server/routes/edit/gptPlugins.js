@@ -1,22 +1,19 @@
-const express = require('express');
-const { getResponseSender } = require('librechat-data-provider');
+import { Router } from 'express';
+import { getResponseSender } from 'librechat-data-provider';
+import middlewareDefault from '~/server/middleware';
 const {
-  setHeaders,
-  handleAbort,
-  moderateText,
-  validateModel,
-  handleAbortError,
-  validateEndpoint,
-  buildEndpointOption,
-  createAbortController,
-} = require('~/server/middleware');
-const { sendMessage, createOnProgress, formatSteps, formatAction } = require('~/server/utils');
-const { initializeClient } = require('~/server/services/Endpoints/gptPlugins');
-const { saveMessage, updateMessage } = require('~/models');
-const { validateTools } = require('~/app');
-const { logger } = require('~/config');
+  setHeaders, handleAbort, moderateText, validateModel, handleAbortError, validateEndpoint, buildEndpointOption, createAbortController,
+} = middlewareDefault;
+import { sendMessage, createOnProgress, formatSteps, formatAction } from '~/server/utils';
+import { initializeClient } from '~/server/services/Endpoints/gptPlugins';
+import _default from '~/models';
+const { saveMessage, updateMessage } = _default;
+import __default from '~/app';
+const { validateTools } = __default;
+import ___default from '~/config';
+const { logger } = ___default;
 
-const router = express.Router();
+const router = Router();
 
 router.use(moderateText);
 router.post('/abort', handleAbort());
@@ -205,4 +202,4 @@ router.post(
   },
 );
 
-module.exports = router;
+export default router;

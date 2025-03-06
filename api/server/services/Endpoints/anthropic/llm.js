@@ -1,6 +1,7 @@
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const { anthropicSettings, removeNullishValues } = require('librechat-data-provider');
-const { checkPromptCacheSupport, getClaudeHeaders, configureReasoning } = require('./helpers');
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { anthropicSettings, removeNullishValues } from 'librechat-data-provider';
+import helpers from './helpers';
+const { checkPromptCacheSupport, getClaudeHeaders, configureReasoning } = helpers;
 
 /**
  * Generates configuration options for creating an Anthropic language model (LLM) instance.
@@ -80,4 +81,4 @@ function getLLMConfig(apiKey, options = {}) {
   };
 }
 
-module.exports = { getLLMConfig };
+export default { getLLMConfig };

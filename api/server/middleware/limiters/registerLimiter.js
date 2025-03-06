@@ -1,6 +1,7 @@
-const rateLimit = require('express-rate-limit');
-const { removePorts } = require('~/server/utils');
-const { logViolation } = require('~/cache');
+import rateLimit from 'express-rate-limit';
+import { removePorts } from '~/server/utils';
+import _default from '~/cache';
+const { logViolation } = _default;
 
 const { REGISTER_WINDOW = 60, REGISTER_MAX = 5, REGISTRATION_VIOLATION_SCORE: score } = process.env;
 const windowMs = REGISTER_WINDOW * 60 * 1000;
@@ -27,4 +28,4 @@ const registerLimiter = rateLimit({
   keyGenerator: removePorts,
 });
 
-module.exports = registerLimiter;
+export default registerLimiter;

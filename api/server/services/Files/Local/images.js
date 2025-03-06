@@ -1,9 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
-const { resizeImageBuffer } = require('../images/resize');
-const { updateUser } = require('~/models/userMethods');
-const { updateFile } = require('~/models/File');
+import { promises as _promises, existsSync, mkdirSync, readFile } from 'fs';
+import { extname, join, basename, posix, resolve as _resolve } from 'path';
+import sharp from 'sharp';
+import resize from '../images/resize';
+const { resizeImageBuffer } = resize;
+import _default from '~/models/userMethods';
+const { updateUser } = _default;
+import __default from '~/models/File';
+const { updateFile } = __default;
 
 /**
  * Converts an image file to the target format. The function first resizes the image based on the specified
@@ -31,38 +34,38 @@ const { updateFile } = require('~/models/File');
  */
 async function uploadLocalImage({ req, file, file_id, endpoint, resolution = 'high' }) {
   const inputFilePath = file.path;
-  const inputBuffer = await fs.promises.readFile(inputFilePath);
+  const inputBuffer = await _promises.readFile(inputFilePath);
   const {
     buffer: resizedBuffer,
     width,
     height,
   } = await resizeImageBuffer(inputBuffer, resolution, endpoint);
-  const extension = path.extname(inputFilePath);
+  const extension = extname(inputFilePath);
 
   const { imageOutput } = req.app.locals.paths;
-  const userPath = path.join(imageOutput, req.user.id);
+  const userPath = join(imageOutput, req.user.id);
 
-  if (!fs.existsSync(userPath)) {
-    fs.mkdirSync(userPath, { recursive: true });
+  if (!existsSync(userPath)) {
+    mkdirSync(userPath, { recursive: true });
   }
 
-  const fileName = `${file_id}__${path.basename(inputFilePath)}`;
-  const newPath = path.join(userPath, fileName);
+  const fileName = `${file_id}__${basename(inputFilePath)}`;
+  const newPath = join(userPath, fileName);
   const targetExtension = `.${req.app.locals.imageOutputType}`;
 
   if (extension.toLowerCase() === targetExtension) {
     const bytes = Buffer.byteLength(resizedBuffer);
-    await fs.promises.writeFile(newPath, resizedBuffer);
-    const filepath = path.posix.join('/', 'images', req.user.id, path.basename(newPath));
+    await _promises.writeFile(newPath, resizedBuffer);
+    const filepath = posix.join('/', 'images', req.user.id, basename(newPath));
     return { filepath, bytes, width, height };
   }
 
   const outputFilePath = newPath.replace(extension, targetExtension);
   const data = await sharp(resizedBuffer).toFormat(req.app.locals.imageOutputType).toBuffer();
-  await fs.promises.writeFile(outputFilePath, data);
+  await _promises.writeFile(outputFilePath, data);
   const bytes = Buffer.byteLength(data);
-  const filepath = path.posix.join('/', 'images', req.user.id, path.basename(outputFilePath));
-  await fs.promises.unlink(inputFilePath);
+  const filepath = posix.join('/', 'images', req.user.id, basename(outputFilePath));
+  await _promises.unlink(inputFilePath);
   return { filepath, bytes, width, height };
 }
 
@@ -73,7 +76,7 @@ async function uploadLocalImage({ req, file, file_id, endpoint, resolution = 'hi
  */
 function encodeImage(imagePath) {
   return new Promise((resolve, reject) => {
-    fs.readFile(imagePath, (err, data) => {
+    readFile(imagePath, (err, data) => {
       if (err) {
         reject(err);
       } else {
@@ -92,12 +95,12 @@ function encodeImage(imagePath) {
  */
 async function prepareImagesLocal(req, file) {
   const { publicPath, imageOutput } = req.app.locals.paths;
-  const userPath = path.join(imageOutput, req.user.id);
+  const userPath = join(imageOutput, req.user.id);
 
-  if (!fs.existsSync(userPath)) {
-    fs.mkdirSync(userPath, { recursive: true });
+  if (!existsSync(userPath)) {
+    mkdirSync(userPath, { recursive: true });
   }
-  const filepath = path.join(publicPath, file.filepath);
+  const filepath = join(publicPath, file.filepath);
 
   const promises = [];
   promises.push(updateFile({ file_id: file.file_id }));
@@ -117,7 +120,7 @@ async function prepareImagesLocal(req, file) {
  * @throws {Error} - Throws an error if Firebase is not initialized or if there is an error in uploading.
  */
 async function processLocalAvatar({ buffer, userId, manual }) {
-  const userDir = path.resolve(
+  const userDir = _resolve(
     __dirname,
     '..',
     '..',
@@ -132,10 +135,10 @@ async function processLocalAvatar({ buffer, userId, manual }) {
 
   const fileName = `avatar-${new Date().getTime()}.png`;
   const urlRoute = `/images/${userId}/${fileName}`;
-  const avatarPath = path.join(userDir, fileName);
+  const avatarPath = join(userDir, fileName);
 
-  await fs.promises.mkdir(userDir, { recursive: true });
-  await fs.promises.writeFile(avatarPath, buffer);
+  await _promises.mkdir(userDir, { recursive: true });
+  await _promises.writeFile(avatarPath, buffer);
 
   const isManual = manual === 'true';
   let url = `${urlRoute}?manual=${isManual}`;
@@ -147,4 +150,4 @@ async function processLocalAvatar({ buffer, userId, manual }) {
   return url;
 }
 
-module.exports = { uploadLocalImage, encodeImage, prepareImagesLocal, processLocalAvatar };
+export default { uploadLocalImage, encodeImage, prepareImagesLocal, processLocalAvatar };

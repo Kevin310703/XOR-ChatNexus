@@ -1,21 +1,14 @@
-const crypto = require('crypto');
-const fetch = require('node-fetch');
-const {
-  supportsBalanceCheck,
-  isAgentsEndpoint,
-  isParamEndpoint,
-  EModelEndpoint,
-  excludedKeys,
-  ErrorTypes,
-  Constants,
-} = require('librechat-data-provider');
-const { getMessages, saveMessage, updateMessage, saveConvo, getConvo } = require('~/models');
-const { addSpaceIfNeeded, isEnabled } = require('~/server/utils');
-const { truncateToolCallOutputs } = require('./prompts');
-const checkBalance = require('~/models/checkBalance');
-const { getFiles } = require('~/models/File');
-const TextStream = require('./TextStream');
-const { logger } = require('~/config');
+import { randomUUID } from 'crypto';
+import fetch from 'node-fetch';
+import { supportsBalanceCheck, isAgentsEndpoint, isParamEndpoint, EModelEndpoint, excludedKeys, ErrorTypes, Constants } from 'librechat-data-provider';
+import { getMessages, saveMessage, updateMessage, saveConvo, getConvo } from '~/models';
+import { addSpaceIfNeeded, isEnabled } from '~/server/utils';
+import prompts from './prompts';
+const { truncateToolCallOutputs } = prompts;
+import checkBalance from '~/models/checkBalance';
+import { getFiles } from '~/models/File';
+import TextStream from './TextStream';
+import { logger } from '~/config';
 
 class BaseClient {
   constructor(apiKey, options = {}) {
@@ -187,17 +180,17 @@ class BaseClient {
     this.user = user;
     const saveOptions = this.getSaveOptions();
     this.abortController = opts.abortController ?? new AbortController();
-    const conversationId = overrideConvoId ?? opts.conversationId ?? crypto.randomUUID();
+    const conversationId = overrideConvoId ?? opts.conversationId ?? randomUUID();
     const parentMessageId = opts.parentMessageId ?? Constants.NO_PARENT;
     const userMessageId =
-      overrideUserMessageId ?? opts.overrideParentMessageId ?? crypto.randomUUID();
-    let responseMessageId = opts.responseMessageId ?? crypto.randomUUID();
+      overrideUserMessageId ?? opts.overrideParentMessageId ?? randomUUID();
+    let responseMessageId = opts.responseMessageId ?? randomUUID();
     let head = isEdited ? responseMessageId : parentMessageId;
     this.currentMessages = (await this.loadHistory(conversationId, head)) ?? [];
     this.conversationId = conversationId;
 
     if (isEdited && !isContinued) {
-      responseMessageId = crypto.randomUUID();
+      responseMessageId = randomUUID();
       head = responseMessageId;
       this.currentMessages[this.currentMessages.length - 1].messageId = head;
     }
@@ -1149,4 +1142,4 @@ class BaseClient {
   }
 }
 
-module.exports = BaseClient;
+export default BaseClient;

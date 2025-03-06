@@ -1,16 +1,15 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
+import middlewareDefault from '~/server/middleware';
 const {
-  uaParser,
-  checkBan,
-  requireJwtAuth,
+  uaParser, checkBan, requireJwtAuth,
   // concurrentLimiter,
   // messageIpLimiter,
   // messageUserLimiter,
-} = require('~/server/middleware');
+} = middlewareDefault;
 
-const { v1 } = require('./v1');
-const chat = require('./chat');
+import { v1 } from './v1';
+import chat from './chat';
 
 router.use(requireJwtAuth);
 router.use(checkBan);
@@ -18,4 +17,4 @@ router.use(uaParser);
 router.use('/', v1);
 router.use('/chat', chat);
 
-module.exports = router;
+export default router;

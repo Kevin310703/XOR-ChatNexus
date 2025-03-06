@@ -1,7 +1,7 @@
-const initializeCustomAgent = require('./CustomAgent/initializeCustomAgent');
-const initializeFunctionsAgent = require('./Functions/initializeFunctionsAgent');
+import initializeCustomAgent from './CustomAgent/initializeCustomAgent';
+import initializeFunctionsAgent from './Functions/initializeFunctionsAgent';
 
-module.exports = {
+export default {
   initializeCustomAgent,
   initializeFunctionsAgent,
 };

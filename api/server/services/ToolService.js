@@ -15,15 +15,15 @@ const {
   AgentCapabilities,
   validateAndParseOpenAPISpec,
 } = require('librechat-data-provider');
-const { processFileURL, uploadImageBuffer } = require('~/server/services/Files/process');
-const { createYouTubeTools, manifestToolMap, toolkits } = require('~/app/clients/tools');
-const { loadActionSets, createActionTool, domainParser } = require('./ActionService');
-const { getEndpointsConfig } = require('~/server/services/Config');
-const { recordUsage } = require('~/server/services/Threads');
-const { loadTools } = require('~/app/clients/tools/util');
-const { redactMessage } = require('~/config/parsers');
-const { sleep } = require('~/server/utils');
-const { logger } = require('~/config');
+const { processFileURL, uploadImageBuffer } = require('~/server/services/Files/process').default;
+const { createYouTubeTools, manifestToolMap, toolkits } = require('~/app/clients/tools').default;
+const { loadActionSets, createActionTool, domainParser } = require('./ActionService').default;
+const { getEndpointsConfig } = require('~/server/services/Config').default;
+const { recordUsage } = require('~/server/services/Threads').default;
+const { loadTools } = require('~/app/clients/tools/util').default;
+const { redactMessage } = require('~/config/parsers').default;
+const { sleep } = require('~/server/utils').default;
+const { logger } = require('~/config').default;
 
 /**
  * Loads and formats tools from the specified tool directory.

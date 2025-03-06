@@ -1,11 +1,12 @@
-const cookies = require('cookie');
-const { Issuer } = require('openid-client');
-const { logoutUser } = require('~/server/services/AuthService');
-const { isEnabled } = require('~/server/utils');
-const { logger } = require('~/config');
+import { parse } from 'cookie';
+import { Issuer } from 'openid-client';
+import { logoutUser } from '~/server/services/AuthService';
+import { isEnabled } from '~/server/utils';
+import _default from '~/config';
+const { logger } = _default;
 
 const logoutController = async (req, res) => {
-  const refreshToken = req.headers.cookie ? cookies.parse(req.headers.cookie).refreshToken : null;
+  const refreshToken = req.headers.cookie ? parse(req.headers.cookie).refreshToken : null;
   try {
     const logout = await logoutUser(req, refreshToken);
     const { status, message } = logout;
@@ -33,6 +34,6 @@ const logoutController = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   logoutController,
 };

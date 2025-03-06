@@ -1,11 +1,13 @@
 // file deepcode ignore NoRateLimitingForLogin: Rate limiting is handled by the `loginLimiter` middleware
-const express = require('express');
-const passport = require('passport');
-const { loginLimiter, checkBan, checkDomainAllowed } = require('~/server/middleware');
-const { setAuthTokens } = require('~/server/services/AuthService');
-const { logger } = require('~/config');
+import { Router } from 'express';
+import { authenticate } from 'passport';
+import middlewareDefault from '~/server/middleware';
+const { loginLimiter, checkBan, checkDomainAllowed } = middlewareDefault;
+import { setAuthTokens } from '~/server/services/AuthService';
+import _default from '~/config';
+const { logger } = _default;
 
-const router = express.Router();
+const router = Router();
 
 const domains = {
   client: process.env.DOMAIN_CLIENT,
@@ -39,7 +41,7 @@ router.get('/error', (req, res) => {
  */
 router.get(
   '/google',
-  passport.authenticate('google', {
+  authenticate('google', {
     scope: ['openid', 'profile', 'email'],
     session: false,
   }),
@@ -47,7 +49,7 @@ router.get(
 
 router.get(
   '/google/callback',
-  passport.authenticate('google', {
+  authenticate('google', {
     failureRedirect: `${domains.client}/oauth/error`,
     failureMessage: true,
     session: false,
@@ -61,7 +63,7 @@ router.get(
  */
 router.get(
   '/facebook',
-  passport.authenticate('facebook', {
+  authenticate('facebook', {
     scope: ['public_profile'],
     profileFields: ['id', 'email', 'name'],
     session: false,
@@ -70,7 +72,7 @@ router.get(
 
 router.get(
   '/facebook/callback',
-  passport.authenticate('facebook', {
+  authenticate('facebook', {
     failureRedirect: `${domains.client}/oauth/error`,
     failureMessage: true,
     session: false,
@@ -85,14 +87,14 @@ router.get(
  */
 router.get(
   '/openid',
-  passport.authenticate('openid', {
+  authenticate('openid', {
     session: false,
   }),
 );
 
 router.get(
   '/openid/callback',
-  passport.authenticate('openid', {
+  authenticate('openid', {
     failureRedirect: `${domains.client}/oauth/error`,
     failureMessage: true,
     session: false,
@@ -105,7 +107,7 @@ router.get(
  */
 router.get(
   '/github',
-  passport.authenticate('github', {
+  authenticate('github', {
     scope: ['user:email', 'read:user'],
     session: false,
   }),
@@ -113,7 +115,7 @@ router.get(
 
 router.get(
   '/github/callback',
-  passport.authenticate('github', {
+  authenticate('github', {
     failureRedirect: `${domains.client}/oauth/error`,
     failureMessage: true,
     session: false,
@@ -127,7 +129,7 @@ router.get(
  */
 router.get(
   '/discord',
-  passport.authenticate('discord', {
+  authenticate('discord', {
     scope: ['identify', 'email'],
     session: false,
   }),
@@ -135,7 +137,7 @@ router.get(
 
 router.get(
   '/discord/callback',
-  passport.authenticate('discord', {
+  authenticate('discord', {
     failureRedirect: `${domains.client}/oauth/error`,
     failureMessage: true,
     session: false,
@@ -149,14 +151,14 @@ router.get(
  */
 router.get(
   '/apple',
-  passport.authenticate('apple', {
+  authenticate('apple', {
     session: false,
   }),
 );
 
 router.post(
   '/apple/callback',
-  passport.authenticate('apple', {
+  authenticate('apple', {
     failureRedirect: `${domains.client}/oauth/error`,
     failureMessage: true,
     session: false,
@@ -164,4 +166,4 @@ router.post(
   oauthHandler,
 );
 
-module.exports = router;
+export default router;

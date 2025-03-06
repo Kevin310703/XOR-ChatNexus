@@ -1,6 +1,8 @@
-const { EModelEndpoint } = require('librechat-data-provider');
-const { normalizeEndpointName } = require('~/server/utils');
-const { logger } = require('~/config');
+import { EModelEndpoint } from 'librechat-data-provider';
+import __default from '../../utils/index.js';
+const { normalizeEndpointName } = __default;
+import _default from '../../../config/index.js';
+const { logger } = _default;
 
 /**
  * Sets up Model Specs from the config (`librechat.yaml`) file.
@@ -58,4 +60,4 @@ For more information, see the documentation at https://www.librechat.ai/docs/con
   };
 }
 
-module.exports = { processModelSpecs };
+export default { processModelSpecs };

@@ -1,4 +1,4 @@
-const { loadSpecs } = require('./loadSpecs');
+import { loadSpecs } from './loadSpecs';
 
 function transformSpec(input) {
   return {
@@ -24,7 +24,7 @@ async function addOpenAPISpecs(availableTools) {
   }
 }
 
-module.exports = {
+export default {
   transformSpec,
   addOpenAPISpecs,
 };

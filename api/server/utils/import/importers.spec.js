@@ -1,11 +1,15 @@
-const fs = require('fs');
-const path = require('path');
-const { EModelEndpoint, Constants, openAISettings } = require('librechat-data-provider');
-const { bulkSaveConvos: _bulkSaveConvos } = require('~/models/Conversation');
-const { getImporter, processAssistantMessage } = require('./importers');
-const { ImportBatchBuilder } = require('./importBatchBuilder');
-const { bulkSaveMessages } = require('~/models/Message');
-const getLogStores = require('~/cache/getLogStores');
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { EModelEndpoint, Constants, openAISettings } from 'librechat-data-provider';
+import conversationDefault from '~/models/Conversation';
+const { bulkSaveConvos: _bulkSaveConvos } = conversationDefault;
+import _default from './importers';
+const { getImporter, processAssistantMessage } = _default;
+import __default from './importBatchBuilder';
+const { ImportBatchBuilder } = __default;
+import ___default from '~/models/Message';
+const { bulkSaveMessages } = ___default;
+import getLogStores from '~/cache/getLogStores';
 
 jest.mock('~/cache/getLogStores');
 const mockedCacheGet = jest.fn();
@@ -29,7 +33,7 @@ describe('importChatGptConvo', () => {
   it('should import conversation correctly', async () => {
     const expectedNumberOfMessages = 19;
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'chatgpt-export.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'chatgpt-export.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -51,7 +55,7 @@ describe('importChatGptConvo', () => {
 
   it('should maintain correct message hierarchy (tree parent/children relationship)', async () => {
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'chatgpt-tree.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'chatgpt-tree.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -103,7 +107,7 @@ describe('importChatGptConvo', () => {
 
 describe('importLibreChatConvo', () => {
   const jsonDataNonRecursiveBranches = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '__data__', 'librechat-opts-nonr-branches.json'), 'utf8'),
+    readFileSync(join(__dirname, '__data__', 'librechat-opts-nonr-branches.json'), 'utf8'),
   );
 
   it('should import conversation correctly', async () => {
@@ -112,7 +116,7 @@ describe('importLibreChatConvo', () => {
     });
     const expectedNumberOfMessages = 6;
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'librechat-export.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'librechat-export.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -138,7 +142,7 @@ describe('importLibreChatConvo', () => {
     });
 
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'librechat-linear.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'librechat-linear.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -168,7 +172,7 @@ describe('importLibreChatConvo', () => {
 
   it('should maintain correct message hierarchy (tree parent/children relationship)', async () => {
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'librechat-tree.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'librechat-tree.json'), 'utf8'),
     );
     const requestUserId = 'user-123';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -343,7 +347,7 @@ describe('importLibreChatConvo', () => {
 describe('importChatBotUiConvo', () => {
   it('should import custom conversation correctly', async () => {
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'chatbotui-export.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'chatbotui-export.json'), 'utf8'),
     );
     const requestUserId = 'custom-user-456';
     const importBatchBuilder = new ImportBatchBuilder(requestUserId);
@@ -533,7 +537,7 @@ describe('processAssistantMessage', () => {
 
   test('should correctly process citations from real ChatGPT data', () => {
     const jsonData = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '__data__', 'chatgpt-citations.json'), 'utf8'),
+      readFileSync(join(__dirname, '__data__', 'chatgpt-citations.json'), 'utf8'),
     );
 
     // Get the message containing citations from the JSON data

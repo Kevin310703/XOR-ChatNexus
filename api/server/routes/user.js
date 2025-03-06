@@ -1,16 +1,12 @@
-const express = require('express');
-const { requireJwtAuth, canDeleteAccount, verifyEmailLimiter } = require('~/server/middleware');
+import { Router } from 'express';
+import middlewareDefault from '~/server/middleware';
+const { requireJwtAuth, canDeleteAccount, verifyEmailLimiter } = middlewareDefault;
+import _default from '~/server/controllers/UserController';
 const {
-  getUserController,
-  deleteUserController,
-  verifyEmailController,
-  updateUserPluginsController,
-  resendVerificationController,
-  getTermsStatusController,
-  acceptTermsController,
-} = require('~/server/controllers/UserController');
+  getUserController, deleteUserController, verifyEmailController, updateUserPluginsController, resendVerificationController, getTermsStatusController, acceptTermsController,
+} = _default;
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', requireJwtAuth, getUserController);
 router.get('/terms', requireJwtAuth, getTermsStatusController);
@@ -20,4 +16,4 @@ router.delete('/delete', requireJwtAuth, canDeleteAccount, deleteUserController)
 router.post('/verify', verifyEmailController);
 router.post('/verify/resend', verifyEmailLimiter, resendVerificationController);
 
-module.exports = router;
+export default router;

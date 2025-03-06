@@ -1,6 +1,6 @@
-const { SplitStreamHandler } = require('@librechat/agents');
-const { anthropicSettings } = require('librechat-data-provider');
-const AnthropicClient = require('~/app/clients/AnthropicClient');
+import { SplitStreamHandler } from '@librechat/agents';
+import { anthropicSettings } from 'librechat-data-provider';
+import AnthropicClient from '~/app/clients/AnthropicClient';
 
 const HUMAN_PROMPT = '\n\nHuman:';
 const AI_PROMPT = '\n\nAssistant:';

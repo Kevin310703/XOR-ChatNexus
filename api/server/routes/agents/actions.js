@@ -1,13 +1,16 @@
-const express = require('express');
-const { nanoid } = require('nanoid');
-const { actionDelimiter, SystemRoles, removeNullishValues } = require('librechat-data-provider');
-const { encryptMetadata, domainParser } = require('~/server/services/ActionService');
-const { updateAction, getActions, deleteAction } = require('~/models/Action');
-const { isActionDomainAllowed } = require('~/server/services/domains');
-const { getAgent, updateAgent } = require('~/models/Agent');
-const { logger } = require('~/config');
+import { Router } from 'express';
+import { nanoid } from 'nanoid';
+import { actionDelimiter, SystemRoles, removeNullishValues } from 'librechat-data-provider';
+import { encryptMetadata, domainParser } from '~/server/services/ActionService';
+import actionDefault from '~/models/Action';
+const { updateAction, getActions, deleteAction } = actionDefault;
+import { isActionDomainAllowed } from '~/server/services/domains';
+import _default from '~/models/Agent';
+const { getAgent, updateAgent } = _default;
+import __default from '~/config';
+const { logger } = __default;
 
-const router = express.Router();
+const router = Router();
 
 // If the user has ADMIN role
 // then action edition is possible even if not owner of the assistant
@@ -184,4 +187,4 @@ router.delete('/:agent_id/:action_id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

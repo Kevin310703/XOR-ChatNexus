@@ -1,5 +1,7 @@
-const { logger } = require('~/config');
-const { deleteNullOrEmptyConversations } = require('~/models/Conversation');
+import config from '~/config';
+const { logger } = config;
+import _default from '~/models/Conversation';
+const { deleteNullOrEmptyConversations } = _default;
 const cleanup = async () => {
   try {
     await deleteNullOrEmptyConversations();
@@ -10,4 +12,4 @@ const cleanup = async () => {
   }
 };
 
-module.exports = { cleanup };
+export default { cleanup };

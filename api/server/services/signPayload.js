@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import { sign } from 'jsonwebtoken';
 
 /**
  * Signs a given payload using either the `jose` library (for Bun runtime) or `jsonwebtoken`.
@@ -20,7 +20,7 @@ const jwt = require('jsonwebtoken');
  * });
  */
 async function signPayload({ payload, secret, expirationTime }) {
-  return jwt.sign(payload, secret, { expiresIn: expirationTime });
+  return sign(payload, secret, { expiresIn: expirationTime });
 }
 
-module.exports = signPayload;
+export default signPayload;

@@ -1,17 +1,19 @@
-const { FileSources, EModelEndpoint, getConfigDefaults } = require('librechat-data-provider');
-const { checkVariables, checkHealth, checkConfig, checkAzureVariables } = require('./start/checks');
-const { azureAssistantsDefaults, assistantsConfigSetup } = require('./start/assistants');
-const { initializeFirebase } = require('./Files/Firebase/initialize');
-const loadCustomConfig = require('./Config/loadCustomConfig');
-const handleRateLimits = require('./Config/handleRateLimits');
-const { loadDefaultInterface } = require('./start/interface');
-const { azureConfigSetup } = require('./start/azureOpenAI');
-const { processModelSpecs } = require('./start/modelSpecs');
-const { loadAndFormatTools } = require('./ToolService');
-const { agentsConfigSetup } = require('./start/agents');
-const { initializeRoles } = require('~/models/Role');
-const { getMCPManager } = require('~/config');
-const paths = require('~/config/paths');
+import { FileSources, EModelEndpoint, getConfigDefaults } from 'librechat-data-provider';
+import { checkVariables, checkHealth, checkConfig, checkAzureVariables } from './start/checks.js';
+import { azureAssistantsDefaults, assistantsConfigSetup } from './start/assistants.js';
+import { initializeFirebase } from './Files/Firebase/initialize.js';
+import loadCustomConfig from './Config/loadCustomConfig.js';
+import handleRateLimits from './Config/handleRateLimits.js';
+import { loadDefaultInterface } from './start/interface.js';
+import { azureConfigSetup } from './start/azureOpenAI.js';
+import { processModelSpecs } from './start/modelSpecs.js';
+import { loadAndFormatTools } from './ToolService.js';
+import { agentsConfigSetup } from './start/agents.js';
+import roleDefault from '../../models/Role.js';
+const { initializeRoles } = roleDefault;
+import _default from '../../config/index.js';
+const { getMCPManager } = _default;
+import { structuredTools } from '../../config/paths.js';
 
 /**
  *
@@ -43,7 +45,7 @@ const AppService = async (app) => {
   const availableTools = loadAndFormatTools({
     adminFilter: filteredTools,
     adminIncluded: includedTools,
-    directory: paths.structuredTools,
+    directory: structuredTools,
   });
 
   if (config.mcpServers != null) {
@@ -130,4 +132,4 @@ const AppService = async (app) => {
   };
 };
 
-module.exports = AppService;
+export default AppService;

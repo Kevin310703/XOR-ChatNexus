@@ -1,4 +1,4 @@
-const GoogleSearch = require('../GoogleSearch');
+import GoogleSearch from '../GoogleSearch';
 
 jest.mock('node-fetch');
 jest.mock('@langchain/core/utils/env');

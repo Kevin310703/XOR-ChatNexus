@@ -1,7 +1,7 @@
-const { ToolMessage } = require('@langchain/core/messages');
-const { ContentTypes } = require('librechat-data-provider');
-const { HumanMessage, AIMessage, SystemMessage } = require('@langchain/core/messages');
-const { formatAgentMessages } = require('./formatMessages');
+import { ToolMessage } from '@langchain/core/messages';
+import { ContentTypes } from 'librechat-data-provider';
+import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages';
+import { formatAgentMessages } from './formatMessages';
 
 describe('formatAgentMessages', () => {
   it('should format simple user and AI messages', () => {

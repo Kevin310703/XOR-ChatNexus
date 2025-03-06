@@ -1,29 +1,9 @@
-const { FileSources } = require('librechat-data-provider');
-const {
-  getFirebaseURL,
-  prepareImageURL,
-  saveURLToFirebase,
-  deleteFirebaseFile,
-  saveBufferToFirebase,
-  uploadFileToFirebase,
-  uploadImageToFirebase,
-  processFirebaseAvatar,
-  getFirebaseFileStream,
-} = require('./Firebase');
-const {
-  uploadLocalFile,
-  getLocalFileURL,
-  saveFileFromURL,
-  saveLocalBuffer,
-  deleteLocalFile,
-  uploadLocalImage,
-  prepareImagesLocal,
-  processLocalAvatar,
-  getLocalFileStream,
-} = require('./Local');
-const { uploadOpenAIFile, deleteOpenAIFile, getOpenAIFileStream } = require('./OpenAI');
-const { getCodeOutputDownloadStream, uploadCodeEnvFile } = require('./Code');
-const { uploadVectors, deleteVectors } = require('./VectorDB');
+import { FileSources } from 'librechat-data-provider';
+import { getFirebaseURL, prepareImageURL, saveURLToFirebase, deleteFirebaseFile, saveBufferToFirebase, uploadFileToFirebase, uploadImageToFirebase, processFirebaseAvatar, getFirebaseFileStream } from './Firebase';
+import { uploadLocalFile, getLocalFileURL, saveFileFromURL, saveLocalBuffer, deleteLocalFile, uploadLocalImage, prepareImagesLocal, processLocalAvatar, getLocalFileStream } from './Local';
+import { uploadOpenAIFile, deleteOpenAIFile, getOpenAIFileStream } from './OpenAI';
+import { getCodeOutputDownloadStream, uploadCodeEnvFile } from './Code';
+import { uploadVectors, deleteVectors } from './VectorDB';
 
 /**
  * Firebase Storage Strategy Functions
@@ -146,6 +126,6 @@ const getStrategyFunctions = (fileSource) => {
   }
 };
 
-module.exports = {
+export default {
   getStrategyFunctions,
 };

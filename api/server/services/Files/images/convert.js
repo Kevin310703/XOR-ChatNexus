@@ -1,9 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
-const { resizeImageBuffer } = require('./resize');
-const { getStrategyFunctions } = require('../strategies');
-const { logger } = require('~/config');
+import { promises } from 'fs';
+import { extname, basename as _basename } from 'path';
+import sharp from 'sharp';
+import { resizeImageBuffer } from './resize';
+import __default from '../strategies';
+const { getStrategyFunctions } = __default;
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * Converts an image file or buffer to target output type with specified resolution.
@@ -19,14 +21,14 @@ async function convertImage(req, file, resolution = 'high', basename = '') {
   try {
     let inputBuffer;
     let outputBuffer;
-    let extension = path.extname(file.path ?? basename).toLowerCase();
+    let extension = extname(file.path ?? basename).toLowerCase();
 
     // Check if the input is a buffer or a file path
     if (Buffer.isBuffer(file)) {
       inputBuffer = file;
     } else if (file && file.path) {
       const inputFilePath = file.path;
-      inputBuffer = await fs.promises.readFile(inputFilePath);
+      inputBuffer = await promises.readFile(inputFilePath);
     } else {
       throw new Error('Invalid input: file must be a buffer or contain a valid path.');
     }
@@ -49,7 +51,7 @@ async function convertImage(req, file, resolution = 'high', basename = '') {
 
     // Generate a new filename for the output file
     const newFileName =
-      path.basename(file.path ?? basename, path.extname(file.path ?? basename)) + extension;
+      _basename(file.path ?? basename, extname(file.path ?? basename)) + extension;
 
     const { saveBuffer } = getStrategyFunctions(req.app.locals.fileStrategy);
 
@@ -67,4 +69,4 @@ async function convertImage(req, file, resolution = 'high', basename = '') {
   }
 }
 
-module.exports = { convertImage };
+export default { convertImage };

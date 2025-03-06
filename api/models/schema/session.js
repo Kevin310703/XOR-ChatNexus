@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema } from 'mongoose';
 
-const sessionSchema = mongoose.Schema({
+const sessionSchema = Schema({
   refreshTokenHash: {
     type: String,
     required: true,
@@ -11,10 +11,10 @@ const sessionSchema = mongoose.Schema({
     expires: 0,
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
 });
 
-module.exports = sessionSchema;
+export default sessionSchema;

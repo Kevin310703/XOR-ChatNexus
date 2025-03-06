@@ -1,5 +1,5 @@
-const { ZeroShotAgentOutputParser } = require('langchain/agents');
-const { logger } = require('~/config');
+import { ZeroShotAgentOutputParser } from 'langchain/agents';
+import { logger } from '~/config';
 
 class CustomOutputParser extends ZeroShotAgentOutputParser {
   constructor(fields) {
@@ -217,4 +217,4 @@ class CustomOutputParser extends ZeroShotAgentOutputParser {
   }
 }
 
-module.exports = { CustomOutputParser };
+export default { CustomOutputParser };

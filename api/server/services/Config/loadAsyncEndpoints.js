@@ -1,5 +1,5 @@
 const { EModelEndpoint } = require('librechat-data-provider');
-const { isUserProvided } = require('~/server/utils');
+const { isUserProvided } = require('~/server/utils').default;
 const { config } = require('./EndpointService');
 
 const { openAIApiKey, azureOpenAIApiKey, useAzurePlugins, userProvidedOpenAI, googleKey } = config;

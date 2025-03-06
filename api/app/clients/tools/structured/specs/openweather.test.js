@@ -1,6 +1,6 @@
 // __tests__/openweather.test.js
-const OpenWeather = require('../OpenWeather');
-const fetch = require('node-fetch');
+import OpenWeather from '../OpenWeather';
+import { mockReset, mockImplementationOnce } from 'node-fetch';
 
 // Mock environment variable
 process.env.OPENWEATHER_API_KEY = 'test-api-key';
@@ -16,7 +16,7 @@ describe('OpenWeather Tool', () => {
   });
 
   beforeEach(() => {
-    fetch.mockReset();
+    mockReset();
   });
 
   test('action=help returns help instructions', async () => {
@@ -31,7 +31,7 @@ describe('OpenWeather Tool', () => {
 
   test('current_forecast with a city and successful geocoding + forecast', async () => {
     // Mock geocoding response
-    fetch.mockImplementationOnce((url) => {
+    mockImplementationOnce((url) => {
       if (url.includes('geo/1.0/direct')) {
         return Promise.resolve({
           ok: true,
@@ -42,7 +42,7 @@ describe('OpenWeather Tool', () => {
     });
 
     // Mock forecast response
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: async () => ({
@@ -67,7 +67,7 @@ describe('OpenWeather Tool', () => {
 
   test('timestamp action with valid date returns mocked historical data', async () => {
     // Mock geocoding response
-    fetch.mockImplementationOnce((url) => {
+    mockImplementationOnce((url) => {
       if (url.includes('geo/1.0/direct')) {
         return Promise.resolve({
           ok: true,
@@ -78,7 +78,7 @@ describe('OpenWeather Tool', () => {
     });
 
     // Mock historical weather response
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: async () => ({
@@ -109,7 +109,7 @@ describe('OpenWeather Tool', () => {
 
   test('daily_aggregation action returns aggregated weather data', async () => {
     // Mock geocoding response
-    fetch.mockImplementationOnce((url) => {
+    mockImplementationOnce((url) => {
       if (url.includes('geo/1.0/direct')) {
         return Promise.resolve({
           ok: true,
@@ -120,7 +120,7 @@ describe('OpenWeather Tool', () => {
     });
 
     // Mock daily aggregation response
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: async () => ({
@@ -154,7 +154,7 @@ describe('OpenWeather Tool', () => {
 
   test('overview action returns weather summary', async () => {
     // Mock geocoding response
-    fetch.mockImplementationOnce((url) => {
+    mockImplementationOnce((url) => {
       if (url.includes('geo/1.0/direct')) {
         return Promise.resolve({
           ok: true,
@@ -165,7 +165,7 @@ describe('OpenWeather Tool', () => {
     });
 
     // Mock overview response
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: async () => ({
@@ -227,7 +227,7 @@ describe('OpenWeather Tool', () => {
     });
 
     // Test Kelvin
-    fetch.mockImplementationOnce(() => geocodingMock).mockImplementationOnce(() => kelvinMock);
+    mockImplementationOnce(() => geocodingMock).mockImplementationOnce(() => kelvinMock);
 
     let result = await tool.call({
       action: 'current_forecast',
@@ -238,7 +238,7 @@ describe('OpenWeather Tool', () => {
     expect(parsed.current.temp).toBe(293);
 
     // Test Celsius
-    fetch.mockImplementationOnce(() => geocodingMock).mockImplementationOnce(() => celsiusMock);
+    mockImplementationOnce(() => geocodingMock).mockImplementationOnce(() => celsiusMock);
 
     result = await tool.call({
       action: 'current_forecast',
@@ -249,7 +249,7 @@ describe('OpenWeather Tool', () => {
     expect(parsed.current.temp).toBe(20);
 
     // Test Fahrenheit
-    fetch.mockImplementationOnce(() => geocodingMock).mockImplementationOnce(() => fahrenheitMock);
+    mockImplementationOnce(() => geocodingMock).mockImplementationOnce(() => fahrenheitMock);
 
     result = await tool.call({
       action: 'current_forecast',
@@ -289,7 +289,7 @@ describe('OpenWeather Tool', () => {
   });
 
   test('geocoding failure returns a descriptive error', async () => {
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: async () => [],
@@ -305,7 +305,7 @@ describe('OpenWeather Tool', () => {
 
   test('API request failure returns an error', async () => {
     // Mock geocoding success
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: true,
         json: async () => [{ lat: 35.9606, lon: -83.9207 }],
@@ -313,7 +313,7 @@ describe('OpenWeather Tool', () => {
     );
 
     // Mock weather request failure
-    fetch.mockImplementationOnce(() =>
+    mockImplementationOnce(() =>
       Promise.resolve({
         ok: false,
         status: 404,
@@ -330,7 +330,7 @@ describe('OpenWeather Tool', () => {
 
   test('invalid date format returns an error', async () => {
     // Mock geocoding response first
-    fetch.mockImplementationOnce((url) => {
+    mockImplementationOnce((url) => {
       if (url.includes('geo/1.0/direct')) {
         return Promise.resolve({
           ok: true,
@@ -341,7 +341,7 @@ describe('OpenWeather Tool', () => {
     });
 
     // Mock timestamp API response
-    fetch.mockImplementationOnce((url) => {
+    mockImplementationOnce((url) => {
       if (url.includes('onecall/timemachine')) {
         throw new Error('Invalid date format. Expected YYYY-MM-DD.');
       }

@@ -1,4 +1,4 @@
-const { logger } = require('~/config');
+import logger from '../../config/meiliLogger.js';
 
 //handle duplicates
 const handleDuplicateKeyError = (err, res) => {
@@ -25,7 +25,7 @@ const handleValidationError = (err, res) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-module.exports = (err, req, res, next) => {
+export default (err, req, res, next) => {
   try {
     if (err.name === 'ValidationError') {
       return (err = handleValidationError(err, res));

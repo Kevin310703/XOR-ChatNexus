@@ -1,5 +1,5 @@
-const tokenSplit = require('./tokenSplit');
+import tokenSplit from './tokenSplit';
 
-module.exports = {
+export default {
   tokenSplit,
 };

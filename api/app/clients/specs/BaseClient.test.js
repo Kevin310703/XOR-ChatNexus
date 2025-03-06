@@ -1,5 +1,5 @@
-const { Constants } = require('librechat-data-provider');
-const { initializeFakeClient } = require('./FakeClient');
+import { Constants } from 'librechat-data-provider';
+import { initializeFakeClient } from './FakeClient';
 
 jest.mock('~/lib/db/connectDb');
 jest.mock('~/models', () => ({
@@ -30,7 +30,7 @@ jest.mock('~/models', () => ({
   updateFileUsage: jest.fn(),
 }));
 
-const { getConvo, saveConvo } = require('~/models');
+import { getConvo, saveConvo } from '~/models';
 
 jest.mock('@langchain/openai', () => {
   return {

@@ -10,11 +10,11 @@ import type { Plugin } from 'vite';
 export default defineConfig({
   server: {
     host: 'localhost',
-    port: 5173,
+    port: 3080,
     strictPort: false,
     proxy: {
       '/api': {
-        target: 'http://localhost:3080',
+        target: 'http://host.docker.internal:3080',
         changeOrigin: true,
       },
       '/oauth': {

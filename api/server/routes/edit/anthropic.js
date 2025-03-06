@@ -1,15 +1,12 @@
-const express = require('express');
-const EditController = require('~/server/controllers/EditController');
-const { initializeClient } = require('~/server/services/Endpoints/anthropic');
+import { Router } from 'express';
+import EditController from '~/server/controllers/EditController';
+import { initializeClient } from '~/server/services/Endpoints/anthropic';
+import _default from '~/server/middleware';
 const {
-  setHeaders,
-  handleAbort,
-  validateModel,
-  validateEndpoint,
-  buildEndpointOption,
-} = require('~/server/middleware');
+  setHeaders, handleAbort, validateModel, validateEndpoint, buildEndpointOption,
+} = _default;
 
-const router = express.Router();
+const router = Router();
 
 router.post('/abort', handleAbort());
 
@@ -24,4 +21,4 @@ router.post(
   },
 );
 
-module.exports = router;
+export default router;

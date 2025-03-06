@@ -1,6 +1,7 @@
-const { ViolationTypes } = require('librechat-data-provider');
-const { logViolation } = require('~/cache');
-const Balance = require('./Balance');
+import { ViolationTypes } from 'librechat-data-provider';
+import cache from '~/cache';
+const { logViolation } = cache;
+import Balance from './Balance';
 /**
  * Checks the balance for a user and determines if they can spend a certain amount.
  * If the user cannot spend the amount, it logs a violation and denies the request.
@@ -42,4 +43,4 @@ const checkBalance = async ({ req, res, txData }) => {
   throw new Error(JSON.stringify(errorMessage));
 };
 
-module.exports = checkBalance;
+export default checkBalance;

@@ -1,8 +1,8 @@
-const createLLM = require('./createLLM');
-const RunManager = require('./RunManager');
-const createCoherePayload = require('./createCoherePayload');
+import createLLM from './createLLM';
+import RunManager from './RunManager';
+import createCoherePayload from './createCoherePayload';
 
-module.exports = {
+export default {
   createLLM,
   RunManager,
   createCoherePayload,

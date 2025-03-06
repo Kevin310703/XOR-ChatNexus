@@ -1,5 +1,5 @@
-const { Run, Providers } = require('@librechat/agents');
-const { providerEndpointMap, KnownEndpoints } = require('librechat-data-provider');
+import { Run, Providers } from '@librechat/agents';
+import { providerEndpointMap, KnownEndpoints } from 'librechat-data-provider';
 
 /**
  * @typedef {import('@librechat/agents').t} t
@@ -79,4 +79,4 @@ async function createRun({
   });
 }
 
-module.exports = { createRun };
+export default { createRun };

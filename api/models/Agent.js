@@ -1,17 +1,14 @@
-const mongoose = require('mongoose');
-const { SystemRoles } = require('librechat-data-provider');
-const { GLOBAL_PROJECT_NAME } = require('librechat-data-provider').Constants;
-const { CONFIG_STORE, STARTUP_CONFIG } = require('librechat-data-provider').CacheKeys;
-const {
-  getProjectByName,
-  addAgentIdsToProject,
-  removeAgentIdsFromProject,
-  removeAgentFromAllProjects,
-} = require('./Project');
-const getLogStores = require('~/cache/getLogStores');
-const agentSchema = require('./schema/agent');
+import { model } from 'mongoose';
+import { SystemRoles } from 'librechat-data-provider';
+import { Constants } from 'librechat-data-provider';
+const { GLOBAL_PROJECT_NAME } = Constants;
+import { CacheKeys } from 'librechat-data-provider';
+const { CONFIG_STORE, STARTUP_CONFIG } = CacheKeys;
+import { getProjectByName, addAgentIdsToProject, removeAgentIdsFromProject, removeAgentFromAllProjects } from './Project';
+import getLogStores from '~/cache/getLogStores';
+import agentSchema from './schema/agent';
 
-const Agent = mongoose.model('agent', agentSchema);
+const Agent = model('agent', agentSchema);
 
 /**
  * Create an agent with the provided data.
@@ -300,7 +297,7 @@ const updateAgentProjects = async ({ user, agentId, projectIds, removeProjectIds
   return await getAgent({ id: agentId });
 };
 
-module.exports = {
+export default {
   Agent,
   getAgent,
   loadAgent,

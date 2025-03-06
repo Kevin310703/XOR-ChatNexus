@@ -1,6 +1,7 @@
-const { TTSProviders } = require('librechat-data-provider');
-const { getCustomConfig } = require('~/server/services/Config');
-const { getProvider } = require('./TTSService');
+import { TTSProviders } from 'librechat-data-provider';
+import _default from '~/server/services/Config';
+const { getCustomConfig } = _default;
+import { getProvider } from './TTSService';
 
 /**
  * This function retrieves the available voices for the current TTS provider
@@ -47,4 +48,4 @@ async function getVoices(req, res) {
   }
 }
 
-module.exports = getVoices;
+export default getVoices;

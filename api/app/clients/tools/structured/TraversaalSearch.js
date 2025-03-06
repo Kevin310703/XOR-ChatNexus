@@ -1,7 +1,7 @@
-const { z } = require('zod');
-const { Tool } = require('@langchain/core/tools');
-const { getEnvironmentVariable } = require('@langchain/core/utils/env');
-const { logger } = require('~/config');
+import { z } from 'zod';
+import { Tool } from '@langchain/core/tools';
+import { getEnvironmentVariable } from '@langchain/core/utils/env';
+import { logger } from '~/config';
 
 /**
  * Tool for the Traversaal AI search API, Ares.
@@ -86,4 +86,4 @@ class TraversaalSearch extends Tool {
   }
 }
 
-module.exports = TraversaalSearch;
+export default TraversaalSearch;

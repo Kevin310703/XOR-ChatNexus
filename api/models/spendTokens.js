@@ -1,5 +1,6 @@
-const { Transaction } = require('./Transaction');
-const { logger } = require('~/config');
+import { Transaction } from './Transaction';
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * Creates up to two transactions to record the spending of tokens.
@@ -137,4 +138,4 @@ const spendStructuredTokens = async (txData, tokenUsage) => {
   return { prompt, completion };
 };
 
-module.exports = { spendTokens, spendStructuredTokens };
+export default { spendTokens, spendStructuredTokens };

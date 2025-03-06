@@ -1,6 +1,8 @@
-const { EModelEndpoint, anthropicSettings } = require('librechat-data-provider');
-const { matchModelName } = require('~/utils');
-const { logger } = require('~/config');
+import { EModelEndpoint, anthropicSettings } from 'librechat-data-provider';
+import utils from '~/utils';
+const { matchModelName } = utils;
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * @param {string} modelName
@@ -108,4 +110,4 @@ function configureReasoning(anthropicInput, extendedOptions = {}) {
   return updatedOptions;
 }
 
-module.exports = { checkPromptCacheSupport, getClaudeHeaders, configureReasoning };
+export default { checkPromptCacheSupport, getClaudeHeaders, configureReasoning };

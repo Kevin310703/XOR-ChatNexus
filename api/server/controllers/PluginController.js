@@ -1,9 +1,13 @@
-const { CacheKeys, AuthType } = require('librechat-data-provider');
-const { addOpenAPISpecs } = require('~/app/clients/tools/util/addOpenAPISpecs');
-const { getCustomConfig } = require('~/server/services/Config');
-const { availableTools } = require('~/app/clients/tools');
-const { getMCPManager } = require('~/config');
-const { getLogStores } = require('~/cache');
+import { CacheKeys, AuthType } from 'librechat-data-provider';
+import addOpenAPISpecsDefault from '~/app/clients/tools/util/addOpenAPISpecs';
+const { addOpenAPISpecs } = addOpenAPISpecsDefault;
+import { getCustomConfig } from '~/server/services/Config';
+import _default from '~/app/clients/tools';
+const { availableTools } = _default;
+import __default from '~/config';
+const { getMCPManager } = __default;
+import ___default from '~/cache';
+const { getLogStores } = ___default;
 
 /**
  * Filters out duplicate plugins from the list of plugins.
@@ -138,7 +142,7 @@ const getAvailableTools = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   getAvailableTools,
   getAvailablePluginsController,
 };

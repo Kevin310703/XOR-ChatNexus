@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
-const { conversationPreset } = require('./defaults');
-const presetSchema = mongoose.Schema(
+import { Schema, models, model } from 'mongoose';
+import _default from './defaults';
+const { conversationPreset } = _default;
+const presetSchema = Schema(
   {
     presetId: {
       type: String,
@@ -25,13 +26,13 @@ const presetSchema = mongoose.Schema(
     },
     ...conversationPreset,
     agentOptions: {
-      type: mongoose.Schema.Types.Mixed,
+      type: Schema.Types.Mixed,
       default: null,
     },
   },
   { timestamps: true },
 );
 
-const Preset = mongoose.models.Preset || mongoose.model('Preset', presetSchema);
+const Preset = models.Preset || model('Preset', presetSchema);
 
-module.exports = Preset;
+export default Preset;

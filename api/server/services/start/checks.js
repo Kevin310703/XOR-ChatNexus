@@ -1,10 +1,8 @@
-const {
-  Constants,
-  deprecatedAzureVariables,
-  conflictingAzureVariables,
-} = require('librechat-data-provider');
-const { isEnabled, checkEmailConfig } = require('~/server/utils');
-const { logger } = require('~/config');
+import { Constants, deprecatedAzureVariables, conflictingAzureVariables } from 'librechat-data-provider';
+import __default from '../../utils/index.js';
+const { isEnabled, checkEmailConfig } = __default;
+import _default from '../../../config/index.js';
+const { logger } = _default;
 
 const secretDefaults = {
   CREDS_KEY: 'f34be427ebb29de8d88c107a71546019685ed8b241d8f2ed00c3df97ad2566f0',
@@ -131,4 +129,4 @@ function checkPasswordReset() {
   }
 }
 
-module.exports = { checkVariables, checkHealth, checkConfig, checkAzureVariables };
+export default { checkVariables, checkHealth, checkConfig, checkAzureVariables };

@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const { requireJwtAuth } = require('~/server/middleware');
-const { getCategories } = require('~/models/Categories');
+import { Router } from 'express';
+const router = Router();
+import _default from '../middleware/index.js';
+const { requireJwtAuth } = _default;
+import { getCategories } from '../../models/Categories.js';
 
 router.get('/', requireJwtAuth, async (req, res) => {
   try {
@@ -12,4 +13,4 @@ router.get('/', requireJwtAuth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

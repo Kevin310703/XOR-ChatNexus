@@ -1,11 +1,24 @@
 require('dotenv').config();
 
-const { webcrypto } = require('node:crypto');
-const key = Buffer.from(process.env.CREDS_KEY, 'hex');
-const iv = Buffer.from(process.env.CREDS_IV, 'hex');
+import { webcrypto } from 'node:crypto';
+
+// Kiểm tra và ném lỗi nếu CREDS_KEY hoặc CREDS_IV không tồn tại
+const CREDS_KEY = process.env.CREDS_KEY;
+const CREDS_IV = process.env.CREDS_IV;
+
+if (!CREDS_KEY || !CREDS_IV) {
+  throw new Error('CREDS_KEY and CREDS_IV must be defined in .env as hex strings');
+}
+
+const key = Buffer.from(CREDS_KEY, 'hex');
+const iv = Buffer.from(CREDS_IV, 'hex');
 const algorithm = 'AES-CBC';
 
 async function encrypt(value) {
+  if (!value || typeof value !== 'string') {
+    throw new Error('Value must be a non-empty string');
+  }
+  
   const cryptoKey = await webcrypto.subtle.importKey('raw', key, { name: algorithm }, false, [
     'encrypt',
   ]);
@@ -125,7 +138,7 @@ const hashBackupCode = async (input) => {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 };
 
-module.exports = {
+export default {
   encrypt,
   decrypt,
   encryptV2,

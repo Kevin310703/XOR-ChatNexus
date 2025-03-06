@@ -1,12 +1,16 @@
-const { isAssistantsEndpoint, ErrorTypes } = require('librechat-data-provider');
-const { sendMessage, sendError, countTokens, isEnabled } = require('~/server/utils');
-const { truncateText, smartTruncateText } = require('~/app/clients/prompts');
-const clearPendingReq = require('~/cache/clearPendingReq');
-const { spendTokens } = require('~/models/spendTokens');
-const abortControllers = require('./abortControllers');
-const { saveMessage, getConvo } = require('~/models');
-const { abortRun } = require('./abortRun');
-const { logger } = require('~/config');
+import { isAssistantsEndpoint, ErrorTypes } from 'librechat-data-provider';
+import { sendMessage, sendError, countTokens, isEnabled } from '~/server/utils';
+import promptsDefault from '~/app/clients/prompts';
+const { truncateText, smartTruncateText } = promptsDefault;
+import clearPendingReq from '~/cache/clearPendingReq';
+import _default from '~/models/spendTokens';
+const { spendTokens } = _default;
+import abortControllers from './abortControllers';
+import __default from '~/models';
+const { saveMessage, getConvo } = __default;
+import { abortRun } from './abortRun';
+import ___default from '~/config';
+const { logger } = ___default;
 
 async function abortMessage(req, res) {
   let { abortKey, endpoint } = req.body;
@@ -221,7 +225,7 @@ const handleAbortError = async (res, req, error, data) => {
   }
 };
 
-module.exports = {
+export default {
   handleAbort,
   createAbortController,
   handleAbortError,

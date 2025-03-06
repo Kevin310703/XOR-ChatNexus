@@ -1,11 +1,12 @@
-const express = require('express');
-const { createTTSLimiters, createSTTLimiters } = require('~/server/middleware');
+import { Router } from 'express';
+import _default from '~/server/middleware';
+const { createTTSLimiters, createSTTLimiters } = _default;
 
-const stt = require('./stt');
-const tts = require('./tts');
-const customConfigSpeech = require('./customConfigSpeech');
+import stt from './stt';
+import tts from './tts';
+import customConfigSpeech from './customConfigSpeech';
 
-const router = express.Router();
+const router = Router();
 
 const { sttIpLimiter, sttUserLimiter } = createSTTLimiters();
 const { ttsIpLimiter, ttsUserLimiter } = createTTSLimiters();
@@ -14,4 +15,4 @@ router.use('/tts', ttsIpLimiter, ttsUserLimiter, tts);
 
 router.use('/config', customConfigSpeech);
 
-module.exports = router;
+export default router;

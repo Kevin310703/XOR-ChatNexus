@@ -1,5 +1,6 @@
-const mergeSort = require('./mergeSort');
-const { cleanUpPrimaryKeyValue } = require('./misc');
+import mergeSort from './mergeSort.js';
+import misc from './misc.js';
+const { cleanUpPrimaryKeyValue } = misc;
 
 function reduceMessages(hits) {
   const counts = {};
@@ -56,4 +57,4 @@ function reduceHits(hits, titles = []) {
   return mergeSort(result, (a, b) => b.count - a.count);
 }
 
-module.exports = { reduceMessages, reduceHits };
+export default { reduceMessages, reduceHits };

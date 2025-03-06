@@ -1,10 +1,11 @@
 jest.mock('~/cache/getLogStores');
 require('dotenv').config();
-const OpenAI = require('openai');
-const getLogStores = require('~/cache/getLogStores');
-const { fetchEventSource } = require('@waylaidwanderer/fetch-event-source');
-const { genAzureChatCompletion } = require('~/utils/azureUtils');
-const OpenAIClient = require('../OpenAIClient');
+import OpenAI, { mockImplementation, mock } from 'openai';
+import { mockReturnValue } from '~/cache/getLogStores';
+import { fetchEventSource } from '@waylaidwanderer/fetch-event-source';
+import azureUtils from '~/utils/azureUtils';
+const { genAzureChatCompletion } = azureUtils;
+import OpenAIClient from '../OpenAIClient';
 jest.mock('meilisearch');
 
 jest.mock('~/lib/db/connectDb');
@@ -120,7 +121,7 @@ const create = jest.fn().mockResolvedValue({
   ],
 });
 
-OpenAI.mockImplementation(() => ({
+mockImplementation(() => ({
   beta: {
     chat: {
       completions: {
@@ -140,7 +141,7 @@ describe('OpenAIClient', () => {
   const mockCache = { set: mockSet };
 
   beforeEach(() => {
-    getLogStores.mockReturnValue(mockCache);
+    mockReturnValue(mockCache);
   });
   let client;
   const model = 'gpt-4';
@@ -589,7 +590,7 @@ describe('OpenAIClient', () => {
       expect(streamArgs).not.toHaveProperty('model');
 
       // Check if the baseURL is correct
-      const constructorArgs = OpenAI.mock.calls[0][0];
+      const constructorArgs = mock.calls[0][0];
       const expectedURL = genAzureChatCompletion(defaultAzureOptions).split('/chat')[0];
       expect(constructorArgs.baseURL).toBe(expectedURL);
     });

@@ -1,14 +1,7 @@
-const {
-  SystemRoles,
-  EModelEndpoint,
-  defaultOrderQuery,
-  defaultAssistantsVersion,
-} = require('librechat-data-provider');
-const {
-  initializeClient: initAzureClient,
-} = require('~/server/services/Endpoints/azureAssistants');
-const { initializeClient } = require('~/server/services/Endpoints/assistants');
-const { getEndpointsConfig } = require('~/server/services/Config');
+import { SystemRoles, EModelEndpoint, defaultOrderQuery, defaultAssistantsVersion } from 'librechat-data-provider';
+import { initializeClient as initAzureClient } from '~/server/services/Endpoints/azureAssistants';
+import { initializeClient } from '~/server/services/Endpoints/assistants';
+import { getEndpointsConfig } from '~/server/services/Config';
 
 /**
  * @param {Express.Request} req
@@ -259,7 +252,7 @@ function filterAssistants({ assistants, userId, assistantsConfig }) {
   return assistants;
 }
 
-module.exports = {
+export default {
   getOpenAIClient,
   fetchAssistants,
   getCurrentVersion,

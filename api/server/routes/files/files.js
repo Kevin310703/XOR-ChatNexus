@@ -1,27 +1,21 @@
-const fs = require('fs').promises;
-const express = require('express');
-const { EnvVar } = require('@librechat/agents');
-const {
-  isUUID,
-  FileSources,
-  EModelEndpoint,
-  isAgentsEndpoint,
-  checkOpenAIStorage,
-} = require('librechat-data-provider');
-const {
-  filterFile,
-  processFileUpload,
-  processDeleteRequest,
-  processAgentFileUpload,
-} = require('~/server/services/Files/process');
-const { getStrategyFunctions } = require('~/server/services/Files/strategies');
-const { getOpenAIClient } = require('~/server/controllers/assistants/helpers');
-const { loadAuthValues } = require('~/app/clients/tools/util');
-const { getAgent } = require('~/models/Agent');
-const { getFiles } = require('~/models/File');
-const { logger } = require('~/config');
+import { promises as fs } from 'fs';
+import { Router } from 'express';
+import { EnvVar } from '@librechat/agents';
+import { isUUID, FileSources, EModelEndpoint, isAgentsEndpoint, checkOpenAIStorage } from 'librechat-data-provider';
+import { filterFile, processFileUpload, processDeleteRequest, processAgentFileUpload } from '~/server/services/Files/process';
+import { getStrategyFunctions } from '~/server/services/Files/strategies';
+import helpersDefault from '~/server/controllers/assistants/helpers';
+const { getOpenAIClient } = helpersDefault;
+import _default from '~/app/clients/tools/util';
+const { loadAuthValues } = _default;
+import __default from '~/models/Agent';
+const { getAgent } = __default;
+import ___default from '~/models/File';
+const { getFiles } = ___default;
+import ____default from '~/config';
+const { logger } = ____default;
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', async (req, res) => {
   try {
@@ -263,4 +257,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

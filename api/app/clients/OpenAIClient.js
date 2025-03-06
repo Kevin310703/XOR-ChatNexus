@@ -1,46 +1,34 @@
-const OpenAI = require('openai');
-const { OllamaClient } = require('./OllamaClient');
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const { SplitStreamHandler, GraphEvents } = require('@librechat/agents');
+import OpenAI, { APIError, OpenAIError } from 'openai';
+import OllamaClientDefault from './OllamaClient';
+const { OllamaClient } = OllamaClientDefault;
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { SplitStreamHandler, GraphEvents } from '@librechat/agents';
+import { Constants, ImageDetail, EModelEndpoint, resolveHeaders, KnownEndpoints, openAISettings, ImageDetailCost, CohereConstants, getResponseSender, validateVisionModel, mapModelToAzureConfig } from 'librechat-data-provider';
+import _default from '~/utils';
 const {
-  Constants,
-  ImageDetail,
-  EModelEndpoint,
-  resolveHeaders,
-  KnownEndpoints,
-  openAISettings,
-  ImageDetailCost,
-  CohereConstants,
-  getResponseSender,
-  validateVisionModel,
-  mapModelToAzureConfig,
-} = require('librechat-data-provider');
+  extractBaseURL, constructAzureURL, getModelMaxTokens, genAzureChatCompletion, getModelMaxOutputTokens,
+} = _default;
+import __default from './prompts';
 const {
-  extractBaseURL,
-  constructAzureURL,
-  getModelMaxTokens,
-  genAzureChatCompletion,
-  getModelMaxOutputTokens,
-} = require('~/utils');
-const {
-  truncateText,
-  formatMessage,
-  CUT_OFF_PROMPT,
-  titleInstruction,
-  createContextHandlers,
-} = require('./prompts');
-const { encodeAndFormat } = require('~/server/services/Files/images/encode');
-const { addSpaceIfNeeded, isEnabled, sleep } = require('~/server/utils');
-const Tokenizer = require('~/server/services/Tokenizer');
-const { spendTokens } = require('~/models/spendTokens');
-const { handleOpenAIErrors } = require('./tools/util');
-const { createLLM, RunManager } = require('./llm');
-const { logger, sendEvent } = require('~/config');
-const ChatGPTClient = require('./ChatGPTClient');
-const { summaryBuffer } = require('./memory');
-const { runTitleChain } = require('./chains');
-const { tokenSplit } = require('./document');
-const BaseClient = require('./BaseClient');
+  truncateText, formatMessage, CUT_OFF_PROMPT, titleInstruction, createContextHandlers,
+} = __default;
+import { encodeAndFormat } from '~/server/services/Files/images/encode';
+import { addSpaceIfNeeded, isEnabled, sleep } from '~/server/utils';
+import { getTokenCount as _getTokenCount } from '~/server/services/Tokenizer';
+import { spendTokens } from '~/models/spendTokens';
+import ___default from './tools/util';
+const { handleOpenAIErrors } = ___default;
+import ____default from './llm';
+const { createLLM, RunManager } = ____default;
+import { logger, sendEvent } from '~/config';
+import ChatGPTClient from './ChatGPTClient';
+import _____default from './memory';
+const { summaryBuffer } = _____default;
+import ______default from './chains';
+const { runTitleChain } = ______default;
+import _______default from './document';
+const { tokenSplit } = _______default;
+import BaseClient from './BaseClient';
 
 class OpenAIClient extends BaseClient {
   constructor(apiKey, options = {}) {
@@ -315,7 +303,7 @@ class OpenAIClient extends BaseClient {
    */
   getTokenCount(text) {
     const encoding = this.getEncoding();
-    return Tokenizer.getTokenCount(text, encoding);
+    return _getTokenCount(text, encoding);
   }
 
   /**
@@ -1490,7 +1478,7 @@ ${convo}
     } catch (err) {
       if (
         err?.message?.includes('abort') ||
-        (err instanceof OpenAI.APIError && err?.message?.includes('abort'))
+        (err instanceof APIError && err?.message?.includes('abort'))
       ) {
         return this.getStreamText(intermediateReply);
       }
@@ -1504,7 +1492,7 @@ ${convo}
         err?.message?.includes('The server had an error processing your request') ||
         err?.message?.includes('missing finish_reason') ||
         err?.message?.includes('missing role') ||
-        (err instanceof OpenAI.OpenAIError && err?.message?.includes('missing finish_reason'))
+        (err instanceof OpenAIError && err?.message?.includes('missing finish_reason'))
       ) {
         logger.error('[OpenAIClient] Known OpenAI error:', err);
         if (this.streamHandler && this.streamHandler.reasoningTokens.length) {
@@ -1514,7 +1502,7 @@ ${convo}
         } else {
           throw err;
         }
-      } else if (err instanceof OpenAI.APIError) {
+      } else if (err instanceof APIError) {
         if (this.streamHandler && this.streamHandler.reasoningTokens.length) {
           return this.getStreamText();
         } else if (intermediateReply.length > 0) {
@@ -1530,4 +1518,4 @@ ${convo}
   }
 }
 
-module.exports = OpenAIClient;
+export default OpenAIClient;

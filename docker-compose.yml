@@ -6,7 +6,7 @@ services:
     container_name: ChatNexus
     ports:
       - "${PORT}:${PORT}"
-      - "5173:5173"
+      # - "5173:5173"
     depends_on:
       - mongodb
       - rag_api
@@ -33,8 +33,8 @@ services:
       - ./logs:/app/api/logs
       - ./chatnexus.yaml:/app/chatnexus.yaml  # Thêm dòng này để mount file cấu hình
       - ./api:/app/api  # Mount backend để hot reload
-      - ./client:/app/client  # Mount frontend để hot reload
-      - ./packages:/app/packages  # Mount packages để hot reload 
+      # - ./client:/app/client  # Mount frontend để hot reload
+      # - ./packages:/app/packages  # Mount packages để hot reload 
   mongodb:
     container_name: chat-mongodb
     image: mongo

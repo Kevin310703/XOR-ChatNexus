@@ -1,5 +1,5 @@
-const URL = require('url').URL;
-const path = require('path');
+import { URL } from 'url';
+import { basename as _basename } from 'path';
 
 const imageExtensionRegex = /\.(jpg|jpeg|png|gif|bmp|tiff|svg|webp)$/i;
 
@@ -13,7 +13,7 @@ const imageExtensionRegex = /\.(jpg|jpeg|png|gif|bmp|tiff|svg|webp)$/i;
 function getImageBasename(urlString) {
   try {
     const url = new URL(urlString);
-    const basename = path.basename(url.pathname);
+    const basename = _basename(url.pathname);
 
     return imageExtensionRegex.test(basename) ? basename : '';
   } catch (error) {
@@ -32,14 +32,14 @@ function getImageBasename(urlString) {
 function getFileBasename(urlString) {
   try {
     const url = new URL(urlString);
-    return path.basename(url.pathname);
+    return _basename(url.pathname);
   } catch (error) {
     // If URL parsing fails, return an empty string
     return '';
   }
 }
 
-module.exports = {
+export default {
   getImageBasename,
   getFileBasename,
 };

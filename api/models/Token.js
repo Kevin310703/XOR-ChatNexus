@@ -1,13 +1,15 @@
-const mongoose = require('mongoose');
-const { encryptV2 } = require('~/server/utils/crypto');
-const tokenSchema = require('./schema/tokenSchema');
-const { logger } = require('~/config');
+import { model } from 'mongoose';
+import _default from '~/server/utils/crypto';
+const { encryptV2 } = _default;
+import tokenSchema from './schema/tokenSchema';
+import __default from '~/config';
+const { logger } = __default;
 
 /**
  * Token model.
  * @type {mongoose.Model}
  */
-const Token = mongoose.model('Token', tokenSchema);
+const Token = model('Token', tokenSchema);
 /**
  * Fixes the indexes for the Token collection from legacy TTL indexes to the new expiresAt index.
  */
@@ -190,7 +192,7 @@ async function handleOAuthToken({
   }
 }
 
-module.exports = {
+export default {
   findToken,
   createToken,
   updateToken,

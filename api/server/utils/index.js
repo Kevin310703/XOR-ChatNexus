@@ -1,12 +1,12 @@
-const streamResponse = require('./streamResponse');
-const removePorts = require('./removePorts');
-const countTokens = require('./countTokens');
-const handleText = require('./handleText');
-const sendEmail = require('./sendEmail');
-const cryptoUtils = require('./crypto');
-const queue = require('./queue');
-const files = require('./files');
-const math = require('./math');
+import streamResponse from './streamResponse.js';
+import removePorts from './removePorts.js';
+import countTokens from './countTokens.js';
+import handleText from './handleText.js';
+import sendEmail from './sendEmail.js';
+import cryptoUtils from './crypto.js';
+import queue from './queue.js';
+import files from './files.js';
+import math from './math.js';
 
 /**
  * Check if email configuration is set
@@ -21,7 +21,7 @@ function checkEmailConfig() {
   );
 }
 
-module.exports = {
+export default {
   ...streamResponse,
   checkEmailConfig,
   ...cryptoUtils,

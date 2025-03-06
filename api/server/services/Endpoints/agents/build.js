@@ -1,5 +1,7 @@
-const { loadAgent } = require('~/models/Agent');
-const { logger } = require('~/config');
+import agent from '~/models/Agent';
+const { loadAgent } = agent;
+import _default from '~/config';
+const { logger } = _default;
 
 const buildOptions = (req, endpoint, parsedBody) => {
   const {
@@ -34,4 +36,4 @@ const buildOptions = (req, endpoint, parsedBody) => {
   return endpointOption;
 };
 
-module.exports = { buildOptions };
+export default { buildOptions };

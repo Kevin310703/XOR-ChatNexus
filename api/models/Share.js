@@ -1,9 +1,11 @@
-const { nanoid } = require('nanoid');
-const { Constants } = require('librechat-data-provider');
-const { Conversation } = require('~/models/Conversation');
-const SharedLink = require('./schema/shareSchema');
-const { getMessages } = require('./Message');
-const logger = require('~/config/winston');
+import { nanoid } from 'nanoid';
+import { Constants } from 'librechat-data-provider';
+import _default from '~/models/Conversation';
+const { Conversation } = _default;
+import SharedLink from './schema/shareSchema';
+import __default from './Message';
+const { getMessages } = __default;
+import logger from '~/config/winston';
 
 class ShareServiceError extends Error {
   constructor(message, code) {
@@ -328,7 +330,7 @@ async function deleteSharedLink(user, shareId) {
   }
 }
 
-module.exports = {
+export default {
   SharedLink,
   getSharedLink,
   getSharedLinks,

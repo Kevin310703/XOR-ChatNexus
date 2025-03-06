@@ -1,6 +1,7 @@
-const { SystemRoles } = require('librechat-data-provider');
-const { isEnabled } = require('~/server/utils');
-const { logger } = require('~/config');
+import { SystemRoles } from 'librechat-data-provider';
+import { isEnabled } from '~/server/utils';
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * Checks if the user can delete their account
@@ -25,4 +26,4 @@ const canDeleteAccount = async (req, res, next = () => {}) => {
   }
 };
 
-module.exports = canDeleteAccount;
+export default canDeleteAccount;

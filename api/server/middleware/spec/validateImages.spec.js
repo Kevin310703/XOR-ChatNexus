@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const validateImageRequest = require('~/server/middleware/validateImageRequest');
+import { sign } from 'jsonwebtoken';
+import validateImageRequest from '~/server/middleware/validateImageRequest';
 
 describe('validateImageRequest middleware', () => {
   let req, res, next;
@@ -43,7 +43,7 @@ describe('validateImageRequest middleware', () => {
   });
 
   test('should return 403 if refresh token is expired', () => {
-    const expiredToken = jwt.sign(
+    const expiredToken = sign(
       { id: validObjectId, exp: Math.floor(Date.now() / 1000) - 3600 },
       process.env.JWT_REFRESH_SECRET,
     );
@@ -54,7 +54,7 @@ describe('validateImageRequest middleware', () => {
   });
 
   test('should call next() for valid image path', () => {
-    const validToken = jwt.sign(
+    const validToken = sign(
       { id: validObjectId, exp: Math.floor(Date.now() / 1000) + 3600 },
       process.env.JWT_REFRESH_SECRET,
     );
@@ -65,7 +65,7 @@ describe('validateImageRequest middleware', () => {
   });
 
   test('should return 403 for invalid image path', () => {
-    const validToken = jwt.sign(
+    const validToken = sign(
       { id: validObjectId, exp: Math.floor(Date.now() / 1000) + 3600 },
       process.env.JWT_REFRESH_SECRET,
     );
@@ -77,7 +77,7 @@ describe('validateImageRequest middleware', () => {
   });
 
   test('should return 403 for invalid ObjectId format', () => {
-    const validToken = jwt.sign(
+    const validToken = sign(
       { id: validObjectId, exp: Math.floor(Date.now() / 1000) + 3600 },
       process.env.JWT_REFRESH_SECRET,
     );
@@ -90,7 +90,7 @@ describe('validateImageRequest middleware', () => {
 
   // File traversal tests
   test('should prevent file traversal attempts', () => {
-    const validToken = jwt.sign(
+    const validToken = sign(
       { id: validObjectId, exp: Math.floor(Date.now() / 1000) + 3600 },
       process.env.JWT_REFRESH_SECRET,
     );
@@ -113,7 +113,7 @@ describe('validateImageRequest middleware', () => {
   });
 
   test('should handle URL encoded characters in valid paths', () => {
-    const validToken = jwt.sign(
+    const validToken = sign(
       { id: validObjectId, exp: Math.floor(Date.now() / 1000) + 3600 },
       process.env.JWT_REFRESH_SECRET,
     );

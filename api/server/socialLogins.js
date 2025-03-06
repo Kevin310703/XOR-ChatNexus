@@ -1,18 +1,14 @@
-const Redis = require('ioredis');
-const passport = require('passport');
-const session = require('express-session');
+import Redis from 'ioredis';
+import pkg from 'passport';
+const { use, session: _session } = pkg;
+import session from 'express-session';
 const MemoryStore = require('memorystore')(session);
-const RedisStore = require('connect-redis').default;
-const {
-  setupOpenId,
-  googleLogin,
-  githubLogin,
-  discordLogin,
-  facebookLogin,
-  appleLogin,
-} = require('~/strategies');
-const { isEnabled } = require('~/server/utils');
-const { logger } = require('~/config');
+import RedisStore from 'connect-redis';
+import * as strategies from '../strategies/index.js';
+const { setupOpenId, googleLogin, githubLogin, discordLogin, facebookLogin, appleLogin } = strategies;
+import * as handleTextUtils from './utils/handleText.js';
+const { isEnabled } = handleTextUtils;
+import logger from '../config/meiliLogger.js';
 
 /**
  *
@@ -20,19 +16,19 @@ const { logger } = require('~/config');
  */
 const configureSocialLogins = (app) => {
   if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    passport.use(googleLogin());
+    use(googleLogin());
   }
   if (process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET) {
-    passport.use(facebookLogin());
+    use(facebookLogin());
   }
   if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
-    passport.use(githubLogin());
+    use(githubLogin());
   }
   if (process.env.DISCORD_CLIENT_ID && process.env.DISCORD_CLIENT_SECRET) {
-    passport.use(discordLogin());
+    use(discordLogin());
   }
   if (process.env.APPLE_CLIENT_ID && process.env.APPLE_PRIVATE_KEY_PATH) {
-    passport.use(appleLogin());
+    use(appleLogin());
   }
   if (
     process.env.OPENID_CLIENT_ID &&
@@ -59,9 +55,9 @@ const configureSocialLogins = (app) => {
       });
     }
     app.use(session(sessionOptions));
-    app.use(passport.session());
+    app.use(_session());
     setupOpenId();
   }
 };
 
-module.exports = configureSocialLogins;
+export default configureSocialLogins;

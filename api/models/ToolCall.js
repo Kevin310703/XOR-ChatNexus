@@ -1,4 +1,4 @@
-const ToolCall = require('./schema/toolCallSchema');
+import ToolCall from './schema/toolCallSchema';
 
 /**
  * Create a new tool call
@@ -86,7 +86,7 @@ async function deleteToolCalls(userId, conversationId) {
   }
 }
 
-module.exports = {
+export default {
   createToolCall,
   updateToolCall,
   deleteToolCalls,

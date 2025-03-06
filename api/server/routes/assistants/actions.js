@@ -1,14 +1,15 @@
-const express = require('express');
-const { nanoid } = require('nanoid');
-const { actionDelimiter, EModelEndpoint, removeNullishValues } = require('librechat-data-provider');
-const { encryptMetadata, domainParser } = require('~/server/services/ActionService');
-const { getOpenAIClient } = require('~/server/controllers/assistants/helpers');
-const { updateAction, getActions, deleteAction } = require('~/models/Action');
-const { updateAssistantDoc, getAssistant } = require('~/models/Assistant');
-const { isActionDomainAllowed } = require('~/server/services/domains');
-const { logger } = require('~/config');
+import { Router } from 'express';
+import { nanoid } from 'nanoid';
+import { actionDelimiter, EModelEndpoint, removeNullishValues } from 'librechat-data-provider';
+import { encryptMetadata, domainParser } from '~/server/services/ActionService';
+import helpers from '~/server/controllers/assistants/helpers';
+const { getOpenAIClient } = helpers;
+import { updateAction, getActions, deleteAction } from '~/models/Action';
+import { updateAssistantDoc, getAssistant } from '~/models/Assistant';
+import { isActionDomainAllowed } from '~/server/services/domains';
+import { logger } from '~/config';
 
-const router = express.Router();
+const router = Router();
 
 /**
  * Adds or updates actions for a specific assistant.
@@ -202,4 +203,4 @@ router.delete('/:assistant_id/:action_id/:model', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

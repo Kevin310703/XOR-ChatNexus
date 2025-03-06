@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema } from 'mongoose';
+const Schema = _Schema;
 
 const tokenSchema = new Schema({
   userId: {
@@ -35,4 +35,4 @@ const tokenSchema = new Schema({
 
 tokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-module.exports = tokenSchema;
+export default tokenSchema;

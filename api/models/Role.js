@@ -1,19 +1,11 @@
-const {
-  CacheKeys,
-  SystemRoles,
-  roleDefaults,
-  PermissionTypes,
-  removeNullishValues,
-  agentPermissionsSchema,
-  promptPermissionsSchema,
-  runCodePermissionsSchema,
-  bookmarkPermissionsSchema,
-  multiConvoPermissionsSchema,
-  temporaryChatPermissionsSchema,
-} = require('librechat-data-provider');
-const getLogStores = require('~/cache/getLogStores');
-const Role = require('~/models/schema/roleSchema');
-const { logger } = require('~/config');
+import { CacheKeys, SystemRoles, roleDefaults, PermissionTypes, removeNullishValues, 
+  agentPermissionsSchema, promptPermissionsSchema, runCodePermissionsSchema, 
+  bookmarkPermissionsSchema, multiConvoPermissionsSchema, temporaryChatPermissionsSchema } 
+  from 'librechat-data-provider';
+import getLogStores from '../cache/getLogStores.js';
+import Role from '../models/schema/roleSchema.js';
+import _default from '../config/index.js';
+const { logger } = _default;
 
 /**
  * Retrieve a role by name and convert the found role document to a plain object.
@@ -167,7 +159,7 @@ const initializeRoles = async function () {
     await role.save();
   }
 };
-module.exports = {
+export default {
   getRoleByName,
   initializeRoles,
   updateRoleByName,

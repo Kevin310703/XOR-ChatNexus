@@ -1,9 +1,13 @@
-const axios = require('axios');
-const { extractEnvVariable, TTSProviders } = require('librechat-data-provider');
-const { getRandomVoiceId, createChunkProcessor, splitTextIntoChunks } = require('./streamAudio');
-const { getCustomConfig } = require('~/server/services/Config');
-const { genAzureEndpoint } = require('~/utils');
-const { logger } = require('~/config');
+import { post } from 'axios';
+import { extractEnvVariable, TTSProviders } from 'librechat-data-provider';
+import streamAudio from './streamAudio';
+const { getRandomVoiceId, createChunkProcessor, splitTextIntoChunks } = streamAudio;
+import _default from '~/server/services/Config';
+const { getCustomConfig } = _default;
+import __default from '~/utils';
+const { genAzureEndpoint } = __default;
+import ___default from '~/config';
+const { logger } = ___default;
 
 /**
  * Service class for handling Text-to-Speech (TTS) operations.
@@ -272,7 +276,7 @@ class TTSService {
     const options = { headers, responseType: stream ? 'stream' : 'arraybuffer' };
 
     try {
-      return await axios.post(url, data, options);
+      return await post(url, data, options);
     } catch (error) {
       logger.error(`TTS request failed for provider ${provider}:`, error);
       throw error;
@@ -470,7 +474,7 @@ async function getProvider() {
   return ttsService.getProvider();
 }
 
-module.exports = {
+export default {
   textToSpeech,
   streamAudio,
   getProvider,

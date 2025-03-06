@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const jwt = require('jsonwebtoken');
-const { Strategy: AppleStrategy } = require('passport-apple');
-const socialLogin = require('./socialLogin');
-const User = require('~/models/User');
-const { logger } = require('~/config');
-const { createSocialUser, handleExistingUser } = require('./process');
-const { isEnabled } = require('~/server/utils');
-const { findUser } = require('~/models');
+import { connect, disconnect } from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { decode } from 'jsonwebtoken';
+import { Strategy as AppleStrategy } from 'passport-apple';
+import socialLogin from './socialLogin';
+import User, { deleteMany, findOne } from '~/models/User';
+import { logger } from '~/config';
+import { createSocialUser, handleExistingUser } from './process';
+import { isEnabled } from '~/server/utils';
+import { findUser } from '~/models';
 
 // Mocking external dependencies
 jest.mock('jsonwebtoken');
@@ -38,11 +38,11 @@ describe('Apple Login Strategy', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
-    await mongoose.connect(mongoUri);
+    await connect(mongoUri);
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await disconnect();
     await mongoServer.stop();
     process.env = OLD_ENV;
   });
@@ -60,7 +60,7 @@ describe('Apple Login Strategy', () => {
 
     // Clear mocks and database
     jest.clearAllMocks();
-    await User.deleteMany({});
+    await deleteMany({});
 
     // Define getProfileDetails within the test scope
     getProfileDetails = ({ idToken, profile }) => {
@@ -70,7 +70,7 @@ describe('Apple Login Strategy', () => {
         throw new Error('idToken is missing');
       }
 
-      const decoded = jwt.decode(idToken);
+      const decoded = decode(idToken);
       if (!decoded) {
         logger.error('Failed to decode idToken');
         throw new Error('idToken is invalid');
@@ -129,7 +129,7 @@ describe('Apple Login Strategy', () => {
     });
 
     it('should throw an error if idToken cannot be decoded', () => {
-      jwt.decode.mockReturnValue(null);
+      decode.mockReturnValue(null);
       expect(() => {
         getProfileDetails({ idToken: 'invalid_id_token', profile: mockProfile });
       }).toThrow('idToken is invalid');
@@ -146,14 +146,14 @@ describe('Apple Login Strategy', () => {
         },
       };
 
-      jwt.decode.mockReturnValue(fakeDecodedToken);
+      decode.mockReturnValue(fakeDecodedToken);
 
       const profileDetails = getProfileDetails({
         idToken: 'fake_id_token',
         profile: mockProfile,
       });
 
-      expect(jwt.decode).toHaveBeenCalledWith('fake_id_token');
+      expect(decode).toHaveBeenCalledWith('fake_id_token');
       expect(logger.debug).toHaveBeenCalledWith(
         expect.stringContaining('Decoded Apple JWT'),
       );
@@ -172,7 +172,7 @@ describe('Apple Login Strategy', () => {
         sub: 'apple-sub-5678',
       };
 
-      jwt.decode.mockReturnValue(fakeDecodedToken);
+      decode.mockReturnValue(fakeDecodedToken);
 
       const profileDetails = getProfileDetails({
         idToken: 'fake_id_token',
@@ -208,8 +208,8 @@ describe('Apple Login Strategy', () => {
     const fakeRefreshToken = 'fake_refresh_token';
 
     beforeEach(() => {
-      jwt.decode.mockReturnValue(decodedToken);
-      findUser.mockImplementation(({ email }) => User.findOne({ email }));
+      decode.mockReturnValue(decodedToken);
+      findUser.mockImplementation(({ email }) => findOne({ email }));
     });
 
     it('should create a new user if one does not exist and registration is allowed', async () => {
@@ -315,7 +315,7 @@ describe('Apple Login Strategy', () => {
 
     it('should handle decoding errors gracefully', async () => {
       // Simulate decoding failure by returning null
-      jwt.decode.mockReturnValue(null);
+      decode.mockReturnValue(null);
 
       const mockVerifyCallback = jest.fn();
 

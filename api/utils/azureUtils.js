@@ -1,4 +1,4 @@
-const { isEnabled } = require('~/server/utils');
+import { isEnabled } from '~/server/utils';
 
 /**
  * Sanitizes the model name to be used in the URL by removing or replacing disallowed characters.
@@ -96,7 +96,7 @@ function constructAzureURL({ baseURL, azureOptions }) {
   return finalURL;
 }
 
-module.exports = {
+export default {
   sanitizeModelName,
   genAzureEndpoint,
   genAzureChatCompletion,

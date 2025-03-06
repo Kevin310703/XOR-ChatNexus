@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { SystemRoles } = require('librechat-data-provider');
+import { Schema } from 'mongoose';
+import { SystemRoles } from 'librechat-data-provider';
 
 /**
  * @typedef {Object} MongoSession
@@ -32,21 +32,21 @@ const { SystemRoles } = require('librechat-data-provider');
  */
 
 /** @type {MongooseSchema<MongoSession>} */
-const Session = mongoose.Schema({
+const Session = Schema({
   refreshToken: {
     type: String,
     default: '',
   },
 });
 
-const backupCodeSchema = mongoose.Schema({
+const backupCodeSchema = Schema({
   codeHash: { type: String, required: true },
   used: { type: Boolean, default: false },
   usedAt: { type: Date, default: null },
 });
 
 /** @type {MongooseSchema<MongoUser>} */
-const userSchema = mongoose.Schema(
+const userSchema = Schema(
   {
     name: {
       type: String,
@@ -148,4 +148,4 @@ const userSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-module.exports = userSchema;
+export default userSchema;

@@ -1,4 +1,4 @@
-const extractBaseURL = require('./extractBaseURL');
+import extractBaseURL from './extractBaseURL';
 
 describe('extractBaseURL', () => {
   test('should extract base URL up to /v1 for standard endpoints', () => {

@@ -1,5 +1,5 @@
-const crud = require('./crud');
+import crud from './crud';
 
-module.exports = {
+export default {
   ...crud,
 };

@@ -1,6 +1,7 @@
 // file deepcode ignore NoHardcodedPasswords: No hard-coded passwords in tests
-const { errorsToString } = require('librechat-data-provider');
-const { loginSchema, registerSchema } = require('./validators');
+import { errorsToString } from 'librechat-data-provider';
+import validators from './validators';
+const { loginSchema, registerSchema } = validators;
 
 describe('Zod Schemas', () => {
   describe('loginSchema', () => {

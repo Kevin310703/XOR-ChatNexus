@@ -1,5 +1,5 @@
-const summaryBuffer = require('./summaryBuffer');
+import summaryBuffer from './summaryBuffer';
 
-module.exports = {
+export default {
   ...summaryBuffer,
 };

@@ -1,9 +1,9 @@
-const passport = require('passport');
+import { authenticate } from 'passport';
 
 // This middleware does not require authentication,
 // but if the user is authenticated, it will set the user object.
 const optionalJwtAuth = (req, res, next) => {
-  passport.authenticate('jwt', { session: false }, (err, user) => {
+  authenticate('jwt', { session: false }, (err, user) => {
     if (err) {
       return next(err);
     }
@@ -14,4 +14,4 @@ const optionalJwtAuth = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports = optionalJwtAuth;
+export default optionalJwtAuth;

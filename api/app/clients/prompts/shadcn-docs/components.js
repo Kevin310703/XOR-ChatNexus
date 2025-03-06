@@ -490,6 +490,6 @@ import {
 
 const components = Object.assign({}, essentialComponents, extraComponents);
 
-module.exports = {
+export default {
   components,
 };

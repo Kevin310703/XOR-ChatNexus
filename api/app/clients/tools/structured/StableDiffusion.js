@@ -1,14 +1,14 @@
 // Generates image using stable diffusion webui's api (automatic1111)
-const fs = require('fs');
-const { z } = require('zod');
-const path = require('path');
-const axios = require('axios');
-const sharp = require('sharp');
-const { v4: uuidv4 } = require('uuid');
-const { Tool } = require('@langchain/core/tools');
-const { FileContext, ContentTypes } = require('librechat-data-provider');
-const paths = require('~/config/paths');
-const { logger } = require('~/config');
+import { existsSync, mkdirSync } from 'fs';
+import { z } from 'zod';
+import { join, relative } from 'path';
+import { post } from 'axios';
+import sharp from 'sharp';
+import { v4 as uuidv4 } from 'uuid';
+import { Tool } from '@langchain/core/tools';
+import { FileContext, ContentTypes } from 'librechat-data-provider';
+import paths from '~/config/paths';
+import { logger } from '~/config';
 
 const displayMessage =
   'Stable Diffusion displayed an image. All generated images are already plainly visible, so don\'t repeat the descriptions in detail. Do not list download links as they are available in the UI already. The user may download the images by clicking on them, but do not mention anything about downloading to the user.';
@@ -64,8 +64,7 @@ class StableDiffusionAPI extends Tool {
   }
 
   getMarkdownImageUrl(imageName) {
-    const imageUrl = path
-      .join(this.relativePath, this.userId, imageName)
+    const imageUrl = join(this.relativePath, this.userId, imageName)
       .replace(/\\/g, '/')
       .replace('public/', '');
     return `![generated image](/${imageUrl})`;
@@ -102,7 +101,7 @@ class StableDiffusionAPI extends Tool {
     };
     let generationResponse;
     try {
-      generationResponse = await axios.post(`${url}/sdapi/v1/txt2img`, payload);
+      generationResponse = await post(`${url}/sdapi/v1/txt2img`, payload);
     } catch (error) {
       logger.error('[StableDiffusion] Error while generating image:', error);
       return 'Error making API request.';
@@ -120,11 +119,11 @@ class StableDiffusionAPI extends Tool {
     const file_id = uuidv4();
     const imageName = `${file_id}.png`;
     const { imageOutput: imageOutputPath, clientPath } = paths;
-    const filepath = path.join(imageOutputPath, this.userId, imageName);
-    this.relativePath = path.relative(clientPath, imageOutputPath);
+    const filepath = join(imageOutputPath, this.userId, imageName);
+    this.relativePath = relative(clientPath, imageOutputPath);
 
-    if (!fs.existsSync(path.join(imageOutputPath, this.userId))) {
-      fs.mkdirSync(path.join(imageOutputPath, this.userId), { recursive: true });
+    if (!existsSync(join(imageOutputPath, this.userId))) {
+      mkdirSync(join(imageOutputPath, this.userId), { recursive: true });
     }
 
     try {
@@ -192,4 +191,4 @@ class StableDiffusionAPI extends Tool {
   }
 }
 
-module.exports = StableDiffusionAPI;
+export default StableDiffusionAPI;

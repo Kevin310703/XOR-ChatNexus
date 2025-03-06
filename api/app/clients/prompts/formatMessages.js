@@ -1,6 +1,6 @@
-const { ToolMessage } = require('@langchain/core/messages');
-const { EModelEndpoint, ContentTypes } = require('librechat-data-provider');
-const { HumanMessage, AIMessage, SystemMessage } = require('@langchain/core/messages');
+import { ToolMessage } from '@langchain/core/messages';
+import { EModelEndpoint, ContentTypes } from 'librechat-data-provider';
+import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages';
 
 /**
  * Formats a message to OpenAI Vision API payload format.
@@ -266,7 +266,7 @@ const formatContentStrings = (payload) => {
   return messages;
 };
 
-module.exports = {
+export default {
   formatMessage,
   formatFromLangChain,
   formatAgentMessages,

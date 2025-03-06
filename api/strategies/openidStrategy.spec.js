@@ -1,8 +1,8 @@
-const fetch = require('node-fetch');
-const jwtDecode = require('jsonwebtoken/decode');
-const { Issuer, Strategy: OpenIDStrategy } = require('openid-client');
-const { findUser, createUser, updateUser } = require('~/models/userMethods');
-const setupOpenId = require('./openidStrategy');
+import fetch, { mockResolvedValue } from 'node-fetch';
+import { mockReturnValue } from 'jsonwebtoken/decode';
+import { Issuer, Strategy as OpenIDStrategy } from 'openid-client';
+import { findUser, createUser, updateUser } from '~/models/userMethods';
+import setupOpenId from './openidStrategy';
 
 // --- Mocks ---
 jest.mock('node-fetch');
@@ -98,7 +98,7 @@ describe('setupOpenId', () => {
     delete process.env.PROXY;
 
     // Default jwtDecode mock returns a token that includes the required role.
-    jwtDecode.mockReturnValue({
+    mockReturnValue({
       roles: ['requiredRole'],
     });
 
@@ -118,7 +118,7 @@ describe('setupOpenId', () => {
       ok: true,
       buffer: jest.fn().mockResolvedValue(fakeBuffer),
     };
-    fetch.mockResolvedValue(fakeResponse);
+    mockResolvedValue(fakeResponse);
 
     // Finally, call the setup function so that passport.use gets called
     await setupOpenId();
@@ -261,7 +261,7 @@ describe('setupOpenId', () => {
 
   it('should enforce the required role and reject login if missing', async () => {
     // Arrange – simulate a token without the required role.
-    jwtDecode.mockReturnValue({
+    mockReturnValue({
       roles: ['SomeOtherRole'],
     });
     const userinfo = { ...baseUserinfo };

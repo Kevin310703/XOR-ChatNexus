@@ -1,7 +1,9 @@
-const { sign } = require('jsonwebtoken');
-const { webcrypto } = require('node:crypto');
-const { hashBackupCode, decryptV2 } = require('~/server/utils/crypto');
-const { updateUser } = require('~/models/userMethods');
+import { sign } from 'jsonwebtoken';
+import { webcrypto } from 'node:crypto';
+import __default from '~/server/utils/crypto';
+const { hashBackupCode, decryptV2 } = __default;
+import _default from '~/models/userMethods';
+const { updateUser } = _default;
 
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
@@ -227,7 +229,7 @@ const getTOTPSecret = async (storedSecret) => {
   return storedSecret;
 };
 
-module.exports = {
+export default {
   verifyTOTP,
   generateTOTP,
   getTOTPSecret,

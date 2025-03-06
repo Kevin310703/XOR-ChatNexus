@@ -1,4 +1,5 @@
-const Redis = require('ioredis');
+import { Cluster } from 'ioredis';
 const { REDIS_URI } = process.env ?? {};
-const redis = new Redis.Cluster(REDIS_URI);
-module.exports = redis;
+const redis = new Cluster(REDIS_URI);
+
+export default redis;

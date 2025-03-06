@@ -13,7 +13,7 @@
 */
 
 require('dotenv').config();
-const { OpenAIClient } = require('../');
+import { OpenAIClient } from '../';
 
 function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

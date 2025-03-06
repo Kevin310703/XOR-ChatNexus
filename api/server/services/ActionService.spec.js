@@ -1,5 +1,6 @@
-const { Constants, EModelEndpoint, actionDomainSeparator } = require('librechat-data-provider');
-const { domainParser } = require('./ActionService');
+import { Constants, EModelEndpoint, actionDomainSeparator } from 'librechat-data-provider';
+import _default from './ActionService';
+const { domainParser } = _default;
 
 jest.mock('keyv');
 jest.mock('~/server/services/Config', () => ({

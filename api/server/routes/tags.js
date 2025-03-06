@@ -1,16 +1,15 @@
-const express = require('express');
-const { PermissionTypes, Permissions } = require('librechat-data-provider');
+import { Router } from 'express';
+import { PermissionTypes, Permissions } from 'librechat-data-provider';
+import conversationTagDefault from '~/models/ConversationTag';
 const {
-  getConversationTags,
-  updateConversationTag,
-  createConversationTag,
-  deleteConversationTag,
-  updateTagsForConversation,
-} = require('~/models/ConversationTag');
-const { requireJwtAuth, generateCheckAccess } = require('~/server/middleware');
-const { logger } = require('~/config');
+  getConversationTags, updateConversationTag, createConversationTag, deleteConversationTag, updateTagsForConversation,
+} = conversationTagDefault;
+import _default from '~/server/middleware';
+const { requireJwtAuth, generateCheckAccess } = _default;
+import __default from '~/config';
+const { logger } = __default;
 
-const router = express.Router();
+const router = Router();
 
 const checkBookmarkAccess = generateCheckAccess(PermissionTypes.BOOKMARKS, [Permissions.USE]);
 
@@ -115,4 +114,4 @@ router.put('/convo/:conversationId', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

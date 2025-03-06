@@ -1,4 +1,5 @@
-const { isEnabled } = require('~/server/utils');
+import utils from '~/server/utils';
+const { isEnabled } = utils;
 
 /** @returns {TStartupConfig['ldap'] | undefined} */
 const getLdapConfig = () => {
@@ -19,6 +20,6 @@ const getLdapConfig = () => {
   return ldap;
 };
 
-module.exports = {
+export default {
   getLdapConfig,
 };

@@ -1,13 +1,10 @@
-const {
-  verifyTOTP,
-  verifyBackupCode,
-  generateTOTPSecret,
-  generateBackupCodes,
-  getTOTPSecret,
-} = require('~/server/services/twoFactorService');
-const { updateUser, getUserById } = require('~/models');
-const { logger } = require('~/config');
-const { encryptV2 } = require('~/server/utils/crypto');
+import { verifyTOTP, verifyBackupCode, generateTOTPSecret, generateBackupCodes, getTOTPSecret } from '~/server/services/twoFactorService';
+import models from '~/models';
+const { updateUser, getUserById } = models;
+import _default from '~/config';
+const { logger } = _default;
+import __default from '~/server/utils/crypto';
+const { encryptV2 } = __default;
 
 const enable2FAController = async (req, res) => {
   const safeAppTitle = (process.env.APP_TITLE || 'LibreChat').replace(/\s+/g, '');
@@ -110,7 +107,7 @@ const regenerateBackupCodesController = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   enable2FAController,
   verify2FAController,
   confirm2FAController,

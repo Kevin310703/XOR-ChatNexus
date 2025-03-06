@@ -1,8 +1,4 @@
-const {
-  ChatPromptTemplate,
-  SystemMessagePromptTemplate,
-  HumanMessagePromptTemplate,
-} = require('@langchain/core/prompts');
+import { ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate } from '@langchain/core/prompts';
 
 const langPrompt = new ChatPromptTemplate({
   promptMessages: [
@@ -126,7 +122,7 @@ function parseParamFromPrompt(prompt, paramName) {
   return `No ${paramName} provided`;
 }
 
-module.exports = {
+export default {
   langPrompt,
   titleInstruction,
   createTitlePrompt,

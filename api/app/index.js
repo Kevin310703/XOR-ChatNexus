@@ -1,5 +1,5 @@
-const clients = require('./clients');
+import clients from './clients/index.js';
 
-module.exports = {
+export default {
   ...clients,
 };

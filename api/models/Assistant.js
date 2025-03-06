@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const assistantSchema = require('./schema/assistant');
+import { model } from 'mongoose';
+import assistantSchema from './schema/assistant';
 
-const Assistant = mongoose.model('assistant', assistantSchema);
+const Assistant = model('assistant', assistantSchema);
 
 /**
  * Update an assistant with new data without overwriting existing properties,
@@ -57,7 +57,7 @@ const deleteAssistant = async (searchParams) => {
   return await Assistant.findOneAndDelete(searchParams);
 };
 
-module.exports = {
+export default {
   updateAssistantDoc,
   deleteAssistant,
   getAssistants,

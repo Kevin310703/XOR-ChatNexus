@@ -1,8 +1,8 @@
-const fs = require('fs');
-const ioredis = require('ioredis');
-const KeyvRedis = require('@keyv/redis');
-const { isEnabled } = require('~/server/utils');
-const logger = require('~/config/winston');
+import { readFileSync } from 'fs';
+import { Cluster } from 'ioredis';
+import KeyvRedis from '@keyv/redis';
+import { isEnabled } from '../server/utils/index.js';
+import { error, info } from '../config/winston.js';
 
 const { REDIS_URI, USE_REDIS, USE_REDIS_CLUSTER, REDIS_CA, REDIS_KEY_PREFIX, REDIS_MAX_LISTENERS } =
   process.env;
@@ -56,7 +56,7 @@ if (REDIS_URI && isEnabled(USE_REDIS)) {
   };
 
   if (REDIS_CA) {
-    const ca = fs.readFileSync(REDIS_CA);
+    const ca = readFileSync(REDIS_CA);
     redisOptions = { tls: { ca } };
   }
 
@@ -69,18 +69,18 @@ if (REDIS_URI && isEnabled(USE_REDIS)) {
         port: value.port,
       };
     });
-    const cluster = new ioredis.Cluster(hosts, { redisOptions });
+    const cluster = new Cluster(hosts, { redisOptions });
     keyvRedis = new KeyvRedis(cluster, keyvOpts);
   } else {
     keyvRedis = new KeyvRedis(REDIS_URI, keyvOpts);
   }
-  keyvRedis.on('error', (err) => logger.error('KeyvRedis connection error:', err));
+  keyvRedis.on('error', (err) => error('KeyvRedis connection error:', err));
   keyvRedis.setMaxListeners(redis_max_listeners);
-  logger.info(
+  info(
     '[Optional] Redis initialized. Note: Redis support is experimental. If you have issues, disable it. Cache needs to be flushed for values to refresh.',
   );
 } else {
-  logger.info('[Optional] Redis not initialized. Note: Redis support is experimental.');
+  info('[Optional] Redis not initialized. Note: Redis support is experimental.');
 }
 
-module.exports = keyvRedis;
+export default keyvRedis;

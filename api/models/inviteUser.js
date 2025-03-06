@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
-const { getRandomValues, hashToken } = require('~/server/utils/crypto');
-const { createToken, findToken } = require('./Token');
-const logger = require('~/config/winston');
+import { Types } from 'mongoose';
+import crypto from '~/server/utils/crypto';
+const { getRandomValues, hashToken } = crypto;
+import { createToken, findToken } from './Token';
+import logger from '~/config/winston';
 
 /**
  * @module inviteUser
@@ -21,7 +22,7 @@ const createInvite = async (email) => {
     const hash = await hashToken(token);
     const encodedToken = encodeURIComponent(token);
 
-    const fakeUserId = new mongoose.Types.ObjectId();
+    const fakeUserId = new Types.ObjectId();
 
     await createToken({
       userId: fakeUserId,
@@ -63,7 +64,7 @@ const getInvite = async (encodedToken, email) => {
   }
 };
 
-module.exports = {
+export default {
   createInvite,
   getInvite,
 };

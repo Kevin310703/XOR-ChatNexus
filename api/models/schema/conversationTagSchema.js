@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const conversationTagSchema = mongoose.Schema(
+const conversationTagSchema = Schema(
   {
     tag: {
       type: String,
@@ -29,4 +29,4 @@ const conversationTagSchema = mongoose.Schema(
 
 conversationTagSchema.index({ tag: 1, user: 1 }, { unique: true });
 
-module.exports = mongoose.model('ConversationTag', conversationTagSchema);
+export default model('ConversationTag', conversationTagSchema);

@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+import { Schema } from 'mongoose';
 
-const transactionSchema = mongoose.Schema(
+const transactionSchema = Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       index: true,
       required: true,
@@ -39,4 +39,4 @@ const transactionSchema = mongoose.Schema(
   },
 );
 
-module.exports = transactionSchema;
+export default transactionSchema;

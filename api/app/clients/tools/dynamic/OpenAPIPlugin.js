@@ -1,12 +1,12 @@
 require('dotenv').config();
-const fs = require('fs');
-const { z } = require('zod');
-const path = require('path');
-const yaml = require('js-yaml');
-const { createOpenAPIChain } = require('langchain/chains');
-const { DynamicStructuredTool } = require('@langchain/core/tools');
-const { ChatPromptTemplate, HumanMessagePromptTemplate } = require('@langchain/core/prompts');
-const { logger } = require('~/config');
+import { promises, existsSync } from 'fs';
+import { z } from 'zod';
+import { extname, join } from 'path';
+import { load } from 'js-yaml';
+import { createOpenAPIChain } from 'langchain/chains';
+import { DynamicStructuredTool } from '@langchain/core/tools';
+import { ChatPromptTemplate, HumanMessagePromptTemplate } from '@langchain/core/prompts';
+import { logger } from '~/config';
 
 function addLinePrefix(text, prefix = '// ') {
   return text
@@ -47,11 +47,11 @@ const AuthDefinition = z
 
 async function readSpecFile(filePath) {
   try {
-    const fileContents = await fs.promises.readFile(filePath, 'utf8');
-    if (path.extname(filePath) === '.json') {
+    const fileContents = await promises.readFile(filePath, 'utf8');
+    if (extname(filePath) === '.json') {
       return JSON.parse(fileContents);
     }
-    return yaml.load(fileContents);
+    return load(fileContents);
   } catch (e) {
     logger.error('[readSpecFile] error', e);
     return false;
@@ -64,7 +64,7 @@ async function getSpec(url) {
     .url()
     .catch(() => false);
 
-  if (RegularUrl.parse(url) && path.extname(url) === '.json') {
+  if (RegularUrl.parse(url) && extname(url) === '.json') {
     const response = await fetch(url);
     return await response.json();
   }
@@ -73,8 +73,8 @@ async function getSpec(url) {
     .string()
     .url()
     .catch(async () => {
-      const spec = path.join(__dirname, '..', '.well-known', 'openapi', url);
-      if (!fs.existsSync(spec)) {
+      const spec = join(__dirname, '..', '.well-known', 'openapi', url);
+      if (!existsSync(spec)) {
         return false;
       }
 
@@ -177,7 +177,7 @@ async function createOpenAPIPlugin({ data, llm, user, message, memory, signal })
   });
 }
 
-module.exports = {
+export default {
   getSpec,
   readSpecFile,
   createOpenAPIPlugin,

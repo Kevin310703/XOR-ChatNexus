@@ -1,5 +1,5 @@
-const passport = require('passport');
-const DebugControl = require('../../utils/debug.js');
+import { authenticate } from 'passport';
+import DebugControl from '../../utils/debug.js';
 
 function log({ title, parameters }) {
   DebugControl.log.functionName(title);
@@ -9,7 +9,7 @@ function log({ title, parameters }) {
 }
 
 const requireLocalAuth = (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
+  authenticate('local', (err, user, info) => {
     if (err) {
       log({
         title: '(requireLocalAuth) Error at passport.authenticate',
@@ -34,4 +34,4 @@ const requireLocalAuth = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports = requireLocalAuth;
+export default requireLocalAuth;

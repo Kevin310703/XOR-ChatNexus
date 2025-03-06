@@ -1,7 +1,7 @@
-const images = require('./images');
-const crud = require('./crud');
+import images from './images';
+import crud from './crud';
 
-module.exports = {
+export default {
   ...crud,
   ...images,
 };

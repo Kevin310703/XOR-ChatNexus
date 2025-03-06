@@ -1,8 +1,9 @@
-const { v4: uuidv4 } = require('uuid');
-const { EModelEndpoint, Constants, openAISettings, CacheKeys } = require('librechat-data-provider');
-const { createImportBatchBuilder } = require('./importBatchBuilder');
-const getLogStores = require('~/cache/getLogStores');
-const logger = require('~/config/winston');
+import { v4 as uuidv4 } from 'uuid';
+import { EModelEndpoint, Constants, openAISettings, CacheKeys } from 'librechat-data-provider';
+import importBatchBuilder from './importBatchBuilder';
+const { createImportBatchBuilder } = importBatchBuilder;
+import getLogStores from '~/cache/getLogStores';
+import logger from '~/config/winston';
 
 /**
  * Returns the appropriate importer function based on the provided JSON data.
@@ -349,4 +350,4 @@ function formatMessageText(messageData) {
   return messageText;
 }
 
-module.exports = { getImporter, processAssistantMessage };
+export default { getImporter, processAssistantMessage };

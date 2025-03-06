@@ -1,20 +1,17 @@
-const Keyv = require('keyv');
-const crypto = require('crypto');
-const { CohereClient } = require('cohere-ai');
-const { fetchEventSource } = require('@waylaidwanderer/fetch-event-source');
-const { encoding_for_model: encodingForModel, get_encoding: getEncoding } = require('tiktoken');
-const {
-  ImageDetail,
-  EModelEndpoint,
-  resolveHeaders,
-  CohereConstants,
-  mapModelToAzureConfig,
-} = require('librechat-data-provider');
-const { extractBaseURL, constructAzureURL, genAzureChatCompletion } = require('~/utils');
-const { createContextHandlers } = require('./prompts');
-const { createCoherePayload } = require('./llm');
-const BaseClient = require('./BaseClient');
-const { logger } = require('~/config');
+import Keyv from 'keyv';
+import { randomUUID } from 'crypto';
+import { CohereClient } from 'cohere-ai';
+import { fetchEventSource } from '@waylaidwanderer/fetch-event-source';
+import { encoding_for_model as encodingForModel, get_encoding as getEncoding } from 'tiktoken';
+import { ImageDetail, EModelEndpoint, resolveHeaders, CohereConstants, mapModelToAzureConfig } from 'librechat-data-provider';
+import utils from '~/utils';
+const { extractBaseURL, constructAzureURL, genAzureChatCompletion } = utils;
+import _default from './prompts';
+const { createContextHandlers } = _default;
+import __default from './llm';
+const { createCoherePayload } = __default;
+import BaseClient from './BaseClient';
+import { logger } from '~/config';
 
 const CHATGPT_MODEL = 'gpt-3.5-turbo';
 const tokenizersCache = {};
@@ -491,8 +488,8 @@ ${botMessage.message}
       this.setOptions(opts.clientOptions);
     }
 
-    const conversationId = opts.conversationId || crypto.randomUUID();
-    const parentMessageId = opts.parentMessageId || crypto.randomUUID();
+    const conversationId = opts.conversationId || randomUUID();
+    const parentMessageId = opts.parentMessageId || randomUUID();
 
     let conversation =
       typeof opts.conversation === 'object'
@@ -511,7 +508,7 @@ ${botMessage.message}
     const shouldGenerateTitle = opts.shouldGenerateTitle && isNewConversation;
 
     const userMessage = {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       parentMessageId,
       role: 'User',
       message,
@@ -584,7 +581,7 @@ ${botMessage.message}
     reply = reply.trim();
 
     const replyMessage = {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       parentMessageId: userMessage.id,
       role: 'ChatGPT',
       message: reply,
@@ -801,4 +798,4 @@ ${botMessage.message}
   }
 }
 
-module.exports = ChatGPTClient;
+export default ChatGPTClient;

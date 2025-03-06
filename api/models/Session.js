@@ -1,10 +1,12 @@
-const mongoose = require('mongoose');
-const signPayload = require('~/server/services/signPayload');
-const { hashToken } = require('~/server/utils/crypto');
-const sessionSchema = require('./schema/session');
-const { logger } = require('~/config');
+import { model, Types } from 'mongoose';
+import signPayload from '~/server/services/signPayload';
+import _default from '~/server/utils/crypto';
+const { hashToken } = _default;
+import sessionSchema from './schema/session';
+import _default from '~/config';
+const { logger } = _default;
 
-const Session = mongoose.model('Session', sessionSchema);
+const Session = model('Session', sessionSchema);
 
 const { REFRESH_TOKEN_EXPIRY } = process.env ?? {};
 const expires = eval(REFRESH_TOKEN_EXPIRY) ?? 1000 * 60 * 60 * 24 * 7; // 7 days default
@@ -76,7 +78,7 @@ const findSession = async (params, options = { lean: true }) => {
 
     if (params.sessionId) {
       const sessionId = params.sessionId.sessionId || params.sessionId;
-      if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+      if (!Types.ObjectId.isValid(sessionId)) {
         throw new SessionError('Invalid session ID format', 'INVALID_SESSION_ID');
       }
       query._id = sessionId;
@@ -179,7 +181,7 @@ const deleteAllUserSessions = async (userId, options = {}) => {
     // Extract userId if it's passed as an object
     const userIdString = userId.userId || userId;
 
-    if (!mongoose.Types.ObjectId.isValid(userIdString)) {
+    if (!Types.ObjectId.isValid(userIdString)) {
       throw new SessionError('Invalid user ID format', 'INVALID_USER_ID_FORMAT');
     }
 
@@ -263,7 +265,7 @@ const countActiveSessions = async (userId) => {
   }
 };
 
-module.exports = {
+export default {
   createSession,
   findSession,
   updateExpiration,

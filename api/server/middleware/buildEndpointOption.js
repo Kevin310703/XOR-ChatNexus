@@ -1,29 +1,31 @@
-const { parseCompactConvo, EModelEndpoint, isAgentsEndpoint } = require('librechat-data-provider');
-const { getModelsConfig } = require('~/server/controllers/ModelController');
-const azureAssistants = require('~/server/services/Endpoints/azureAssistants');
-const assistants = require('~/server/services/Endpoints/assistants');
-const gptPlugins = require('~/server/services/Endpoints/gptPlugins');
-const { processFiles } = require('~/server/services/Files/process');
-const anthropic = require('~/server/services/Endpoints/anthropic');
-const bedrock = require('~/server/services/Endpoints/bedrock');
-const openAI = require('~/server/services/Endpoints/openAI');
-const agents = require('~/server/services/Endpoints/agents');
-const custom = require('~/server/services/Endpoints/custom');
-const google = require('~/server/services/Endpoints/google');
-const { getConvoFiles } = require('~/models/Conversation');
-const { handleError } = require('~/server/utils');
+import { parseCompactConvo, EModelEndpoint, isAgentsEndpoint } from 'librechat-data-provider';
+import modelControllerDefault from '~/server/controllers/ModelController';
+const { getModelsConfig } = modelControllerDefault
+import { buildOptions } from '~/server/services/Endpoints/azureAssistants';
+import { buildOptions as _buildOptions } from '~/server/services/Endpoints/assistants';
+import { buildOptions as __buildOptions } from '~/server/services/Endpoints/gptPlugins';
+import { processFiles } from '~/server/services/Files/process';
+import { buildOptions as ___buildOptions } from '~/server/services/Endpoints/anthropic';
+import { buildOptions as ____buildOptions } from '~/server/services/Endpoints/bedrock';
+import { buildOptions as _____buildOptions } from '~/server/services/Endpoints/openAI';
+import { buildOptions as ______buildOptions } from '~/server/services/Endpoints/agents';
+import { buildOptions as _______buildOptions } from '~/server/services/Endpoints/custom';
+import { buildOptions as ________buildOptions } from '~/server/services/Endpoints/google';
+import _default from '~/models/Conversation';
+const { getConvoFiles } = _default;
+import { handleError } from '~/server/utils';
 
 const buildFunction = {
-  [EModelEndpoint.openAI]: openAI.buildOptions,
-  [EModelEndpoint.google]: google.buildOptions,
-  [EModelEndpoint.custom]: custom.buildOptions,
-  [EModelEndpoint.agents]: agents.buildOptions,
-  [EModelEndpoint.bedrock]: bedrock.buildOptions,
-  [EModelEndpoint.azureOpenAI]: openAI.buildOptions,
-  [EModelEndpoint.anthropic]: anthropic.buildOptions,
-  [EModelEndpoint.gptPlugins]: gptPlugins.buildOptions,
-  [EModelEndpoint.assistants]: assistants.buildOptions,
-  [EModelEndpoint.azureAssistants]: azureAssistants.buildOptions,
+  [EModelEndpoint.openAI]: _____buildOptions,
+  [EModelEndpoint.google]: ________buildOptions,
+  [EModelEndpoint.custom]: _______buildOptions,
+  [EModelEndpoint.agents]: ______buildOptions,
+  [EModelEndpoint.bedrock]: ____buildOptions,
+  [EModelEndpoint.azureOpenAI]: _____buildOptions,
+  [EModelEndpoint.anthropic]: ___buildOptions,
+  [EModelEndpoint.gptPlugins]: __buildOptions,
+  [EModelEndpoint.assistants]: _buildOptions,
+  [EModelEndpoint.azureAssistants]: buildOptions,
 };
 
 async function buildEndpointOption(req, res, next) {
@@ -105,4 +107,4 @@ async function buildEndpointOption(req, res, next) {
   }
 }
 
-module.exports = buildEndpointOption;
+export default buildEndpointOption;

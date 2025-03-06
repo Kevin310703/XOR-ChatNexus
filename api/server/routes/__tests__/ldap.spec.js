@@ -1,7 +1,7 @@
-const request = require('supertest');
-const express = require('express');
-const { getLdapConfig } = require('~/server/services/Config/ldap');
-const { isEnabled } = require('~/server/utils');
+import request from 'supertest';
+import express from 'express';
+import { getLdapConfig } from '~/server/services/Config/ldap';
+import { isEnabled } from '~/server/utils';
 
 jest.mock('~/server/services/Config/ldap');
 jest.mock('~/server/utils');

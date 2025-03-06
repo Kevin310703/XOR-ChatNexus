@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const mongoMeili = require('~/models/plugins/mongoMeili');
-const messageSchema = mongoose.Schema(
+import { Schema, models, model as _model } from 'mongoose';
+import mongoMeili from '~/models/plugins/mongoMeili';
+const messageSchema = Schema(
   {
     messageId: {
       type: String,
@@ -79,7 +79,7 @@ const messageSchema = mongoose.Schema(
       select: false,
       default: false,
     },
-    files: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
+    files: { type: [{ type: Schema.Types.Mixed }], default: undefined },
     plugin: {
       type: {
         latest: {
@@ -87,7 +87,7 @@ const messageSchema = mongoose.Schema(
           required: false,
         },
         inputs: {
-          type: [mongoose.Schema.Types.Mixed],
+          type: [Schema.Types.Mixed],
           required: false,
           default: undefined,
         },
@@ -98,9 +98,9 @@ const messageSchema = mongoose.Schema(
       },
       default: undefined,
     },
-    plugins: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
+    plugins: { type: [{ type: Schema.Types.Mixed }], default: undefined },
     content: {
-      type: [{ type: mongoose.Schema.Types.Mixed }],
+      type: [{ type: Schema.Types.Mixed }],
       default: undefined,
       meiliIndex: true,
     },
@@ -111,7 +111,7 @@ const messageSchema = mongoose.Schema(
     iconURL: {
       type: String,
     },
-    attachments: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
+    attachments: { type: [{ type: Schema.Types.Mixed }], default: undefined },
     /*
     attachments: {
       type: [
@@ -154,6 +154,6 @@ messageSchema.index({ createdAt: 1 });
 messageSchema.index({ messageId: 1, user: 1 }, { unique: true });
 
 /** @type {mongoose.Model<TMessage>} */
-const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
+const Message = models.Message || _model('Message', messageSchema);
 
-module.exports = Message;
+export default Message;

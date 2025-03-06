@@ -1,4 +1,5 @@
-const { isEnabled, sanitizeFilename } = require('./handleText');
+import handleText from './handleText';
+const { isEnabled, sanitizeFilename } = handleText;
 
 describe('isEnabled', () => {
   test('should return true when input is "true"', () => {

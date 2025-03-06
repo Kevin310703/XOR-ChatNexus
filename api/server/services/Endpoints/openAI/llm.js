@@ -1,7 +1,9 @@
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const { KnownEndpoints } = require('librechat-data-provider');
-const { sanitizeModelName, constructAzureURL } = require('~/utils');
-const { isEnabled } = require('~/server/utils');
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { KnownEndpoints } from 'librechat-data-provider';
+import __default from '~/utils';
+const { sanitizeModelName, constructAzureURL } = __default;
+import _default from '~/server/utils';
+const { isEnabled } = _default;
 
 /**
  * Generates configuration options for creating a language model (LLM) instance.
@@ -138,4 +140,4 @@ function getLLMConfig(apiKey, options = {}, endpoint = null) {
   };
 }
 
-module.exports = { getLLMConfig };
+export default { getLLMConfig };

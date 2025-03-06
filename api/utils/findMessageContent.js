@@ -1,4 +1,4 @@
-const { logger } = require('~/config');
+import { logger } from '~/config';
 
 function findContent(obj) {
   if (obj && typeof obj === 'object') {
@@ -32,4 +32,4 @@ function findMessageContent(message) {
   return content;
 }
 
-module.exports = findMessageContent;
+export default findMessageContent;

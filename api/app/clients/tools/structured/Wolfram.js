@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-escape */
-const axios = require('axios');
-const { z } = require('zod');
-const { Tool } = require('@langchain/core/tools');
-const { logger } = require('~/config');
+import { get } from 'axios';
+import { z } from 'zod';
+import { Tool } from '@langchain/core/tools';
+import { logger } from '~/config';
 
 class WolframAlphaAPI extends Tool {
   constructor(fields) {
@@ -48,7 +48,7 @@ class WolframAlphaAPI extends Tool {
 
   async fetchRawText(url) {
     try {
-      const response = await axios.get(url, { responseType: 'text' });
+      const response = await get(url, { responseType: 'text' });
       return response.data;
     } catch (error) {
       logger.error('[WolframAlphaAPI] Error fetching raw text:', error);
@@ -92,4 +92,4 @@ class WolframAlphaAPI extends Tool {
   }
 }
 
-module.exports = WolframAlphaAPI;
+export default WolframAlphaAPI;

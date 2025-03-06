@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema as _Schema } from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -24,7 +24,7 @@ const AuthSchema = new Schema(
 
 const actionSchema = new Schema({
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: _Schema.Types.ObjectId,
     ref: 'User',
     index: true,
     required: true,
@@ -57,4 +57,4 @@ const actionSchema = new Schema({
 });
 // }, { minimize: false }); // Prevent removal of empty objects
 
-module.exports = actionSchema;
+export default actionSchema;

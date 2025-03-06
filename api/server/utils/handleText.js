@@ -1,17 +1,10 @@
-const path = require('path');
-const crypto = require('crypto');
-const {
-  Capabilities,
-  EModelEndpoint,
-  isAgentsEndpoint,
-  AgentCapabilities,
-  isAssistantsEndpoint,
-  defaultRetrievalModels,
-  defaultAssistantsVersion,
-} = require('librechat-data-provider');
-const { Providers } = require('@librechat/agents');
-const partialRight = require('lodash/partialRight');
-const { sendMessage } = require('./streamResponse');
+import { basename, extname } from 'path';
+import { randomBytes } from 'crypto';
+import { Capabilities, EModelEndpoint, isAgentsEndpoint, AgentCapabilities, isAssistantsEndpoint, defaultRetrievalModels, defaultAssistantsVersion } from 'librechat-data-provider';
+import { Providers } from '@librechat/agents';
+import partialRight from 'lodash/partialRight.js';
+import streamResponse from './streamResponse.js';
+const { sendMessage } = streamResponse;
 
 /** Helper function to escape special characters in regex
  * @param {string} string - The string to escape.
@@ -231,7 +224,7 @@ function normalizeEndpointName(name = '') {
  */
 function sanitizeFilename(inputName) {
   // Remove any directory components
-  let name = path.basename(inputName);
+  let name = basename(inputName);
 
   // Replace any non-alphanumeric characters except for '.' and '-'
   name = name.replace(/[^a-zA-Z0-9.-]/g, '_');
@@ -244,19 +237,19 @@ function sanitizeFilename(inputName) {
   // Limit the length of the filename
   const MAX_LENGTH = 255;
   if (name.length > MAX_LENGTH) {
-    const ext = path.extname(name);
-    const nameWithoutExt = path.basename(name, ext);
+    const ext = extname(name);
+    const nameWithoutExt = basename(name, ext);
     name =
       nameWithoutExt.slice(0, MAX_LENGTH - ext.length - 7) +
       '-' +
-      crypto.randomBytes(3).toString('hex') +
+      randomBytes(3).toString('hex') +
       ext;
   }
 
   return name;
 }
 
-module.exports = {
+export default {
   isEnabled,
   handleText,
   formatSteps,

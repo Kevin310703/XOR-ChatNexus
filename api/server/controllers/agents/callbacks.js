@@ -1,18 +1,10 @@
-const { nanoid } = require('nanoid');
-const { Tools, StepTypes, FileContext } = require('librechat-data-provider');
-const {
-  EnvVar,
-  Providers,
-  GraphEvents,
-  getMessageId,
-  ToolEndHandler,
-  handleToolCalls,
-  ChatModelStreamHandler,
-} = require('@librechat/agents');
-const { processCodeOutput } = require('~/server/services/Files/Code/process');
-const { saveBase64Image } = require('~/server/services/Files/process');
-const { loadAuthValues } = require('~/app/clients/tools/util');
-const { logger, sendEvent } = require('~/config');
+import { nanoid } from 'nanoid';
+import { Tools, StepTypes, FileContext } from 'librechat-data-provider';
+import { EnvVar, Providers, GraphEvents, getMessageId, ToolEndHandler, handleToolCalls, ChatModelStreamHandler } from '@librechat/agents';
+import { processCodeOutput } from '~/server/services/Files/Code/process';
+import { saveBase64Image } from '~/server/services/Files/process';
+import { loadAuthValues } from '~/app/clients/tools/util';
+import { logger, sendEvent } from '~/config';
 
 /** @typedef {import('@librechat/agents').Graph} Graph */
 /** @typedef {import('@librechat/agents').EventHandler} EventHandler */
@@ -331,7 +323,7 @@ function createToolEndCallback({ req, res, artifactPromises }) {
   };
 }
 
-module.exports = {
+export default {
   getDefaultHandlers,
   createToolEndCallback,
 };

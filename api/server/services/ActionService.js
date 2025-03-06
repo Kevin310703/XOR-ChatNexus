@@ -1,26 +1,24 @@
-const jwt = require('jsonwebtoken');
-const { nanoid } = require('nanoid');
-const { tool } = require('@langchain/core/tools');
-const { GraphEvents, sleep } = require('@librechat/agents');
-const {
-  Time,
-  CacheKeys,
-  StepTypes,
-  Constants,
-  AuthTypeEnum,
-  actionDelimiter,
-  isImageVisionTool,
-  actionDomainSeparator,
-} = require('librechat-data-provider');
-const { refreshAccessToken } = require('~/server/services/TokenService');
-const { isActionDomainAllowed } = require('~/server/services/domains');
-const { logger, getFlowStateManager, sendEvent } = require('~/config');
-const { encryptV2, decryptV2 } = require('~/server/utils/crypto');
-const { getActions, deleteActions } = require('~/models/Action');
-const { deleteAssistant } = require('~/models/Assistant');
-const { findToken } = require('~/models/Token');
-const { logAxiosError } = require('~/utils');
-const { getLogStores } = require('~/cache');
+import { sign } from 'jsonwebtoken';
+import { nanoid } from 'nanoid';
+import { tool } from '@langchain/core/tools';
+import { GraphEvents, sleep } from '@librechat/agents';
+import { Time, CacheKeys, StepTypes, Constants, AuthTypeEnum, actionDelimiter, isImageVisionTool, actionDomainSeparator } from 'librechat-data-provider';
+import { refreshAccessToken } from '~/server/services/TokenService';
+import { isActionDomainAllowed } from '~/server/services/domains';
+import configDefault from '~/config';
+const { logger, getFlowStateManager, sendEvent } = configDefault;
+import _default from '~/server/utils/crypto';
+const { encryptV2, decryptV2 } = _default;
+import __default from '~/models/Action';
+const { getActions, deleteActions } = __default;
+import ___default from '~/models/Assistant';
+const { deleteAssistant } = ___default;
+import ____default from '~/models/Token';
+const { findToken } = ____default;
+import _____default from '~/utils';
+const { logAxiosError } = _____default;
+import ______default from '~/cache';
+const { getLogStores } = ______default;
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const toolNameRegex = /^[a-zA-Z0-9_-]+$/;
@@ -175,7 +173,7 @@ async function createActionTool({
                 action_id,
               };
 
-              const stateToken = jwt.sign(statePayload, JWT_SECRET, { expiresIn: '10m' });
+              const stateToken = sign(statePayload, JWT_SECRET, { expiresIn: '10m' });
               try {
                 const redirectUri = `${process.env.DOMAIN_CLIENT}/api/actions/${action_id}/oauth/callback`;
                 const params = new URLSearchParams({
@@ -402,7 +400,7 @@ const deleteAssistantActions = async ({ req, assistant_id }) => {
   }
 };
 
-module.exports = {
+export default {
   deleteAssistantActions,
   validateAndUpdateTool,
   createActionTool,

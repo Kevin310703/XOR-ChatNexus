@@ -1,6 +1,6 @@
-const { klona } = require('klona');
-const winston = require('winston');
-const traverse = require('traverse');
+import { klona } from 'klona';
+import { format } from 'winston';
+import traverse from 'traverse';
 
 const SPLAT_SYMBOL = Symbol.for('splat');
 const MESSAGE_SYMBOL = Symbol.for('message');
@@ -56,7 +56,7 @@ function redactMessage(str, trimLength) {
  * @param {Object} info - The log information object.
  * @returns {Object} - The modified log information object.
  */
-const redactFormat = winston.format((info) => {
+const redactFormat = format((info) => {
   if (info.level === 'error') {
     info.message = redactMessage(info.message);
     if (info[MESSAGE_SYMBOL]) {
@@ -109,7 +109,7 @@ const condenseArray = (item) => {
  * @param {Object} options.metadata - Additional metadata associated with the log message.
  * @returns {string} - The formatted log message.
  */
-const debugTraverse = winston.format.printf(({ level, message, timestamp, ...metadata }) => {
+const debugTraverse = format.printf(({ level, message, timestamp, ...metadata }) => {
   if (!message) {
     return `${timestamp} ${level}`;
   }
@@ -187,7 +187,7 @@ const debugTraverse = winston.format.printf(({ level, message, timestamp, ...met
   }
 });
 
-const jsonTruncateFormat = winston.format((info) => {
+const jsonTruncateFormat = format((info) => {
   const truncateLongStrings = (str, maxLength) => {
     return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
   };
@@ -223,7 +223,7 @@ const jsonTruncateFormat = winston.format((info) => {
   return truncateObject(info);
 });
 
-module.exports = {
+export default {
   redactFormat,
   redactMessage,
   debugTraverse,

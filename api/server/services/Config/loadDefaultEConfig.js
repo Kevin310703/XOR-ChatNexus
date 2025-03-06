@@ -1,6 +1,6 @@
-const { EModelEndpoint, getEnabledEndpoints } = require('librechat-data-provider');
-const loadAsyncEndpoints = require('./loadAsyncEndpoints');
-const { config } = require('./EndpointService');
+import { EModelEndpoint, getEnabledEndpoints } from 'librechat-data-provider';
+import loadAsyncEndpoints from './loadAsyncEndpoints';
+import { config } from './EndpointService';
 
 /**
  * Load async endpoints and return a configuration object
@@ -36,4 +36,4 @@ async function loadDefaultEndpointsConfig(req) {
   return orderedAndFilteredEndpoints;
 }
 
-module.exports = loadDefaultEndpointsConfig;
+export default loadDefaultEndpointsConfig;

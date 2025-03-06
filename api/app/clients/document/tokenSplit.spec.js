@@ -1,4 +1,4 @@
-const tokenSplit = require('./tokenSplit');
+import tokenSplit from './tokenSplit';
 
 describe('tokenSplit', () => {
   const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id.';

@@ -1,12 +1,8 @@
-const { EModelEndpoint } = require('librechat-data-provider');
+import { EModelEndpoint } from 'librechat-data-provider';
+import _default from './tx';
 const {
-  defaultRate,
-  tokenValues,
-  getValueKey,
-  getMultiplier,
-  cacheTokenValues,
-  getCacheMultiplier,
-} = require('./tx');
+  defaultRate, tokenValues, getValueKey, getMultiplier, cacheTokenValues, getCacheMultiplier,
+} = _default;
 
 describe('getValueKey', () => {
   it('should return "16k" for model name containing "gpt-3.5-turbo-16k"', () => {

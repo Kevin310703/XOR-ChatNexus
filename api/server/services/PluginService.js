@@ -1,6 +1,8 @@
-const PluginAuth = require('~/models/schema/pluginAuthSchema');
-const { encrypt, decrypt } = require('~/server/utils/');
-const { logger } = require('~/config');
+import PluginAuth from '~/models/schema/pluginAuthSchema';
+import __default from '~/server/utils/';
+const { encrypt, decrypt } = __default;
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * Asynchronously retrieves and decrypts the authentication value for a user's plugin, based on a specified authentication field.
@@ -111,7 +113,7 @@ const deleteUserPluginAuth = async (userId, authField, all = false) => {
   }
 };
 
-module.exports = {
+export default {
   getUserPluginAuthValue,
   updateUserPluginAuth,
   deleteUserPluginAuth,

@@ -1,33 +1,24 @@
-const express = require('express');
+import { Router } from 'express';
+import authControllerDefault from '~/server/controllers/AuthController';
 const {
-  refreshController,
-  registrationController,
-  resetPasswordController,
-  resetPasswordRequestController,
-} = require('~/server/controllers/AuthController');
-const { loginController } = require('~/server/controllers/auth/LoginController');
-const { logoutController } = require('~/server/controllers/auth/LogoutController');
-const { verify2FA } = require('~/server/controllers/auth/TwoFactorAuthController');
+  refreshController, registrationController, resetPasswordController, resetPasswordRequestController,
+} = authControllerDefault;
+import _default from '~/server/controllers/auth/LoginController';
+const { loginController } = _default;
+import __default from '~/server/controllers/auth/LogoutController';
+const { logoutController } = __default;
+import ___default from '~/server/controllers/auth/TwoFactorAuthController';
+const { verify2FA } = ___default;
+import ____default from '~/server/controllers/TwoFactorController';
 const {
-  enable2FAController,
-  verify2FAController,
-  disable2FAController,
-  regenerateBackupCodesController, confirm2FAController,
-} = require('~/server/controllers/TwoFactorController');
+  enable2FAController, verify2FAController, disable2FAController, regenerateBackupCodesController, confirm2FAController,
+} = ____default;
+import _____default from '~/server/middleware';
 const {
-  checkBan,
-  loginLimiter,
-  requireJwtAuth,
-  checkInviteUser,
-  registerLimiter,
-  requireLdapAuth,
-  requireLocalAuth,
-  resetPasswordLimiter,
-  validateRegistration,
-  validatePasswordReset,
-} = require('~/server/middleware');
+  checkBan, loginLimiter, requireJwtAuth, checkInviteUser, registerLimiter, requireLdapAuth, requireLocalAuth, resetPasswordLimiter, validateRegistration, validatePasswordReset,
+} = _____default;
 
-const router = express.Router();
+const router = Router();
 
 const ldapAuth = !!process.env.LDAP_URL && !!process.env.LDAP_USER_SEARCH_BASE;
 //Local
@@ -64,4 +55,4 @@ router.post('/2fa/confirm', requireJwtAuth, confirm2FAController);
 router.post('/2fa/disable', requireJwtAuth, disable2FAController);
 router.post('/2fa/backup/regenerate', requireJwtAuth, regenerateBackupCodesController);
 
-module.exports = router;
+export default router;

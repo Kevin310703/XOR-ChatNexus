@@ -1,16 +1,21 @@
-const Keyv = require('keyv');
-const express = require('express');
-const { MeiliSearch } = require('meilisearch');
-const { Conversation, getConvosQueried } = require('~/models/Conversation');
-const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
-const { cleanUpPrimaryKeyValue } = require('~/lib/utils/misc');
-const { reduceHits } = require('~/lib/utils/reduceHits');
-const { isEnabled } = require('~/server/utils');
-const { Message } = require('~/models/Message');
-const keyvRedis = require('~/cache/keyvRedis');
-const { logger } = require('~/config');
+import Keyv from 'keyv';
+import { Router } from 'express';
+import { MeiliSearch } from 'meilisearch';
+import conversationDefault from '~/models/Conversation';
+const { Conversation, getConvosQueried } = conversationDefault;
+import requireJwtAuth from '~/server/middleware/requireJwtAuth';
+import _default from '~/lib/utils/misc';
+const { cleanUpPrimaryKeyValue } = _default;
+import __default from '~/lib/utils/reduceHits';
+const { reduceHits } = __default;
+import { isEnabled } from '~/server/utils';
+import ___default from '~/models/Message';
+const { Message } = ___default;
+import keyvRedis from '~/cache/keyvRedis';
+import ____default from '~/config';
+const { logger } = ____default;
 
-const router = express.Router();
+const router = Router();
 
 const expiration = 60 * 1000;
 const cache = isEnabled(process.env.USE_REDIS)
@@ -102,4 +107,4 @@ router.get('/enable', async function (req, res) {
   }
 });
 
-module.exports = router;
+export default router;

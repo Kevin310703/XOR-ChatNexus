@@ -1,9 +1,11 @@
-const fs = require('fs');
-const axios = require('axios');
-const FormData = require('form-data');
-const { FileSources } = require('librechat-data-provider');
-const { logAxiosError } = require('~/utils');
-const { logger } = require('~/config');
+import { createReadStream } from 'fs';
+import { post } from 'axios';
+import FormData from 'form-data';
+import { FileSources } from 'librechat-data-provider';
+import utils from '~/utils';
+const { logAxiosError } = utils;
+import _default from '~/config';
+const { logger } = _default;
 
 /**
  * Deletes a file from the vector database. This function takes a file object, constructs the full path, and
@@ -24,7 +26,7 @@ const deleteVectors = async (req, file) => {
   }
   try {
     const jwtToken = req.headers.authorization.split(' ')[1];
-    return await axios.delete(`${process.env.RAG_API_URL}/documents`, {
+    return await delete(`${process.env.RAG_API_URL}/documents`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
         'Content-Type': 'application/json',
@@ -73,14 +75,14 @@ async function uploadVectors({ req, file, file_id, entity_id }) {
     const jwtToken = req.headers.authorization.split(' ')[1];
     const formData = new FormData();
     formData.append('file_id', file_id);
-    formData.append('file', fs.createReadStream(file.path));
+    formData.append('file', createReadStream(file.path));
     if (entity_id != null && entity_id) {
       formData.append('entity_id', entity_id);
     }
 
     const formHeaders = formData.getHeaders();
 
-    const response = await axios.post(`${process.env.RAG_API_URL}/embed`, formData, {
+    const response = await post(`${process.env.RAG_API_URL}/embed`, formData, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
         accept: 'application/json',
@@ -114,7 +116,7 @@ async function uploadVectors({ req, file, file_id, entity_id }) {
   }
 }
 
-module.exports = {
+export default {
   deleteVectors,
   uploadVectors,
 };

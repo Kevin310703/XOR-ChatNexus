@@ -1,35 +1,23 @@
-const { google } = require('googleapis');
-const { concat } = require('@langchain/core/utils/stream');
-const { ChatVertexAI } = require('@langchain/google-vertexai');
-const { ChatGoogleGenerativeAI } = require('@langchain/google-genai');
-const { GoogleGenerativeAI: GenAI } = require('@google/generative-ai');
-const { HumanMessage, SystemMessage } = require('@langchain/core/messages');
+import { google } from 'googleapis';
+import { concat } from '@langchain/core/utils/stream';
+import { ChatVertexAI } from '@langchain/google-vertexai';
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { GoogleGenerativeAI as GenAI } from '@google/generative-ai';
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { googleGenConfigSchema, validateVisionModel, getResponseSender, endpointSettings, EModelEndpoint, ContentTypes, VisionModes, ErrorTypes, Constants, AuthKeys } from 'librechat-data-provider';
+import { getSafetySettings } from '~/server/services/Endpoints/google/llm';
+import { encodeAndFormat } from '~/server/services/Files/images';
+import { getTokenCount as _getTokenCount } from '~/server/services/Tokenizer';
+import { spendTokens } from '~/models/spendTokens';
+import utils from '~/utils';
+const { getModelMaxTokens } = utils;
+import { sleep } from '~/server/utils';
+import { logger } from '~/config';
+import _default from './prompts';
 const {
-  googleGenConfigSchema,
-  validateVisionModel,
-  getResponseSender,
-  endpointSettings,
-  EModelEndpoint,
-  ContentTypes,
-  VisionModes,
-  ErrorTypes,
-  Constants,
-  AuthKeys,
-} = require('librechat-data-provider');
-const { getSafetySettings } = require('~/server/services/Endpoints/google/llm');
-const { encodeAndFormat } = require('~/server/services/Files/images');
-const Tokenizer = require('~/server/services/Tokenizer');
-const { spendTokens } = require('~/models/spendTokens');
-const { getModelMaxTokens } = require('~/utils');
-const { sleep } = require('~/server/utils');
-const { logger } = require('~/config');
-const {
-  formatMessage,
-  createContextHandlers,
-  titleInstruction,
-  truncateText,
-} = require('./prompts');
-const BaseClient = require('./BaseClient');
+  formatMessage, createContextHandlers, titleInstruction, truncateText,
+} = _default;
+import BaseClient from './BaseClient';
 
 const loc = process.env.GOOGLE_LOC || 'us-central1';
 const publisher = 'google';
@@ -951,8 +939,8 @@ class GoogleClient extends BaseClient {
    */
   getTokenCount(text) {
     const encoding = this.getEncoding();
-    return Tokenizer.getTokenCount(text, encoding);
+    return _getTokenCount(text, encoding);
   }
 }
 
-module.exports = GoogleClient;
+export default GoogleClient;

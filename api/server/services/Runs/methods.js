@@ -1,6 +1,7 @@
-const axios = require('axios');
-const { EModelEndpoint } = require('librechat-data-provider');
-const { logAxiosError } = require('~/utils');
+import { get } from 'axios';
+import { EModelEndpoint } from 'librechat-data-provider';
+import _default from '~/utils';
+const { logAxiosError } = _default;
 
 /**
  * @typedef {Object} RetrieveOptions
@@ -51,7 +52,7 @@ async function retrieveRun({ thread_id, run_id, timeout, openai }) {
       axiosConfig.httpsAgent = httpAgent;
     }
 
-    const response = await axios.get(url, axiosConfig);
+    const response = await get(url, axiosConfig);
     return response.data;
   } catch (error) {
     const message = '[retrieveRun] Failed to retrieve run data:';
@@ -60,4 +61,4 @@ async function retrieveRun({ thread_id, run_id, timeout, openai }) {
   }
 }
 
-module.exports = { retrieveRun };
+export default { retrieveRun };
