@@ -1,27 +1,18 @@
-import { model } from 'mongoose';
-import _default from '~/server/utils/crypto';
-const { encryptV2 } = _default;
-import tokenSchema from './schema/tokenSchema';
-import __default from '~/config';
-const { logger } = __default;
+const mongoose = require('mongoose');
+const { encryptV2 } = require('~/server/utils/crypto');
+const tokenSchema = require('./schema/tokenSchema');
+const { logger } = require('~/config');
 
 /**
  * Token model.
  * @type {mongoose.Model}
  */
-const Token = model('Token', tokenSchema);
+const Token = mongoose.model('Token', tokenSchema);
 /**
  * Fixes the indexes for the Token collection from legacy TTL indexes to the new expiresAt index.
  */
 async function fixIndexes() {
   try {
-    if (
-      process.env.NODE_ENV === 'CI' ||
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test'
-    ) {
-      return;
-    }
     const indexes = await Token.collection.indexes();
     logger.debug('Existing Token Indexes:', JSON.stringify(indexes, null, 2));
     const unwantedTTLIndexes = indexes.filter(
@@ -192,7 +183,7 @@ async function handleOAuthToken({
   }
 }
 
-export default {
+module.exports = {
   findToken,
   createToken,
   updateToken,

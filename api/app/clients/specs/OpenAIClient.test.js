@@ -1,11 +1,10 @@
 jest.mock('~/cache/getLogStores');
 require('dotenv').config();
-import OpenAI, { mockImplementation, mock } from 'openai';
-import { mockReturnValue } from '~/cache/getLogStores';
-import { fetchEventSource } from '@waylaidwanderer/fetch-event-source';
-import azureUtils from '~/utils/azureUtils';
-const { genAzureChatCompletion } = azureUtils;
-import OpenAIClient from '../OpenAIClient';
+const OpenAI = require('openai');
+const getLogStores = require('~/cache/getLogStores');
+const { fetchEventSource } = require('@waylaidwanderer/fetch-event-source');
+const { genAzureChatCompletion } = require('~/utils/azureUtils');
+const OpenAIClient = require('../OpenAIClient');
 jest.mock('meilisearch');
 
 jest.mock('~/lib/db/connectDb');
@@ -121,7 +120,7 @@ const create = jest.fn().mockResolvedValue({
   ],
 });
 
-mockImplementation(() => ({
+OpenAI.mockImplementation(() => ({
   beta: {
     chat: {
       completions: {
@@ -141,7 +140,7 @@ describe('OpenAIClient', () => {
   const mockCache = { set: mockSet };
 
   beforeEach(() => {
-    mockReturnValue(mockCache);
+    getLogStores.mockReturnValue(mockCache);
   });
   let client;
   const model = 'gpt-4';
@@ -201,6 +200,14 @@ describe('OpenAIClient', () => {
       expect(client.apiKey).toBe('new-api-key');
       expect(client.modelOptions.model).toBe(model);
       expect(client.modelOptions.temperature).toBe(0.7);
+    });
+
+    it('should set apiKey and useOpenRouter if OPENROUTER_API_KEY is present', () => {
+      process.env.OPENROUTER_API_KEY = 'openrouter-key';
+      client.setOptions({});
+      expect(client.apiKey).toBe('openrouter-key');
+      expect(client.useOpenRouter).toBe(true);
+      delete process.env.OPENROUTER_API_KEY; // Cleanup
     });
 
     it('should set FORCE_PROMPT based on OPENAI_FORCE_PROMPT or reverseProxyUrl', () => {
@@ -527,6 +534,7 @@ describe('OpenAIClient', () => {
     afterEach(() => {
       delete process.env.AZURE_OPENAI_DEFAULT_MODEL;
       delete process.env.AZURE_USE_MODEL_AS_DEPLOYMENT_NAME;
+      delete process.env.OPENROUTER_API_KEY;
     });
 
     it('should call getCompletion and fetchEventSource when using a text/instruct model', async () => {
@@ -590,7 +598,7 @@ describe('OpenAIClient', () => {
       expect(streamArgs).not.toHaveProperty('model');
 
       // Check if the baseURL is correct
-      const constructorArgs = mock.calls[0][0];
+      const constructorArgs = OpenAI.mock.calls[0][0];
       const expectedURL = genAzureChatCompletion(defaultAzureOptions).split('/chat')[0];
       expect(constructorArgs.baseURL).toBe(expectedURL);
     });

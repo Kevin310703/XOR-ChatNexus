@@ -1,7 +1,7 @@
 jest.mock('~/cache/getLogStores');
-import request from 'supertest';
-import express from 'express';
-import routes from '../';
+const request = require('supertest');
+const express = require('express');
+const routes = require('../');
 // file deepcode ignore UseCsurfForExpress/test: test
 const app = express();
 app.disable('x-powered-by');

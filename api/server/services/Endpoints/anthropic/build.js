@@ -1,15 +1,13 @@
-import { removeNullishValues, anthropicSettings } from 'librechat-data-provider';
-import generateArtifactsPrompt from '~/app/clients/prompts/artifacts';
+const { removeNullishValues } = require('librechat-data-provider');
+const generateArtifactsPrompt = require('~/app/clients/prompts/artifacts');
 
 const buildOptions = (endpoint, parsedBody) => {
   const {
     modelLabel,
     promptPrefix,
     maxContextTokens,
-    resendFiles = anthropicSettings.resendFiles.default,
-    promptCache = anthropicSettings.promptCache.default,
-    thinking = anthropicSettings.thinking.default,
-    thinkingBudget = anthropicSettings.thinkingBudget.default,
+    resendFiles = true,
+    promptCache = true,
     iconURL,
     greeting,
     spec,
@@ -23,8 +21,6 @@ const buildOptions = (endpoint, parsedBody) => {
     promptPrefix,
     resendFiles,
     promptCache,
-    thinking,
-    thinkingBudget,
     iconURL,
     greeting,
     spec,
@@ -39,4 +35,4 @@ const buildOptions = (endpoint, parsedBody) => {
   return endpointOption;
 };
 
-export default buildOptions;
+module.exports = buildOptions;

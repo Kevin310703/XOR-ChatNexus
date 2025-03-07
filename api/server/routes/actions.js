@@ -1,12 +1,10 @@
-import { Router } from 'express';
-import { verify } from 'jsonwebtoken';
-import { getAccessToken } from '~/server/services/TokenService';
-import configDefault from '~/config';
-const { logger, getFlowStateManager } = configDefault;
-import _default from '~/cache';
-const { getLogStores } = _default;
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const { getAccessToken } = require('~/server/services/TokenService');
+const { logger, getFlowStateManager } = require('~/config');
+const { getLogStores } = require('~/cache');
 
-const router = Router();
+const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 /**
@@ -27,7 +25,7 @@ router.get('/:action_id/oauth/callback', async (req, res) => {
   try {
     let decodedState;
     try {
-      decodedState = verify(state, JWT_SECRET);
+      decodedState = jwt.verify(state, JWT_SECRET);
     } catch (err) {
       await flowManager.failFlow(identifier, 'oauth', 'Invalid or expired state parameter');
       return res.status(400).send('Invalid or expired state parameter');
@@ -135,4 +133,4 @@ router.get('/:action_id/oauth/callback', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

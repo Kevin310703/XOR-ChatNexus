@@ -1,17 +1,19 @@
-import { Router } from 'express';
-import { ContentTypes } from 'librechat-data-provider';
-import models from '../../models/index.js';
+const express = require('express');
+const { ContentTypes } = require('librechat-data-provider');
 const {
-  saveConvo, saveMessage, getMessage, getMessages, updateMessage, deleteMessages,
-} = models;
-import { findAllArtifacts, replaceArtifactContent } from '#root/server/services/Artifacts/update.js';
-import _default from '#root/server/middleware';
-const { requireJwtAuth, validateMessageReq } = _default;
-import { countTokens } from '#root/server/utils';
-import __default from '#root/config';
-const { logger } = __default;
+  saveConvo,
+  saveMessage,
+  getMessage,
+  getMessages,
+  updateMessage,
+  deleteMessages,
+} = require('~/models');
+const { findAllArtifacts, replaceArtifactContent } = require('~/server/services/Artifacts/update');
+const { requireJwtAuth, validateMessageReq } = require('~/server/middleware');
+const { countTokens } = require('~/server/utils');
+const { logger } = require('~/config');
 
-const router = Router();
+const router = express.Router();
 router.use(requireJwtAuth);
 
 router.post('/artifact/:messageId', async (req, res) => {
@@ -184,4 +186,4 @@ router.delete('/:conversationId/:messageId', validateMessageReq, async (req, res
   }
 });
 
-export default router;
+module.exports = router;

@@ -1,10 +1,8 @@
-import { Router } from 'express';
-import modelControllerDefault from '~/server/controllers/ModelController';
-const { modelController } = modelControllerDefault;
-import _default from '~/server/middleware/';
-const { requireJwtAuth } = _default;
+const express = require('express');
+const { modelController } = require('~/server/controllers/ModelController');
+const { requireJwtAuth } = require('~/server/middleware/');
 
-const router = Router();
+const router = express.Router();
 router.get('/', requireJwtAuth, modelController);
 
-export default router;
+module.exports = router;

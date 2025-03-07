@@ -1,10 +1,9 @@
-import { model as _model } from 'mongoose';
-import { isEnabled } from '~/server/utils/handleText';
-import transactionSchema from './schema/transaction';
-import { getMultiplier, getCacheMultiplier } from './tx';
-import _default from '~/config';
-const { logger } = _default;
-import Balance from './Balance';
+const mongoose = require('mongoose');
+const { isEnabled } = require('~/server/utils/handleText');
+const transactionSchema = require('./schema/transaction');
+const { getMultiplier, getCacheMultiplier } = require('./tx');
+const { logger } = require('~/config');
+const Balance = require('./Balance');
 const cancelRate = 1.15;
 
 /** Method to calculate and set the tokenValue for a transaction */
@@ -166,7 +165,7 @@ transactionSchema.methods.calculateStructuredTokenValue = function () {
   }
 };
 
-const Transaction = _model('Transaction', transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 /**
  * Queries and retrieves transactions based on a given filter.
@@ -185,4 +184,4 @@ async function getTransactions(filter) {
   }
 }
 
-export default { Transaction, getTransactions };
+module.exports = { Transaction, getTransactions };

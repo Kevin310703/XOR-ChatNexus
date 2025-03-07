@@ -1,5 +1,4 @@
-import _default from '../utils';
-const { matchModelName } = _default;
+const { matchModelName } = require('../utils');
 const defaultRate = 6;
 
 /**
@@ -80,7 +79,6 @@ const tokenValues = Object.assign(
     'o1-mini': { prompt: 1.1, completion: 4.4 },
     'o1-preview': { prompt: 15, completion: 60 },
     o1: { prompt: 15, completion: 60 },
-    'gpt-4.5': { prompt: 75, completion: 150 },
     'gpt-4o-mini': { prompt: 0.15, completion: 0.6 },
     'gpt-4o': { prompt: 2.5, completion: 10 },
     'gpt-4o-2024-05-13': { prompt: 5, completion: 15 },
@@ -90,8 +88,6 @@ const tokenValues = Object.assign(
     'claude-3-sonnet': { prompt: 3, completion: 15 },
     'claude-3-5-sonnet': { prompt: 3, completion: 15 },
     'claude-3.5-sonnet': { prompt: 3, completion: 15 },
-    'claude-3-7-sonnet': { prompt: 3, completion: 15 },
-    'claude-3.7-sonnet': { prompt: 3, completion: 15 },
     'claude-3-5-haiku': { prompt: 0.8, completion: 4 },
     'claude-3.5-haiku': { prompt: 0.8, completion: 4 },
     'claude-3-haiku': { prompt: 0.25, completion: 1.25 },
@@ -114,14 +110,6 @@ const tokenValues = Object.assign(
     'gemini-1.5': { prompt: 2.5, completion: 10 },
     'gemini-pro-vision': { prompt: 0.5, completion: 1.5 },
     gemini: { prompt: 0.5, completion: 1.5 },
-    'grok-2-vision-1212': { prompt: 2.0, completion: 10.0 },
-    'grok-2-vision-latest': { prompt: 2.0, completion: 10.0 },
-    'grok-2-vision': { prompt: 2.0, completion: 10.0 },
-    'grok-vision-beta': { prompt: 5.0, completion: 15.0 },
-    'grok-2-1212': { prompt: 2.0, completion: 10.0 },
-    'grok-2-latest': { prompt: 2.0, completion: 10.0 },
-    'grok-2': { prompt: 2.0, completion: 10.0 },
-    'grok-beta': { prompt: 5.0, completion: 15.0 },
   },
   bedrockValues,
 );
@@ -133,8 +121,6 @@ const tokenValues = Object.assign(
  * @type {Object.<string, {write: number, read: number }>}
  */
 const cacheTokenValues = {
-  'claude-3.7-sonnet': { write: 3.75, read: 0.3 },
-  'claude-3-7-sonnet': { write: 3.75, read: 0.3 },
   'claude-3.5-sonnet': { write: 3.75, read: 0.3 },
   'claude-3-5-sonnet': { write: 3.75, read: 0.3 },
   'claude-3.5-haiku': { write: 1, read: 0.08 },
@@ -169,8 +155,6 @@ const getValueKey = (model, endpoint) => {
     return 'o1-mini';
   } else if (modelName.includes('o1')) {
     return 'o1';
-  } else if (modelName.includes('gpt-4.5')) {
-    return 'gpt-4.5';
   } else if (modelName.includes('gpt-4o-2024-05-13')) {
     return 'gpt-4o-2024-05-13';
   } else if (modelName.includes('gpt-4o-mini')) {
@@ -264,7 +248,7 @@ const getCacheMultiplier = ({ valueKey, cacheType, model, endpoint, endpointToke
   return cacheTokenValues[valueKey]?.[cacheType] ?? null;
 };
 
-export default {
+module.exports = {
   tokenValues,
   getValueKey,
   getMultiplier,

@@ -7,7 +7,7 @@ const levels = {
 
 let level = levels.HIGH;
 
-export default {
+module.exports = {
   levels,
   setLevel: (l) => (level = l),
   log: {

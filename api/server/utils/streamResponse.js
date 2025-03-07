@@ -1,8 +1,8 @@
-import { randomUUID } from 'crypto';
-import { parseConvo } from 'librechat-data-provider';
-import { saveMessage, getMessages } from '../../models/Message.js';
-import { getConvo } from '../../models/Conversation.js';
-import { logger } from '../../config/meiliLogger.js';
+const crypto = require('crypto');
+const { parseConvo } = require('librechat-data-provider');
+const { saveMessage, getMessages } = require('~/models/Message');
+const { getConvo } = require('~/models/Conversation');
+const { logger } = require('~/config');
 
 /**
  * Sends error data in Server Sent Events format and ends the response.
@@ -55,7 +55,7 @@ const sendError = async (req, res, options, callback) => {
   } = options;
   const errorMessage = {
     sender,
-    messageId: messageId ?? randomUUID(),
+    messageId: messageId ?? crypto.randomUUID(),
     conversationId,
     parentMessageId,
     unfinished: false,
@@ -117,7 +117,7 @@ const sendResponse = (req, res, data, errorMessage) => {
   return sendMessage(res, data);
 };
 
-export default {
+module.exports = {
   sendResponse,
   handleError,
   sendMessage,

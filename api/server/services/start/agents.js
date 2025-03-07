@@ -1,7 +1,7 @@
-import { EModelEndpoint, agentsEndpointSChema } from 'librechat-data-provider';
+const { EModelEndpoint, agentsEndpointSChema } = require('librechat-data-provider');
 
 /**
- * Sets up the Agents configuration from the config (`librechat.yaml`) file.
+ * Sets up the Agents configuration from the config (`chatnexus.yaml`) file.
  * @param {TCustomConfig} config - The loaded custom configuration.
  * @returns {Partial<TAgentsEndpoint>} The Agents endpoint configuration.
  */
@@ -11,4 +11,4 @@ function agentsConfigSetup(config) {
   return parsedConfig;
 }
 
-export default { agentsConfigSetup };
+module.exports = { agentsConfigSetup };

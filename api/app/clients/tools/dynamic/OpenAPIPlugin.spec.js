@@ -1,6 +1,5 @@
-import { promises as _promises, existsSync as _existsSync } from 'fs';
-import OpenAPIPlugin from './OpenAPIPlugin';
-const { createOpenAPIPlugin, getSpec, readSpecFile } = OpenAPIPlugin;
+const fs = require('fs');
+const { createOpenAPIPlugin, getSpec, readSpecFile } = require('./OpenAPIPlugin');
 
 global.fetch = jest.fn().mockImplementationOnce(() => {
   return new Promise((resolve) => {
@@ -19,19 +18,19 @@ jest.mock('fs', () => ({
 
 describe('readSpecFile', () => {
   it('reads JSON file correctly', async () => {
-    _promises.readFile.mockResolvedValue(JSON.stringify({ test: 'value' }));
+    fs.promises.readFile.mockResolvedValue(JSON.stringify({ test: 'value' }));
     const result = await readSpecFile('test.json');
     expect(result).toEqual({ test: 'value' });
   });
 
   it('reads YAML file correctly', async () => {
-    _promises.readFile.mockResolvedValue('test: value');
+    fs.promises.readFile.mockResolvedValue('test: value');
     const result = await readSpecFile('test.yaml');
     expect(result).toEqual({ test: 'value' });
   });
 
   it('handles error correctly', async () => {
-    _promises.readFile.mockRejectedValue(new Error('test error'));
+    fs.promises.readFile.mockRejectedValue(new Error('test error'));
     const result = await readSpecFile('test.json');
     expect(result).toBe(false);
   });
@@ -45,14 +44,14 @@ describe('getSpec', () => {
   });
 
   it('reads spec from file correctly', async () => {
-    _existsSync.mockReturnValue(true);
-    _promises.readFile.mockResolvedValue(JSON.stringify({ test: 'value' }));
+    fs.existsSync.mockReturnValue(true);
+    fs.promises.readFile.mockResolvedValue(JSON.stringify({ test: 'value' }));
     const result = await getSpec('test.json');
     expect(result).toEqual({ test: 'value' });
   });
 
   it('returns false when file does not exist', async () => {
-    _existsSync.mockReturnValue(false);
+    fs.existsSync.mockReturnValue(false);
     const result = await getSpec('test.json');
     expect(result).toBe(false);
   });

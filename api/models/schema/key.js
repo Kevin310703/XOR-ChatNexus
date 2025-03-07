@@ -1,8 +1,8 @@
-import { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 
-const keySchema = Schema({
+const keySchema = mongoose.Schema({
   userId: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
@@ -21,4 +21,4 @@ const keySchema = Schema({
 
 keySchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export default keySchema;
+module.exports = keySchema;

@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
 
 /**
  * @typedef {Object} ToolCallData
@@ -13,7 +13,7 @@ import { Schema, model } from 'mongoose';
  */
 
 /** @type {MongooseSchema<ToolCallData>} */
-const toolCallSchema = Schema(
+const toolCallSchema = mongoose.Schema(
   {
     conversationId: {
       type: String,
@@ -28,15 +28,15 @@ const toolCallSchema = Schema(
       required: true,
     },
     user: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
     result: {
-      type: Schema.Types.Mixed,
+      type: mongoose.Schema.Types.Mixed,
     },
     attachments: {
-      type: Schema.Types.Mixed,
+      type: mongoose.Schema.Types.Mixed,
     },
     blockIndex: {
       type: Number,
@@ -51,4 +51,4 @@ const toolCallSchema = Schema(
 toolCallSchema.index({ messageId: 1, user: 1 });
 toolCallSchema.index({ conversationId: 1, user: 1 });
 
-export default model('ToolCall', toolCallSchema);
+module.exports = mongoose.model('ToolCall', toolCallSchema);

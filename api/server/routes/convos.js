@@ -1,27 +1,22 @@
-import multer from 'multer';
-import { Router } from 'express';
-import { CacheKeys, EModelEndpoint } from 'librechat-data-provider';
-import conversationDefault from '~/models/Conversation';
-const { getConvosByPage, deleteConvos, getConvo, saveConvo } = conversationDefault;
-import { forkConversation, duplicateConversation } from '~/server/utils/import/fork';
-import _default from '~/server/routes/files/multer';
-const { storage, importFileFilter } = _default;
-import requireJwtAuth from '~/server/middleware/requireJwtAuth';
-import { importConversations } from '~/server/utils/import';
-import __default from '~/server/middleware';
-const { createImportLimiters } = __default;
-import ___default from '~/models/ToolCall';
-const { deleteToolCalls } = ___default;
-import getLogStores from '~/cache/getLogStores';
-import { sleep } from '~/server/utils';
-import ____default from '~/config';
-const { logger } = ____default;
+const multer = require('multer');
+const express = require('express');
+const { CacheKeys, EModelEndpoint } = require('librechat-data-provider');
+const { getConvosByPage, deleteConvos, getConvo, saveConvo } = require('~/models/Conversation');
+const { forkConversation, duplicateConversation } = require('~/server/utils/import/fork');
+const { storage, importFileFilter } = require('~/server/routes/files/multer');
+const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
+const { importConversations } = require('~/server/utils/import');
+const { createImportLimiters } = require('~/server/middleware');
+const { deleteToolCalls } = require('~/models/ToolCall');
+const getLogStores = require('~/cache/getLogStores');
+const { sleep } = require('~/server/utils');
+const { logger } = require('~/config');
 const assistantClients = {
-  [EModelEndpoint.azureAssistants]: require('~/server/services/Endpoints/azureAssistants').default,
-  [EModelEndpoint.assistants]: require('~/server/services/Endpoints/assistants').default,
+  [EModelEndpoint.azureAssistants]: require('~/server/services/Endpoints/azureAssistants'),
+  [EModelEndpoint.assistants]: require('~/server/services/Endpoints/assistants'),
 };
 
-const router = Router();
+const router = express.Router();
 router.use(requireJwtAuth);
 
 router.get('/', async (req, res) => {
@@ -208,4 +203,4 @@ router.post('/duplicate', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

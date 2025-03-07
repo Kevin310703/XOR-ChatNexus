@@ -63,7 +63,7 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export default {
+module.exports = {
   sleep,
   LB_QueueAsyncCall,
 };

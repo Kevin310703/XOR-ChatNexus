@@ -1,6 +1,6 @@
-import { connect, disconnect } from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Message, getMessages, bulkSaveMessages } from './Message';
+const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const { Message, getMessages, bulkSaveMessages } = require('./Message');
 
 // Original version of buildTree function
 function buildTree({ messages, fileMap }) {
@@ -46,11 +46,11 @@ let mongod;
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create();
   const uri = mongod.getUri();
-  await connect(uri);
+  await mongoose.connect(uri);
 });
 
 afterAll(async () => {
-  await disconnect();
+  await mongoose.disconnect();
   await mongod.stop();
 });
 

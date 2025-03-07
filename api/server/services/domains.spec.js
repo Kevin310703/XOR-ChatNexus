@@ -1,7 +1,5 @@
-import domains from '~/server/services/domains';
-const { isEmailDomainAllowed, isActionDomainAllowed } = domains;
-import _default from '~/server/services/Config';
-const { getCustomConfig } = _default;
+const { isEmailDomainAllowed, isActionDomainAllowed } = require('~/server/services/domains');
+const { getCustomConfig } = require('~/server/services/Config');
 
 jest.mock('~/server/services/Config', () => ({
   getCustomConfig: jest.fn(),

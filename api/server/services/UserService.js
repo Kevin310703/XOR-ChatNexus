@@ -1,10 +1,7 @@
-import { ErrorTypes } from 'librechat-data-provider';
-import utils from '~/server/utils';
-const { encrypt, decrypt } = utils;
-import _default from '~/models';
-const { updateUser, Key } = _default;
-import __default from '~/config';
-const { logger } = __default;
+const { ErrorTypes } = require('librechat-data-provider');
+const { encrypt, decrypt } = require('~/server/utils');
+const { updateUser, Key } = require('~/models');
+const { logger } = require('~/config');
 
 /**
  * Updates the plugins for a user based on the action specified (install/uninstall).
@@ -173,7 +170,7 @@ const checkUserKeyExpiry = (expiresAt, endpoint) => {
   }
 };
 
-export default {
+module.exports = {
   getUserKey,
   updateUserKey,
   deleteUserKey,

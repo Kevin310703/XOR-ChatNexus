@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+const { Schema } = require('mongoose');
 
 /**
  * @typedef {Object} MongoProject
@@ -32,4 +32,4 @@ const projectSchema = new Schema(
   },
 );
 
-export default projectSchema;
+module.exports = projectSchema;

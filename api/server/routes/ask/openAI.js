@@ -1,12 +1,16 @@
-import { Router } from 'express';
-import AskController from '~/server/controllers/AskController';
-import { addTitle, initializeClient } from '~/server/services/Endpoints/openAI';
-import _default from '~/server/middleware';
+const express = require('express');
+const AskController = require('~/server/controllers/AskController');
+const { addTitle, initializeClient } = require('~/server/services/Endpoints/openAI');
 const {
-  handleAbort, setHeaders, validateModel, validateEndpoint, buildEndpointOption, moderateText,
-} = _default;
+  handleAbort,
+  setHeaders,
+  validateModel,
+  validateEndpoint,
+  buildEndpointOption,
+  moderateText,
+} = require('~/server/middleware');
 
-const router = Router();
+const router = express.Router();
 router.use(moderateText);
 router.post('/abort', handleAbort());
 
@@ -21,4 +25,4 @@ router.post(
   },
 );
 
-export default router;
+module.exports = router;

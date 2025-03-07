@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import controllers from '~/server/controllers/assistants/v1';
+const express = require('express');
+const controllers = require('~/server/controllers/assistants/v1');
 
-const router = Router();
+const router = express.Router();
 
 /**
  * Returns a list of the user's assistant documents (metadata saved to database).
@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', controllers.getAssistantDocuments);
 
-export default router;
+module.exports = router;

@@ -1,6 +1,9 @@
-import { Capabilities, assistantEndpointSchema, defaultAssistantsVersion } from 'librechat-data-provider';
-import _default from '../../../config/index.js';
-const { logger } = _default;
+const {
+  Capabilities,
+  assistantEndpointSchema,
+  defaultAssistantsVersion,
+} = require('librechat-data-provider');
+const { logger } = require('~/config');
 
 /**
  * Sets up the minimum, default Assistants configuration if Azure OpenAI Assistants option is enabled.
@@ -14,7 +17,7 @@ function azureAssistantsDefaults() {
 }
 
 /**
- * Sets up the Assistants configuration from the config (`librechat.yaml`) file.
+ * Sets up the Assistants configuration from the config (`chatnexus.yaml`) file.
  * @param {TCustomConfig} config - The loaded custom configuration.
  * @param {EModelEndpoint.assistants|EModelEndpoint.azureAssistants} assistantsEndpoint - The Assistants endpoint name.
  * - The previously loaded assistants configuration from Azure OpenAI Assistants option.
@@ -52,4 +55,4 @@ function assistantsConfigSetup(config, assistantsEndpoint, prevConfig = {}) {
   };
 }
 
-export default { azureAssistantsDefaults, assistantsConfigSetup };
+module.exports = { azureAssistantsDefaults, assistantsConfigSetup };

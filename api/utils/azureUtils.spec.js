@@ -1,7 +1,10 @@
-import azureUtils from './azureUtils';
 const {
-  sanitizeModelName, genAzureEndpoint, genAzureChatCompletion, getAzureCredentials, constructAzureURL,
-} = azureUtils;
+  sanitizeModelName,
+  genAzureEndpoint,
+  genAzureChatCompletion,
+  getAzureCredentials,
+  constructAzureURL,
+} = require('./azureUtils');
 
 describe('sanitizeModelName', () => {
   test('removes periods from the model name', () => {

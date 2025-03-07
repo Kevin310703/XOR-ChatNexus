@@ -1,20 +1,22 @@
-import models from '~/models';
 const {
-  Balance, getFiles, deleteFiles, deleteConvos, deletePresets, deleteMessages, deleteUserById, deleteAllUserSessions,
-} = models;
-import User from '~/models/User';
-import { updateUserPluginAuth, deleteUserPluginAuth } from '~/server/services/PluginService';
-import { updateUserPluginsService, deleteUserKey } from '~/server/services/UserService';
-import { verifyEmail, resendVerificationEmail } from '~/server/services/AuthService';
-import { processDeleteRequest } from '~/server/services/Files/process';
-import _default from '~/models/Share';
-const { deleteAllSharedLinks } = _default;
-import __default from '~/models/ToolCall';
-const { deleteToolCalls } = __default;
-import ___default from '~/models/Transaction';
-const { Transaction } = ___default;
-import ____default from '~/config';
-const { logger } = ____default;
+  Balance,
+  getFiles,
+  deleteFiles,
+  deleteConvos,
+  deletePresets,
+  deleteMessages,
+  deleteUserById,
+  deleteAllUserSessions,
+} = require('~/models');
+const User = require('~/models/User');
+const { updateUserPluginAuth, deleteUserPluginAuth } = require('~/server/services/PluginService');
+const { updateUserPluginsService, deleteUserKey } = require('~/server/services/UserService');
+const { verifyEmail, resendVerificationEmail } = require('~/server/services/AuthService');
+const { processDeleteRequest } = require('~/server/services/Files/process');
+const { deleteAllSharedLinks } = require('~/models/Share');
+const { deleteToolCalls } = require('~/models/ToolCall');
+const { Transaction } = require('~/models/Transaction');
+const { logger } = require('~/config');
 
 const getUserController = async (req, res) => {
   const userData = req.user.toObject != null ? req.user.toObject() : { ...req.user };
@@ -162,7 +164,7 @@ const resendVerificationController = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   getUserController,
   getTermsStatusController,
   acceptTermsController,

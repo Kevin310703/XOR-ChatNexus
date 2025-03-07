@@ -1,10 +1,13 @@
-import { parse } from 'cookie';
-import { verify } from 'jsonwebtoken';
-import { registerUser, resetPassword, setAuthTokens, requestPasswordReset } from '~/server/services/AuthService';
-import models from '~/models';
-const { findSession, getUserById, deleteAllUserSessions } = models;
-import _default from '~/config';
-const { logger } = _default;
+const cookies = require('cookie');
+const jwt = require('jsonwebtoken');
+const {
+  registerUser,
+  resetPassword,
+  setAuthTokens,
+  requestPasswordReset,
+} = require('~/server/services/AuthService');
+const { findSession, getUserById, deleteAllUserSessions } = require('~/models');
+const { logger } = require('~/config');
 
 const registrationController = async (req, res) => {
   try {
@@ -51,13 +54,13 @@ const resetPasswordController = async (req, res) => {
 };
 
 const refreshController = async (req, res) => {
-  const refreshToken = req.headers.cookie ? parse(req.headers.cookie).refreshToken : null;
+  const refreshToken = req.headers.cookie ? cookies.parse(req.headers.cookie).refreshToken : null;
   if (!refreshToken) {
     return res.status(200).send('Refresh token not provided');
   }
 
   try {
-    const payload = verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const user = await getUserById(payload.id, '-password -__v -totpSecret');
     if (!user) {
       return res.status(401).redirect('/login');
@@ -90,7 +93,7 @@ const refreshController = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   refreshController,
   registrationController,
   resetPasswordController,

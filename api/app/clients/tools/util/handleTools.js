@@ -1,15 +1,28 @@
-import { Tools, Constants } from 'librechat-data-provider';
-import { SerpAPI } from '@langchain/community/tools/serpapi';
-import { Calculator } from '@langchain/community/tools/calculator';
-import { createCodeExecutionTool, EnvVar } from '@librechat/agents';
-import { getUserPluginAuthValue } from '~/server/services/PluginService';
-import { availableTools, manifestToolMap, GoogleSearchAPI, DALLE3, FluxAPI, OpenWeather, StructuredSD, StructuredACS, TraversaalSearch, StructuredWolfram, createYouTubeTools, TavilySearchResults } from '../';
-import { primeFiles as primeCodeFiles } from '~/server/services/Files/Code/process';
-import fileSearch from './fileSearch';
-const { createFileSearchTool, primeFiles: primeSearchFiles } = fileSearch;
-import { createMCPTool } from '~/server/services/MCP';
-import { loadSpecs } from './loadSpecs';
-import { logger } from '~/config';
+const { Tools, Constants } = require('librechat-data-provider');
+const { SerpAPI } = require('@langchain/community/tools/serpapi');
+const { Calculator } = require('@langchain/community/tools/calculator');
+const { createCodeExecutionTool, EnvVar } = require('@librechat/agents');
+const { getUserPluginAuthValue } = require('~/server/services/PluginService');
+const {
+  availableTools,
+  manifestToolMap,
+  // Basic Tools
+  GoogleSearchAPI,
+  // Structured Tools
+  DALLE3,
+  OpenWeather,
+  StructuredSD,
+  StructuredACS,
+  TraversaalSearch,
+  StructuredWolfram,
+  createYouTubeTools,
+  TavilySearchResults,
+} = require('../');
+const { primeFiles: primeCodeFiles } = require('~/server/services/Files/Code/process');
+const { createFileSearchTool, primeFiles: primeSearchFiles } = require('./fileSearch');
+const { createMCPTool } = require('~/server/services/MCP');
+const { loadSpecs } = require('./loadSpecs');
+const { logger } = require('~/config');
 
 const mcpToolPattern = new RegExp(`^.+${Constants.mcp_delimiter}.+$`);
 
@@ -169,7 +182,6 @@ const loadTools = async ({
   returnMap = false,
 }) => {
   const toolConstructors = {
-    flux: FluxAPI,
     calculator: Calculator,
     google: GoogleSearchAPI,
     open_weather: OpenWeather,
@@ -218,10 +230,9 @@ const loadTools = async ({
   };
 
   const toolOptions = {
-    flux: imageGenOptions,
+    serpapi: { location: 'Austin,Texas,United States', hl: 'en', gl: 'us' },
     dalle: imageGenOptions,
     'stable-diffusion': imageGenOptions,
-    serpapi: { location: 'Austin,Texas,United States', hl: 'en', gl: 'us' },
   };
 
   const toolContextMap = {};
@@ -332,7 +343,7 @@ const loadTools = async ({
   return { loadedTools, toolContextMap };
 };
 
-export default {
+module.exports = {
   loadToolWithAuth,
   loadAuthValues,
   validateTools,

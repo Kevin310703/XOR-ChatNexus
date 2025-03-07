@@ -1,11 +1,10 @@
-import { z } from 'zod';
-import { get } from 'axios';
-import { Ollama } from 'ollama';
-import { Constants } from 'librechat-data-provider';
-import utils from '~/utils';
-const { deriveBaseURL, logAxiosError } = utils;
-import { sleep } from '~/server/utils';
-import { logger } from '~/config';
+const { z } = require('zod');
+const axios = require('axios');
+const { Ollama } = require('ollama');
+const { Constants } = require('librechat-data-provider');
+const { deriveBaseURL, logAxiosError } = require('~/utils');
+const { sleep } = require('~/server/utils');
+const { logger } = require('~/config');
 
 const ollamaPayloadSchema = z.object({
   mirostat: z.number().optional(),
@@ -61,7 +60,7 @@ class OllamaClient {
     try {
       const ollamaEndpoint = deriveBaseURL(baseURL);
       /** @type {Promise<AxiosResponse<OllamaListResponse>>} */
-      const response = await get(`${ollamaEndpoint}/api/tags`, {
+      const response = await axios.get(`${ollamaEndpoint}/api/tags`, {
         timeout: 5000,
       });
       models = response.data.models.map((tag) => tag.name);
@@ -159,4 +158,4 @@ class OllamaClient {
   }
 }
 
-export default { OllamaClient, ollamaPayloadSchema };
+module.exports = { OllamaClient, ollamaPayloadSchema };

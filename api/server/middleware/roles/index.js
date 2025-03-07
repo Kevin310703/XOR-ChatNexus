@@ -1,8 +1,7 @@
-import checkAdmin from './checkAdmin';
-import _default from './generateCheckAccess';
-const { checkAccess, generateCheckAccess } = _default;
+const checkAdmin = require('./checkAdmin');
+const { checkAccess, generateCheckAccess } = require('./generateCheckAccess');
 
-export default {
+module.exports = {
   checkAdmin,
   checkAccess,
   generateCheckAccess,

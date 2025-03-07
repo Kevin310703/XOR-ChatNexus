@@ -1,12 +1,8 @@
-import axios from 'axios';
-import tokenDefault from '~/models/Token';
-const { handleOAuthToken } = tokenDefault;
-import _default from '~/server/utils/crypto';
-const { decryptV2 } = _default;
-import __default from '~/utils';
-const { logAxiosError } = __default;
-import ___default from '~/config';
-const { logger } = ___default;
+const axios = require('axios');
+const { handleOAuthToken } = require('~/models/Token');
+const { decryptV2 } = require('~/server/utils/crypto');
+const { logAxiosError } = require('~/utils');
+const { logger } = require('~/config');
 
 /**
  * Processes the access tokens and stores them in the database.
@@ -168,7 +164,7 @@ const getAccessToken = async ({
   }
 };
 
-export default {
+module.exports = {
   getAccessToken,
   refreshAccessToken,
 };

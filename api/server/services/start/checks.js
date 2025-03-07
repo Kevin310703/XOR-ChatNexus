@@ -1,8 +1,10 @@
-import { Constants, deprecatedAzureVariables, conflictingAzureVariables } from 'librechat-data-provider';
-import __default from '../../utils/index.js';
-const { isEnabled, checkEmailConfig } = __default;
-import _default from '../../../config/index.js';
-const { logger } = _default;
+const {
+  Constants,
+  deprecatedAzureVariables,
+  conflictingAzureVariables,
+} = require('librechat-data-provider');
+const { isEnabled, checkEmailConfig } = require('~/server/utils');
+const { logger } = require('~/config');
 
 const secretDefaults = {
   CREDS_KEY: 'f34be427ebb29de8d88c107a71546019685ed8b241d8f2ed00c3df97ad2566f0',
@@ -45,7 +47,7 @@ function checkVariables() {
     logger.warn(
       `The \`OPENROUTER_API_KEY\` environment variable is deprecated and its functionality will be removed soon.
       Use of this environment variable is highly discouraged as it can lead to unexpected errors when using custom endpoints.
-      Please use the config (\`librechat.yaml\`) file for setting up OpenRouter, and use \`OPENROUTER_KEY\` or another environment variable instead.`,
+      Please use the config (\`chatnexus.yaml\`) file for setting up OpenRouter, and use \`OPENROUTER_KEY\` or another environment variable instead.`,
     );
   }
 
@@ -129,4 +131,4 @@ function checkPasswordReset() {
   }
 }
 
-export default { checkVariables, checkHealth, checkConfig, checkAzureVariables };
+module.exports = { checkVariables, checkHealth, checkConfig, checkAzureVariables };

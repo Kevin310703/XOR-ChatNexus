@@ -1,9 +1,9 @@
-import { errorsToString } from 'librechat-data-provider';
-import { Strategy as PassportLocalStrategy } from 'passport-local';
-import { findUser, comparePassword, updateUser } from '../models/index.js';
-import { isEnabled, checkEmailConfig } from '../server/utils/index.js';
-import { loginSchema } from './validators.js';
-import logger from '../utils/logger.js';
+const { errorsToString } = require('librechat-data-provider');
+const { Strategy: PassportLocalStrategy } = require('passport-local');
+const { findUser, comparePassword, updateUser } = require('~/models');
+const { isEnabled, checkEmailConfig } = require('~/server/utils');
+const { loginSchema } = require('./validators');
+const logger = require('~/utils/logger');
 
 // Unix timestamp for 2024-06-07 15:20:18 Eastern Time
 const verificationEnabledTimestamp = 1717788018;
@@ -71,7 +71,7 @@ function logError(title, parameters) {
   logger.error(title, { parameters: entries });
 }
 
-export default () =>
+module.exports = () =>
   new PassportLocalStrategy(
     {
       usernameField: 'email',

@@ -1,7 +1,6 @@
-import { Constants } from 'librechat-data-provider';
-import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages';
-import formatMessages from './formatMessages';
-const { formatMessage, formatLangChainMessages, formatFromLangChain } = formatMessages;
+const { Constants } = require('librechat-data-provider');
+const { HumanMessage, AIMessage, SystemMessage } = require('@langchain/core/messages');
+const { formatMessage, formatLangChainMessages, formatFromLangChain } = require('./formatMessages');
 
 describe('formatMessage', () => {
   it('formats user message', () => {

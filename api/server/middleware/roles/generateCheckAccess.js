@@ -1,7 +1,5 @@
-import roleDefault from '~/models/Role';
-const { getRoleByName } = roleDefault;
-import _default from '~/config';
-const { logger } = _default;
+const { getRoleByName } = require('~/models/Role');
+const { logger } = require('~/config');
 
 /**
  * Core function to check if a user has one or more required permissions
@@ -74,7 +72,7 @@ const generateCheckAccess = (permissionType, permissions, bodyProps = {}) => {
   };
 };
 
-export default {
+module.exports = {
   checkAccess,
   generateCheckAccess,
 };

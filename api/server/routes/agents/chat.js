@@ -1,16 +1,18 @@
-import { Router } from 'express';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
-import middlewareDefault from '~/server/middleware';
+const express = require('express');
+const { PermissionTypes, Permissions } = require('librechat-data-provider');
 const {
-  setHeaders, handleAbort,
+  setHeaders,
+  handleAbort,
   // validateModel,
-  generateCheckAccess, validateConvoAccess, buildEndpointOption,
-} = middlewareDefault;
-import { initializeClient } from '~/server/services/Endpoints/agents';
-import AgentController from '~/server/controllers/agents/request';
-import addTitle from '~/server/services/Endpoints/agents/title';
+  generateCheckAccess,
+  validateConvoAccess,
+  buildEndpointOption,
+} = require('~/server/middleware');
+const { initializeClient } = require('~/server/services/Endpoints/agents');
+const AgentController = require('~/server/controllers/agents/request');
+const addTitle = require('~/server/services/Endpoints/agents/title');
 
-const router = Router();
+const router = express.Router();
 
 router.post('/abort', handleAbort());
 
@@ -36,4 +38,4 @@ router.post(
   },
 );
 
-export default router;
+module.exports = router;

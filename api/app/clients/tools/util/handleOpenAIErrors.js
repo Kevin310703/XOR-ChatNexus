@@ -1,5 +1,5 @@
-import { APIError, OpenAIError } from 'openai';
-import { logger } from '~/config';
+const OpenAI = require('openai');
+const { logger } = require('~/config');
 
 /**
  * Handles errors that may occur when making requests to OpenAI's API.
@@ -12,12 +12,12 @@ import { logger } from '~/config';
  * @param {string} [context='stream'] - A string providing context where the error occurred, defaults to 'stream'.
  */
 async function handleOpenAIErrors(err, errorCallback, context = 'stream') {
-  if (err instanceof APIError && err?.message?.includes('abort')) {
+  if (err instanceof OpenAI.APIError && err?.message?.includes('abort')) {
     logger.warn(`[OpenAIClient.chatCompletion][${context}] Aborted Message`);
   }
-  if (err instanceof OpenAIError && err?.message?.includes('missing finish_reason')) {
+  if (err instanceof OpenAI.OpenAIError && err?.message?.includes('missing finish_reason')) {
     logger.warn(`[OpenAIClient.chatCompletion][${context}] Missing finish_reason`);
-  } else if (err instanceof APIError) {
+  } else if (err instanceof OpenAI.APIError) {
     logger.warn(`[OpenAIClient.chatCompletion][${context}] API error`);
   } else {
     logger.warn(`[OpenAIClient.chatCompletion][${context}] Unhandled error type`);
@@ -30,4 +30,4 @@ async function handleOpenAIErrors(err, errorCallback, context = 'stream') {
   }
 }
 
-export default handleOpenAIErrors;
+module.exports = handleOpenAIErrors;

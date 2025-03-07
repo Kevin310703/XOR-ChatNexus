@@ -1,4 +1,4 @@
-import { SystemRoles } from 'librechat-data-provider';
+const { SystemRoles } = require('librechat-data-provider');
 
 function checkAdmin(req, res, next) {
   try {
@@ -11,4 +11,4 @@ function checkAdmin(req, res, next) {
   }
 }
 
-export default checkAdmin;
+module.exports = checkAdmin;

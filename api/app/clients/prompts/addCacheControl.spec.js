@@ -1,4 +1,4 @@
-import addCacheControl from './addCacheControl';
+const addCacheControl = require('./addCacheControl');
 
 describe('addCacheControl', () => {
   test('should add cache control to the last two user messages with array content', () => {

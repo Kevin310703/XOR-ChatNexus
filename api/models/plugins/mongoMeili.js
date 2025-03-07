@@ -1,9 +1,8 @@
-import { pick, map, reduce, find } from 'lodash';
-import { model } from 'mongoose';
-import { MeiliSearch } from 'meilisearch';
-import _default from '../../lib/utils/misc.js';
-const { cleanUpPrimaryKeyValue } = _default;
-import logger from '../../config/meiliLogger.js';
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const { MeiliSearch } = require('meilisearch');
+const { cleanUpPrimaryKeyValue } = require('~/lib/utils/misc');
+const logger = require('~/config/meiliLogger');
 
 const searchEnabled = process.env.SEARCH && process.env.SEARCH.toLowerCase() === 'true';
 const meiliEnabled = process.env.MEILI_HOST && process.env.MEILI_MASTER_KEY && searchEnabled;
@@ -45,7 +44,7 @@ const createMeiliMongooseModel = function ({ index, attributesToIndex }) {
       try {
         let moreDocuments = true;
         const mongoDocuments = await this.find().lean();
-        const format = (doc) => pick(doc, attributesToIndex);
+        const format = (doc) => _.pick(doc, attributesToIndex);
 
         // Prepare for comparison
         const mongoMap = new Map(mongoDocuments.map((doc) => [doc[primaryKey], format(doc)]));
@@ -147,11 +146,11 @@ const createMeiliMongooseModel = function ({ index, attributesToIndex }) {
         // Find objects into mongodb matching `objectID` from Meili search
         const query = {};
         // query[primaryKey] = { $in: _.map(data.hits, primaryKey) };
-        query[primaryKey] = map(data.hits, (hit) => cleanUpPrimaryKeyValue(hit[primaryKey]));
+        query[primaryKey] = _.map(data.hits, (hit) => cleanUpPrimaryKeyValue(hit[primaryKey]));
         // logger.debug('query', query);
         const hitsFromMongoose = await this.find(
           query,
-          reduce(
+          _.reduce(
             this.schema.obj,
             function (results, value, key) {
               return { ...results, [key]: 1 };
@@ -164,7 +163,7 @@ const createMeiliMongooseModel = function ({ index, attributesToIndex }) {
         const populatedHits = data.hits.map(function (hit) {
           const query = {};
           query[primaryKey] = hit[primaryKey];
-          const originalHit = find(hitsFromMongoose, query);
+          const originalHit = _.find(hitsFromMongoose, query);
 
           return {
             ...(originalHit ?? {}),
@@ -178,7 +177,7 @@ const createMeiliMongooseModel = function ({ index, attributesToIndex }) {
     }
 
     preprocessObjectForIndex() {
-      const object = pick(this.toJSON(), attributesToIndex);
+      const object = _.pick(this.toJSON(), attributesToIndex);
       // NOTE: MeiliSearch does not allow | in primary key, so we replace it with - for Bing convoIds
       // object.conversationId = object.conversationId.replace(/\|/g, '-');
       if (object.conversationId && object.conversationId.includes('|')) {
@@ -212,7 +211,7 @@ const createMeiliMongooseModel = function ({ index, attributesToIndex }) {
 
     // Update an existing document in Meili
     async updateObjectToMeili() {
-      const object = pick(this.toJSON(), attributesToIndex);
+      const object = _.pick(this.toJSON(), attributesToIndex);
       await index.updateDocuments([object]);
     }
 
@@ -248,7 +247,7 @@ const createMeiliMongooseModel = function ({ index, attributesToIndex }) {
   return MeiliMongooseModel;
 };
 
-export default function mongoMeili(schema, options) {
+module.exports = function mongoMeili(schema, options) {
   // Vaidate Options for mongoMeili
   validateOptions(options);
 
@@ -274,7 +273,7 @@ export default function mongoMeili(schema, options) {
   const index = client.index(indexName);
 
   const attributesToIndex = [
-    ...reduce(
+    ..._.reduce(
       schema.obj,
       function (results, value, key) {
         return value.meiliIndex ? [...results, key] : results;
@@ -305,7 +304,7 @@ export default function mongoMeili(schema, options) {
     try {
       if (Object.prototype.hasOwnProperty.call(schema.obj, 'messages')) {
         const convoIndex = client.index('convos');
-        const deletedConvos = await model('Conversation').find(this._conditions).lean();
+        const deletedConvos = await mongoose.model('Conversation').find(this._conditions).lean();
         let promises = [];
         for (const convo of deletedConvos) {
           promises.push(convoIndex.deleteDocument(convo.conversationId));
@@ -315,7 +314,7 @@ export default function mongoMeili(schema, options) {
 
       if (Object.prototype.hasOwnProperty.call(schema.obj, 'messageId')) {
         const messageIndex = client.index('messages');
-        const deletedMessages = await model('Message').find(this._conditions).lean();
+        const deletedMessages = await mongoose.model('Message').find(this._conditions).lean();
         let promises = [];
         for (const message of deletedMessages) {
           promises.push(messageIndex.deleteDocument(message.messageId));

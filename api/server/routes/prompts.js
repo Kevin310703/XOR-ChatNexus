@@ -1,17 +1,23 @@
-import { Router } from 'express';
-import { PermissionTypes, Permissions, SystemRoles } from 'librechat-data-provider';
-import promptDefault from '~/models/Prompt';
+const express = require('express');
+const { PermissionTypes, Permissions, SystemRoles } = require('librechat-data-provider');
 const {
-  getPrompt, getPrompts, savePrompt, deletePrompt, getPromptGroup, getPromptGroups, updatePromptGroup, deletePromptGroup, createPromptGroup, getAllPromptGroups,
+  getPrompt,
+  getPrompts,
+  savePrompt,
+  deletePrompt,
+  getPromptGroup,
+  getPromptGroups,
+  updatePromptGroup,
+  deletePromptGroup,
+  createPromptGroup,
+  getAllPromptGroups,
   // updatePromptLabels,
   makePromptProduction,
-} = promptDefault;
-import _default from '~/server/middleware';
-const { requireJwtAuth, generateCheckAccess } = _default;
-import __default from '~/config';
-const { logger } = __default;
+} = require('~/models/Prompt');
+const { requireJwtAuth, generateCheckAccess } = require('~/server/middleware');
+const { logger } = require('~/config');
 
-const router = Router();
+const router = express.Router();
 
 const checkPromptAccess = generateCheckAccess(PermissionTypes.PROMPTS, [Permissions.USE]);
 const checkPromptCreate = generateCheckAccess(PermissionTypes.PROMPTS, [
@@ -237,4 +243,4 @@ const deletePromptGroupController = async (req, res) => {
 router.delete('/:promptId', checkPromptCreate, deletePromptController);
 router.delete('/groups/:groupId', checkPromptCreate, deletePromptGroupController);
 
-export default router;
+module.exports = router;

@@ -1,4 +1,4 @@
-import logger from './logger';
+const logger = require('./logger');
 
 // Sanitize outside the logger paths. This is useful for sanitizing variables directly with Regex and patterns.
 const redactPatterns = [
@@ -44,7 +44,7 @@ const levels = {
 
 let level = levels.INFO;
 
-export default {
+module.exports = {
   levels,
   setLevel: (l) => (level = l),
   log: {

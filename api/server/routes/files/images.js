@@ -1,12 +1,15 @@
-import { join, basename } from 'path';
-import { promises as fs } from 'fs';
-import { Router } from 'express';
-import { isAgentsEndpoint } from 'librechat-data-provider';
-import { filterFile, processImageFile, processAgentFileUpload } from '~/server/services/Files/process';
-import _default from '~/config';
-const { logger } = _default;
+const path = require('path');
+const fs = require('fs').promises;
+const express = require('express');
+const { isAgentsEndpoint } = require('librechat-data-provider');
+const {
+  filterFile,
+  processImageFile,
+  processAgentFileUpload,
+} = require('~/server/services/Files/process');
+const { logger } = require('~/config');
 
-const router = Router();
+const router = express.Router();
 
 router.post('/', async (req, res) => {
   const metadata = req.body;
@@ -26,10 +29,10 @@ router.post('/', async (req, res) => {
     // TODO: delete remote file if it exists
     logger.error('[/files/images] Error processing file:', error);
     try {
-      const filepath = join(
+      const filepath = path.join(
         req.app.locals.paths.imageOutput,
         req.user.id,
-        basename(req.file.filename),
+        path.basename(req.file.filename),
       );
       await fs.unlink(filepath);
     } catch (error) {
@@ -46,4 +49,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

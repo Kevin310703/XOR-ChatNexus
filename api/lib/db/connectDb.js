@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { set, connect } from 'mongoose';
+const mongoose = require('mongoose');
 const MONGO_URI = process.env.MONGO_URI;
 
 if (!MONGO_URI) {
@@ -33,8 +33,8 @@ async function connectDb() {
       // useCreateIndex: true
     };
 
-    set('strictQuery', true);
-    cached.promise = connect(MONGO_URI, opts).then((mongoose) => {
+    mongoose.set('strictQuery', true);
+    cached.promise = mongoose.connect(MONGO_URI, opts).then((mongoose) => {
       return mongoose;
     });
   }
@@ -42,4 +42,4 @@ async function connectDb() {
   return cached.conn;
 }
 
-export default connectDb;
+module.exports = connectDb;

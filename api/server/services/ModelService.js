@@ -1,12 +1,10 @@
-import { get } from 'axios';
-import { Providers } from '@librechat/agents';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import { EModelEndpoint, defaultModels, CacheKeys } from 'librechat-data-provider';
-import utils from '~/utils';
-const { inputSchema, logAxiosError, extractBaseURL, processModelData } = utils;
-import _default from '~/app/clients/OllamaClient';
-const { OllamaClient } = _default;
-import getLogStores from '~/cache/getLogStores';
+const axios = require('axios');
+const { Providers } = require('@librechat/agents');
+const { HttpsProxyAgent } = require('https-proxy-agent');
+const { EModelEndpoint, defaultModels, CacheKeys } = require('librechat-data-provider');
+const { inputSchema, logAxiosError, extractBaseURL, processModelData } = require('~/utils');
+const { OllamaClient } = require('~/app/clients/OllamaClient');
+const getLogStores = require('~/cache/getLogStores');
 
 /**
  * Splits a string by commas and trims each resulting value.
@@ -23,8 +21,7 @@ const splitAndTrim = (input) => {
     .filter(Boolean);
 };
 
-import { config } from './Config/EndpointService';
-const { openAIApiKey, userProvidedOpenAI } = config;
+const { openAIApiKey, userProvidedOpenAI } = require('./Config/EndpointService').config;
 
 /**
  * Fetches OpenAI models from the specified base API path or Azure, based on the provided configuration.
@@ -85,7 +82,7 @@ const fetchModels = async ({
     if (user && userIdQuery) {
       url.searchParams.append('user', user);
     }
-    const res = await get(url.toString(), options);
+    const res = await axios.get(url.toString(), options);
 
     /** @type {z.infer<typeof inputSchema>} */
     const input = res.data;
@@ -132,6 +129,9 @@ const fetchOpenAIModels = async (opts, _models = []) => {
     //   .split('/deployments')[0]
     //   .concat(`/models?api-version=${azure.azureOpenAIApiVersion}`);
     // apiKey = azureOpenAIApiKey;
+  } else if (process.env.OPENROUTER_API_KEY) {
+    reverseProxyUrl = 'https://openrouter.ai/api/v1';
+    apiKey = process.env.OPENROUTER_API_KEY;
   }
 
   if (reverseProxyUrl) {
@@ -218,7 +218,7 @@ const getOpenAIModels = async (opts) => {
     return models;
   }
 
-  if (userProvidedOpenAI) {
+  if (userProvidedOpenAI && !process.env.OPENROUTER_API_KEY) {
     return models;
   }
 
@@ -261,7 +261,7 @@ const getBedrockModels = () => {
   return models;
 };
 
-export default {
+module.exports = {
   fetchModels,
   splitAndTrim,
   getOpenAIModels,

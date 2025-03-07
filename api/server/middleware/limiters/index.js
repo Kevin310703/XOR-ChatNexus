@@ -1,16 +1,16 @@
-import createTTSLimiters from './ttsLimiters';
-import createSTTLimiters from './sttLimiters';
+const createTTSLimiters = require('./ttsLimiters');
+const createSTTLimiters = require('./sttLimiters');
 
-import loginLimiter from './loginLimiter';
-import importLimiters from './importLimiters';
-import uploadLimiters from './uploadLimiters';
-import registerLimiter from './registerLimiter';
-import toolCallLimiter from './toolCallLimiter';
-import messageLimiters from './messageLimiters';
-import verifyEmailLimiter from './verifyEmailLimiter';
-import resetPasswordLimiter from './resetPasswordLimiter';
+const loginLimiter = require('./loginLimiter');
+const importLimiters = require('./importLimiters');
+const uploadLimiters = require('./uploadLimiters');
+const registerLimiter = require('./registerLimiter');
+const toolCallLimiter = require('./toolCallLimiter');
+const messageLimiters = require('./messageLimiters');
+const verifyEmailLimiter = require('./verifyEmailLimiter');
+const resetPasswordLimiter = require('./resetPasswordLimiter');
 
-export default {
+module.exports = {
   ...uploadLimiters,
   ...importLimiters,
   ...messageLimiters,

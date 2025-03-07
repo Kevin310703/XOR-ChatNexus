@@ -1,6 +1,6 @@
-import rateLimit from 'express-rate-limit';
-import { ViolationTypes } from 'librechat-data-provider';
-import logViolation from '~/cache/logViolation';
+const rateLimit = require('express-rate-limit');
+const { ViolationTypes } = require('librechat-data-provider');
+const logViolation = require('~/cache/logViolation');
 
 const getEnvironmentVariables = () => {
   const IMPORT_IP_MAX = parseInt(process.env.IMPORT_IP_MAX) || 100;
@@ -66,4 +66,4 @@ const createImportLimiters = () => {
   return { importIpLimiter, importUserLimiter };
 };
 
-export default { createImportLimiters };
+module.exports = { createImportLimiters };

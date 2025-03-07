@@ -1,7 +1,9 @@
-import update from './update';
 const {
-  ARTIFACT_START, ARTIFACT_END, findAllArtifacts, replaceArtifactContent,
-} = update;
+  ARTIFACT_START,
+  ARTIFACT_END,
+  findAllArtifacts,
+  replaceArtifactContent,
+} = require('./update');
 
 const createArtifactText = (options = {}) => {
   const { content = '', wrapCode = true, isClosed = true, prefix = '', suffix = '' } = options;

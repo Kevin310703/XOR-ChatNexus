@@ -1,8 +1,7 @@
-import handleTools from './handleTools';
-const { validateTools, loadTools, loadAuthValues } = handleTools;
-import handleOpenAIErrors from './handleOpenAIErrors';
+const { validateTools, loadTools, loadAuthValues } = require('./handleTools');
+const handleOpenAIErrors = require('./handleOpenAIErrors');
 
-export default {
+module.exports = {
   handleOpenAIErrors,
   loadAuthValues,
   validateTools,

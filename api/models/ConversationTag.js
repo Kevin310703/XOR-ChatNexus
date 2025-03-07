@@ -1,6 +1,6 @@
-import ConversationTag from './schema/conversationTagSchema';
-import Conversation from './schema/convoSchema';
-import logger from '~/config/winston';
+const ConversationTag = require('./schema/conversationTagSchema');
+const Conversation = require('./schema/convoSchema');
+const logger = require('~/config/winston');
 
 /**
  * Retrieves all conversation tags for a user.
@@ -240,7 +240,7 @@ const updateTagsForConversation = async (user, conversationId, tags) => {
   }
 };
 
-export default {
+module.exports = {
   getConversationTags,
   createConversationTag,
   updateConversationTag,

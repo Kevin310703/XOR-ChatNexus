@@ -1,15 +1,16 @@
-import { basename as _basename } from 'path';
-import { v4 } from 'uuid';
-import { Constants, ContentTypes, AnnotationTypes, defaultOrderQuery } from 'librechat-data-provider';
-import { retrieveAndProcessFile } from '../../services/Files/process.js';
-import messageDefault from '../../../models/Message.js';
-const { recordMessage, getMessages } = messageDefault;
-import _default from '../../utils/index.js';
-const { countTokens, escapeRegExp } = _default;
-import __default from '../../../models/spendTokens.js';
-const { spendTokens } = __default;
-import ___default from '../../../models/Conversation.js';
-const { saveConvo } = ___default;
+const path = require('path');
+const { v4 } = require('uuid');
+const {
+  Constants,
+  ContentTypes,
+  AnnotationTypes,
+  defaultOrderQuery,
+} = require('librechat-data-provider');
+const { retrieveAndProcessFile } = require('~/server/services/Files/process');
+const { recordMessage, getMessages } = require('~/models/Message');
+const { countTokens, escapeRegExp } = require('~/server/utils');
+const { spendTokens } = require('~/models/spendTokens');
+const { saveConvo } = require('~/models/Conversation');
 
 /**
  * Initializes a new thread or adds messages to an existing thread.
@@ -584,7 +585,7 @@ async function processMessages({ openai, client, messages = [] }) {
           if (alreadyProcessed) {
             file = await retrieveAndProcessFile({ openai, client, file_id, unknownType: true });
           } else if (type === AnnotationTypes.FILE_PATH) {
-            const basename = _basename(annotation.text);
+            const basename = path.basename(annotation.text);
             file = await retrieveAndProcessFile({
               openai,
               client,
@@ -674,7 +675,7 @@ async function processMessages({ openai, client, messages = [] }) {
   return { messages: sorted, text, edited };
 }
 
-export default {
+module.exports = {
   initThread,
   recordUsage,
   processMessages,

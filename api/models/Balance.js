@@ -1,8 +1,7 @@
-import { model as _model } from 'mongoose';
-import balanceSchema from './schema/balance';
-import { getMultiplier } from './tx';
-import config from '~/config';
-const { logger } = config;
+const mongoose = require('mongoose');
+const balanceSchema = require('./schema/balance');
+const { getMultiplier } = require('./tx');
+const { logger } = require('~/config');
 
 balanceSchema.statics.check = async function ({
   user,
@@ -42,4 +41,4 @@ balanceSchema.statics.check = async function ({
   return { canSpend: balance >= tokenCost, balance, tokenCost };
 };
 
-export default _model('Balance', balanceSchema);
+module.exports = mongoose.model('Balance', balanceSchema);

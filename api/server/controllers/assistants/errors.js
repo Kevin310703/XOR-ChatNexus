@@ -1,10 +1,10 @@
 // errorHandler.js
-import { sendResponse } from '~/server/utils';
-import { logger } from '~/config';
-import getLogStores from '~/cache/getLogStores';
-import { CacheKeys, ViolationTypes, ContentTypes } from 'librechat-data-provider';
-import { getConvo } from '~/models/Conversation';
-import { recordUsage, checkMessageGaps } from '~/server/services/Threads';
+const { sendResponse } = require('~/server/utils');
+const { logger } = require('~/config');
+const getLogStores = require('~/cache/getLogStores');
+const { CacheKeys, ViolationTypes, ContentTypes } = require('librechat-data-provider');
+const { getConvo } = require('~/models/Conversation');
+const { recordUsage, checkMessageGaps } = require('~/server/services/Threads');
 
 /**
  * @typedef {Object} ErrorHandlerContext
@@ -190,4 +190,4 @@ const createErrorHandler = ({ req, res, getContext, originPath = '/assistants/ch
   };
 };
 
-export default { createErrorHandler };
+module.exports = { createErrorHandler };

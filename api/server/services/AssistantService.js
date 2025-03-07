@@ -1,16 +1,21 @@
-import { klona } from 'klona';
-import { StepTypes, RunStatus, StepStatus, ContentTypes, ToolCallTypes, imageGenTools, EModelEndpoint, defaultOrderQuery } from 'librechat-data-provider';
-import { retrieveAndProcessFile } from '~/server/services/Files/process';
-import { processRequiredActions } from '~/server/services/ToolService';
-import utils from '~/server/utils';
-const { createOnProgress, sendMessage, sleep } = utils;
-import { RunManager, waitForRun } from '~/server/services/Runs';
-import _default from '~/server/services/Threads';
-const { processMessages } = _default;
-import __default from '~/app/clients';
-const { TextStream } = __default;
-import ___default from '~/config';
-const { logger } = ___default;
+const { klona } = require('klona');
+const {
+  StepTypes,
+  RunStatus,
+  StepStatus,
+  ContentTypes,
+  ToolCallTypes,
+  imageGenTools,
+  EModelEndpoint,
+  defaultOrderQuery,
+} = require('librechat-data-provider');
+const { retrieveAndProcessFile } = require('~/server/services/Files/process');
+const { processRequiredActions } = require('~/server/services/ToolService');
+const { createOnProgress, sendMessage, sleep } = require('~/server/utils');
+const { RunManager, waitForRun } = require('~/server/services/Runs');
+const { processMessages } = require('~/server/services/Threads');
+const { TextStream } = require('~/app/clients');
+const { logger } = require('~/config');
 
 /**
  * Sorts, processes, and flattens messages to a single string.
@@ -443,7 +448,7 @@ async function runAssistant({
   });
 }
 
-export default {
+module.exports = {
   getResponse,
   runAssistant,
   createOnTextProgress,

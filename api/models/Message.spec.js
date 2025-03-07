@@ -1,5 +1,5 @@
-import { model } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 jest.mock('mongoose');
 
@@ -20,7 +20,7 @@ const mockSchema = {
   deleteMany: jest.fn(),
 };
 
-model.mockReturnValue(mockSchema);
+mongoose.model.mockReturnValue(mockSchema);
 
 jest.mock('~/models/schema/messageSchema', () => mockSchema);
 
@@ -28,10 +28,14 @@ jest.mock('~/config/winston', () => ({
   error: jest.fn(),
 }));
 
-import _default from '~/models/Message';
 const {
-  saveMessage, getMessages, updateMessage, deleteMessages, updateMessageText, deleteMessagesSince,
-} = _default;
+  saveMessage,
+  getMessages,
+  updateMessage,
+  deleteMessages,
+  updateMessageText,
+  deleteMessagesSince,
+} = require('~/models/Message');
 
 describe('Message Operations', () => {
   let mockReq;

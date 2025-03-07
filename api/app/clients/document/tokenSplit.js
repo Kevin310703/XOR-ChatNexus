@@ -1,4 +1,4 @@
-import { TokenTextSplitter } from '@langchain/textsplitters';
+const { TokenTextSplitter } = require('@langchain/textsplitters');
 
 /**
  * Splits a given text by token chunks, based on the provided parameters for the TokenTextSplitter.
@@ -48,4 +48,4 @@ async function tokenSplit({
   return splitText;
 }
 
-export default tokenSplit;
+module.exports = tokenSplit;

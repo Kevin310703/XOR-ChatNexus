@@ -1,6 +1,6 @@
-import rateLimit from 'express-rate-limit';
-import { ViolationTypes } from 'librechat-data-provider';
-import logViolation from '~/cache/logViolation';
+const rateLimit = require('express-rate-limit');
+const { ViolationTypes } = require('librechat-data-provider');
+const logViolation = require('~/cache/logViolation');
 
 const getEnvironmentVariables = () => {
   const FILE_UPLOAD_IP_MAX = parseInt(process.env.FILE_UPLOAD_IP_MAX) || 100;
@@ -70,6 +70,6 @@ const createFileLimiters = () => {
   return { fileUploadIpLimiter, fileUploadUserLimiter };
 };
 
-export default {
+module.exports = {
   createFileLimiters,
 };

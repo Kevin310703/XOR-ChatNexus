@@ -1,33 +1,33 @@
-import assistants from './assistants/index.js';
-import categories from './categories.js';
-import tokenizer from './tokenizer.js';
-import endpoints from './endpoints.js';
-import staticRoute from './static.js';
-import messages from './messages.js';
-import presets from './presets.js';
-import prompts from './prompts.js';
-import balance from './balance.js';
-import plugins from './plugins.js';
-import bedrock from './bedrock/index.js';
-import actions from './actions.js';
-import search from './search.js';
-import models from './models.js';
-import convos from './convos.js';
-import config from './config.js';
-import agents from './agents/index.js';
-import roles from './roles.js';
-import oauth from './oauth.js';
-import files from './files/index.js';
-import share from './share.js';
-import tags from './tags.js';
-import auth from './auth.js';
-import edit from './edit/index.js';
-import keys from './keys.js';
-import user from './user.js';
-import ask from './ask/index.js';
-import banner from './banner.js';
+const assistants = require('./assistants');
+const categories = require('./categories');
+const tokenizer = require('./tokenizer');
+const endpoints = require('./endpoints');
+const staticRoute = require('./static');
+const messages = require('./messages');
+const presets = require('./presets');
+const prompts = require('./prompts');
+const balance = require('./balance');
+const plugins = require('./plugins');
+const bedrock = require('./bedrock');
+const actions = require('./actions');
+const search = require('./search');
+const models = require('./models');
+const convos = require('./convos');
+const config = require('./config');
+const agents = require('./agents');
+const roles = require('./roles');
+const oauth = require('./oauth');
+const files = require('./files');
+const share = require('./share');
+const tags = require('./tags');
+const auth = require('./auth');
+const edit = require('./edit');
+const keys = require('./keys');
+const user = require('./user');
+const ask = require('./ask');
+const banner = require('./banner');
 
-export default {
+module.exports = {
   ask,
   edit,
   auth,

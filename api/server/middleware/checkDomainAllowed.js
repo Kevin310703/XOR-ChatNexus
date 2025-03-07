@@ -1,6 +1,5 @@
-import { isEmailDomainAllowed } from '~/server/services/domains';
-import _default from '~/config';
-const { logger } = _default;
+const { isEmailDomainAllowed } = require('~/server/services/domains');
+const { logger } = require('~/config');
 
 /**
  * Checks the domain's social login is allowed
@@ -23,4 +22,4 @@ const checkDomainAllowed = async (req, res, next = () => {}) => {
   }
 };
 
-export default checkDomainAllowed;
+module.exports = checkDomainAllowed;

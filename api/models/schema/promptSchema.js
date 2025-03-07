@@ -1,6 +1,6 @@
-import { Schema as _Schema, model } from 'mongoose';
-import { Constants } from 'librechat-data-provider';
-const Schema = _Schema;
+const mongoose = require('mongoose');
+const { Constants } = require('librechat-data-provider');
+const Schema = mongoose.Schema;
 
 /**
  * @typedef {Object} MongoPromptGroup
@@ -80,7 +80,7 @@ const promptGroupSchema = new Schema(
   },
 );
 
-const PromptGroup = model('PromptGroup', promptGroupSchema);
+const PromptGroup = mongoose.model('PromptGroup', promptGroupSchema);
 
 const promptSchema = new Schema(
   {
@@ -110,9 +110,9 @@ const promptSchema = new Schema(
   },
 );
 
-const Prompt = model('Prompt', promptSchema);
+const Prompt = mongoose.model('Prompt', promptSchema);
 
 promptSchema.index({ createdAt: 1, updatedAt: 1 });
 promptGroupSchema.index({ createdAt: 1, updatedAt: 1 });
 
-export default { Prompt, PromptGroup };
+module.exports = { Prompt, PromptGroup };

@@ -1,28 +1,28 @@
-import validatePasswordReset from './validatePasswordReset';
-import validateRegistration from './validateRegistration';
-import validateImageRequest from './validateImageRequest';
-import buildEndpointOption from './buildEndpointOption';
-import validateMessageReq from './validateMessageReq';
-import checkDomainAllowed from './checkDomainAllowed';
-import concurrentLimiter from './concurrentLimiter';
-import validateEndpoint from './validateEndpoint';
-import requireLocalAuth from './requireLocalAuth';
-import canDeleteAccount from './canDeleteAccount';
-import requireLdapAuth from './requireLdapAuth';
-import abortMiddleware from './abortMiddleware';
-import checkInviteUser from './checkInviteUser';
-import requireJwtAuth from './requireJwtAuth';
-import validateModel from './validateModel';
-import moderateText from './moderateText';
-import setHeaders from './setHeaders';
-import validate from './validate';
-import limiters from './limiters';
-import uaParser from './uaParser';
-import checkBan from './checkBan';
-import noIndex from './noIndex';
-import roles from './roles';
+const validatePasswordReset = require('./validatePasswordReset');
+const validateRegistration = require('./validateRegistration');
+const validateImageRequest = require('./validateImageRequest');
+const buildEndpointOption = require('./buildEndpointOption');
+const validateMessageReq = require('./validateMessageReq');
+const checkDomainAllowed = require('./checkDomainAllowed');
+const concurrentLimiter = require('./concurrentLimiter');
+const validateEndpoint = require('./validateEndpoint');
+const requireLocalAuth = require('./requireLocalAuth');
+const canDeleteAccount = require('./canDeleteAccount');
+const requireLdapAuth = require('./requireLdapAuth');
+const abortMiddleware = require('./abortMiddleware');
+const checkInviteUser = require('./checkInviteUser');
+const requireJwtAuth = require('./requireJwtAuth');
+const validateModel = require('./validateModel');
+const moderateText = require('./moderateText');
+const setHeaders = require('./setHeaders');
+const validate = require('./validate');
+const limiters = require('./limiters');
+const uaParser = require('./uaParser');
+const checkBan = require('./checkBan');
+const noIndex = require('./noIndex');
+const roles = require('./roles');
 
-export default {
+module.exports = {
   ...abortMiddleware,
   ...validate,
   ...limiters,

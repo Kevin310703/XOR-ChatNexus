@@ -1,19 +1,16 @@
-import { Router } from 'express';
-import middlewareDefault from '~/server/middleware';
-const { uaParser, checkBan, requireJwtAuth, createFileLimiters } = middlewareDefault;
-import _default from '~/server/routes/assistants/v1';
-const { avatar: asstAvatarRouter } = _default;
-import __default from '~/server/routes/agents/v1';
-const { avatar: agentAvatarRouter } = __default;
-import { createMulterInstance } from './multer';
+const express = require('express');
+const { uaParser, checkBan, requireJwtAuth, createFileLimiters } = require('~/server/middleware');
+const { avatar: asstAvatarRouter } = require('~/server/routes/assistants/v1');
+const { avatar: agentAvatarRouter } = require('~/server/routes/agents/v1');
+const { createMulterInstance } = require('./multer');
 
-import files from './files';
-import images from './images';
-import avatar from './avatar';
-import speech from './speech';
+const files = require('./files');
+const images = require('./images');
+const avatar = require('./avatar');
+const speech = require('./speech');
 
 const initialize = async () => {
-  const router = Router();
+  const router = express.Router();
   router.use(requireJwtAuth);
   router.use(checkBan);
   router.use(uaParser);
@@ -40,4 +37,4 @@ const initialize = async () => {
   return router;
 };
 
-export default { initialize };
+module.exports = { initialize };

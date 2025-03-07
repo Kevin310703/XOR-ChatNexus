@@ -1,9 +1,13 @@
-import { get } from 'axios';
-import { FileSources, VisionModes, ImageDetail, ContentTypes, EModelEndpoint } from 'librechat-data-provider';
-import __default from '~/server/services/Files/strategies';
-const { getStrategyFunctions } = __default;
-import _default from '~/config';
-const { logger } = _default;
+const axios = require('axios');
+const {
+  FileSources,
+  VisionModes,
+  ImageDetail,
+  ContentTypes,
+  EModelEndpoint,
+} = require('librechat-data-provider');
+const { getStrategyFunctions } = require('~/server/services/Files/strategies');
+const { logger } = require('~/config');
 
 /**
  * Fetches an image from a URL and returns its base64 representation.
@@ -15,7 +19,7 @@ const { logger } = _default;
  */
 async function fetchImageToBase64(url) {
   try {
-    const response = await get(url, {
+    const response = await axios.get(url, {
       responseType: 'arraybuffer',
     });
     return Buffer.from(response.data).toString('base64');
@@ -146,6 +150,6 @@ async function encodeAndFormat(req, files, endpoint, mode) {
   return result;
 }
 
-export default {
+module.exports = {
   encodeAndFormat,
 };

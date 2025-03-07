@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
 
-const shareSchema = Schema(
+const shareSchema = mongoose.Schema(
   {
     conversationId: {
       type: String,
@@ -14,7 +14,7 @@ const shareSchema = Schema(
       type: String,
       index: true,
     },
-    messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
     shareId: {
       type: String,
       index: true,
@@ -27,4 +27,4 @@ const shareSchema = Schema(
   { timestamps: true },
 );
 
-export default model('SharedLink', shareSchema);
+module.exports = mongoose.model('SharedLink', shareSchema);

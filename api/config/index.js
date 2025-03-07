@@ -1,6 +1,6 @@
-import { EventSource } from 'eventsource';
-import { Time, CacheKeys } from 'librechat-data-provider';
-import logger from './winston.js';
+const { EventSource } = require('eventsource');
+const { Time, CacheKeys } = require('librechat-data-provider');
+const logger = require('./winston');
 
 global.EventSource = EventSource;
 
@@ -47,7 +47,7 @@ const sendEvent = (res, event) => {
   res.write(`event: message\ndata: ${JSON.stringify(event)}\n\n`);
 };
 
-export default {
+module.exports = {
   logger,
   sendEvent,
   getMCPManager,

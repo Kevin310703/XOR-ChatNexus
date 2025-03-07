@@ -1,8 +1,11 @@
-import { SystemRoles, Permissions, PermissionTypes, removeNullishValues } from 'librechat-data-provider';
-import __default from '../../../models/Role.js';
-const { updateAccessPermissions } = __default;
-import _default from '../../../config/index.js';
-const { logger } = _default;
+const {
+  SystemRoles,
+  Permissions,
+  PermissionTypes,
+  removeNullishValues,
+} = require('librechat-data-provider');
+const { updateAccessPermissions } = require('~/models/Role');
+const { logger } = require('~/config');
 
 /**
  * Loads the default interface object.
@@ -101,4 +104,4 @@ async function loadDefaultInterface(config, configDefaults, roleName = SystemRol
   return loadedInterface;
 }
 
-export default { loadDefaultInterface };
+module.exports = { loadDefaultInterface };

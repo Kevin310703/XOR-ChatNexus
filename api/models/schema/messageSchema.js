@@ -1,6 +1,6 @@
-import { Schema, models, model as _model } from 'mongoose';
-import mongoMeili from '~/models/plugins/mongoMeili';
-const messageSchema = Schema(
+const mongoose = require('mongoose');
+const mongoMeili = require('~/models/plugins/mongoMeili');
+const messageSchema = mongoose.Schema(
   {
     messageId: {
       type: String,
@@ -79,7 +79,7 @@ const messageSchema = Schema(
       select: false,
       default: false,
     },
-    files: { type: [{ type: Schema.Types.Mixed }], default: undefined },
+    files: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
     plugin: {
       type: {
         latest: {
@@ -87,7 +87,7 @@ const messageSchema = Schema(
           required: false,
         },
         inputs: {
-          type: [Schema.Types.Mixed],
+          type: [mongoose.Schema.Types.Mixed],
           required: false,
           default: undefined,
         },
@@ -98,9 +98,9 @@ const messageSchema = Schema(
       },
       default: undefined,
     },
-    plugins: { type: [{ type: Schema.Types.Mixed }], default: undefined },
+    plugins: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
     content: {
-      type: [{ type: Schema.Types.Mixed }],
+      type: [{ type: mongoose.Schema.Types.Mixed }],
       default: undefined,
       meiliIndex: true,
     },
@@ -111,7 +111,7 @@ const messageSchema = Schema(
     iconURL: {
       type: String,
     },
-    attachments: { type: [{ type: Schema.Types.Mixed }], default: undefined },
+    attachments: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
     /*
     attachments: {
       type: [
@@ -154,6 +154,6 @@ messageSchema.index({ createdAt: 1 });
 messageSchema.index({ messageId: 1, user: 1 }, { unique: true });
 
 /** @type {mongoose.Model<TMessage>} */
-const Message = models.Message || _model('Message', messageSchema);
+const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
 
-export default Message;
+module.exports = Message;

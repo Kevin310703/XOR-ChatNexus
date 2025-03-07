@@ -1,13 +1,12 @@
-import { Router } from 'express';
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
-import middlewareDefault from '~/server/middleware';
-const { requireJwtAuth, generateCheckAccess } = middlewareDefault;
-import { createAgent, getAgent, updateAgent, duplicateAgent, deleteAgent, getListAgents, uploadAgentAvatar } from '~/server/controllers/agents/v1';
-import actions from './actions';
-import tools from './tools';
+const express = require('express');
+const { PermissionTypes, Permissions } = require('librechat-data-provider');
+const { requireJwtAuth, generateCheckAccess } = require('~/server/middleware');
+const v1 = require('~/server/controllers/agents/v1');
+const actions = require('./actions');
+const tools = require('./tools');
 
-const router = Router();
-const avatar = Router();
+const router = express.Router();
+const avatar = express.Router();
 
 const checkAgentAccess = generateCheckAccess(PermissionTypes.AGENTS, [Permissions.USE]);
 const checkAgentCreate = generateCheckAccess(PermissionTypes.AGENTS, [
@@ -44,7 +43,7 @@ router.use('/tools', tools);
  * @param {AgentCreateParams} req.body - The agent creation parameters.
  * @returns {Agent} 201 - Success response - application/json
  */
-router.post('/', checkAgentCreate, createAgent);
+router.post('/', checkAgentCreate, v1.createAgent);
 
 /**
  * Retrieves an agent.
@@ -52,7 +51,7 @@ router.post('/', checkAgentCreate, createAgent);
  * @param {string} req.params.id - Agent identifier.
  * @returns {Agent} 200 - Success response - application/json
  */
-router.get('/:id', checkAgentAccess, getAgent);
+router.get('/:id', checkAgentAccess, v1.getAgent);
 
 /**
  * Updates an agent.
@@ -61,7 +60,7 @@ router.get('/:id', checkAgentAccess, getAgent);
  * @param {AgentUpdateParams} req.body - The agent update parameters.
  * @returns {Agent} 200 - Success response - application/json
  */
-router.patch('/:id', checkGlobalAgentShare, updateAgent);
+router.patch('/:id', checkGlobalAgentShare, v1.updateAgent);
 
 /**
  * Duplicates an agent.
@@ -69,7 +68,7 @@ router.patch('/:id', checkGlobalAgentShare, updateAgent);
  * @param {string} req.params.id - Agent identifier.
  * @returns {Agent} 201 - Success response - application/json
  */
-router.post('/:id/duplicate', checkAgentCreate, duplicateAgent);
+router.post('/:id/duplicate', checkAgentCreate, v1.duplicateAgent);
 
 /**
  * Deletes an agent.
@@ -77,7 +76,7 @@ router.post('/:id/duplicate', checkAgentCreate, duplicateAgent);
  * @param {string} req.params.id - Agent identifier.
  * @returns {Agent} 200 - success response - application/json
  */
-router.delete('/:id', checkAgentCreate, deleteAgent);
+router.delete('/:id', checkAgentCreate, v1.deleteAgent);
 
 /**
  * Returns a list of agents.
@@ -85,7 +84,7 @@ router.delete('/:id', checkAgentCreate, deleteAgent);
  * @param {AgentListParams} req.query - The agent list parameters for pagination and sorting.
  * @returns {AgentListResponse} 200 - success response - application/json
  */
-router.get('/', checkAgentAccess, getListAgents);
+router.get('/', checkAgentAccess, v1.getListAgents);
 
 /**
  * Uploads and updates an avatar for a specific agent.
@@ -95,6 +94,6 @@ router.get('/', checkAgentAccess, getListAgents);
  * @param {string} [req.body.metadata] - Optional metadata for the agent's avatar.
  * @returns {Object} 200 - success response - application/json
  */
-avatar.post('/:agent_id/avatar/', checkAgentAccess, uploadAgentAvatar);
+avatar.post('/:agent_id/avatar/', checkAgentAccess, v1.uploadAgentAvatar);
 
-export default { v1: router, avatar };
+module.exports = { v1: router, avatar };

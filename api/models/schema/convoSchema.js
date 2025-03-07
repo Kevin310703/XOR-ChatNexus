@@ -1,7 +1,7 @@
-import { Schema, models, model } from 'mongoose';
-import mongoMeili from '../plugins/mongoMeili';
-import { conversationPreset } from './defaults';
-const convoSchema = Schema(
+const mongoose = require('mongoose');
+const mongoMeili = require('../plugins/mongoMeili');
+const { conversationPreset } = require('./defaults');
+const convoSchema = mongoose.Schema(
   {
     conversationId: {
       type: String,
@@ -19,9 +19,11 @@ const convoSchema = Schema(
       type: String,
       index: true,
     },
-    messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+    // google only
+    examples: { type: [{ type: mongoose.Schema.Types.Mixed }], default: undefined },
     agentOptions: {
-      type: Schema.Types.Mixed,
+      type: mongoose.Schema.Types.Mixed,
     },
     ...conversationPreset,
     agent_id: {
@@ -46,16 +48,16 @@ if (process.env.MEILI_HOST && process.env.MEILI_MASTER_KEY) {
   convoSchema.plugin(mongoMeili, {
     host: process.env.MEILI_HOST,
     apiKey: process.env.MEILI_MASTER_KEY,
-    /** Note: Will get created automatically if it doesn't exist already */
-    indexName: 'convos',
+    indexName: 'convos', // Will get created automatically if it doesn't exist already
     primaryKey: 'conversationId',
   });
 }
 
+// Create TTL index
 convoSchema.index({ expiredAt: 1 }, { expireAfterSeconds: 0 });
 convoSchema.index({ createdAt: 1, updatedAt: 1 });
 convoSchema.index({ conversationId: 1, user: 1 }, { unique: true });
 
-const Conversation = models.Conversation || model('Conversation', convoSchema);
+const Conversation = mongoose.models.Conversation || mongoose.model('Conversation', convoSchema);
 
-export default Conversation;
+module.exports = Conversation;

@@ -1,7 +1,6 @@
-import { fetchModels } from '~/server/services/ModelService';
-import _default from './getCustomConfig';
-const { getCustomConfig } = _default;
-import loadConfigModels from './loadConfigModels';
+const { fetchModels } = require('~/server/services/ModelService');
+const { getCustomConfig } = require('./getCustomConfig');
+const loadConfigModels = require('./loadConfigModels');
 
 jest.mock('~/server/services/ModelService');
 jest.mock('./getCustomConfig');

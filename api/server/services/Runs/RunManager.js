@@ -1,6 +1,5 @@
-import { ToolCallTypes } from 'librechat-data-provider';
-import _default from '~/config';
-const { logger } = _default;
+const { ToolCallTypes } = require('librechat-data-provider');
+const { logger } = require('~/config');
 
 /**
  * @typedef {import('openai').OpenAI} OpenAI
@@ -162,4 +161,4 @@ class RunManager {
   }
 }
 
-export default RunManager;
+module.exports = RunManager;

@@ -1,21 +1,28 @@
-import { hashSync, compareSync, genSaltSync } from 'bcryptjs';
-import { webcrypto } from 'node:crypto';
-import { SystemRoles, errorsToString } from 'librechat-data-provider';
-import userMethodsDefault from '~/models/userMethods';
+const bcrypt = require('bcryptjs');
+const { webcrypto } = require('node:crypto');
+const { SystemRoles, errorsToString } = require('librechat-data-provider');
 const {
-  findUser, countUsers, createUser, updateUser, getUserById, generateToken, deleteUserById,
-} = userMethodsDefault;
-import _default from '~/models';
+  findUser,
+  countUsers,
+  createUser,
+  updateUser,
+  getUserById,
+  generateToken,
+  deleteUserById,
+} = require('~/models/userMethods');
 const {
-  createToken, findToken, deleteTokens, findSession, deleteSession, createSession, generateRefreshToken,
-} = _default;
-import __default from '~/server/utils';
-const { isEnabled, checkEmailConfig, sendEmail } = __default;
-import { isEmailDomainAllowed } from '~/server/services/domains';
-import ___default from '~/strategies/validators';
-const { registerSchema } = ___default;
-import ____default from '~/config';
-const { logger } = ____default;
+  createToken,
+  findToken,
+  deleteTokens,
+  findSession,
+  deleteSession,
+  createSession,
+  generateRefreshToken,
+} = require('~/models');
+const { isEnabled, checkEmailConfig, sendEmail } = require('~/server/utils');
+const { isEmailDomainAllowed } = require('~/server/services/domains');
+const { registerSchema } = require('~/strategies/validators');
+const { logger } = require('~/config');
 
 const domains = {
   client: process.env.DOMAIN_CLIENT,
@@ -64,7 +71,7 @@ const logoutUser = async (req, refreshToken) => {
  */
 const createTokenHash = () => {
   const token = Buffer.from(webcrypto.getRandomValues(new Uint8Array(32))).toString('hex');
-  const hash = hashSync(token, 10);
+  const hash = bcrypt.hashSync(token, 10);
   return [token, hash];
 };
 
@@ -129,7 +136,7 @@ const verifyEmail = async (req) => {
     return new Error('Invalid or expired password reset token');
   }
 
-  const isValid = compareSync(token, emailVerificationData.token);
+  const isValid = bcrypt.compareSync(token, emailVerificationData.token);
 
   if (!isValid) {
     logger.warn(
@@ -195,7 +202,7 @@ const registerUser = async (user, additionalData = {}) => {
     //determine if this is the first registered user (not counting anonymous_user)
     const isFirstRegisteredUser = (await countUsers()) === 0;
 
-    const salt = genSaltSync(10);
+    const salt = bcrypt.genSaltSync(10);
     const newUserData = {
       provider: 'local',
       email,
@@ -203,7 +210,7 @@ const registerUser = async (user, additionalData = {}) => {
       name,
       avatar: null,
       role: isFirstRegisteredUser ? SystemRoles.ADMIN : SystemRoles.USER,
-      password: hashSync(password, salt),
+      password: bcrypt.hashSync(password, salt),
       ...additionalData,
     };
 
@@ -309,13 +316,13 @@ const resetPassword = async (userId, token, password) => {
     return new Error('Invalid or expired password reset token');
   }
 
-  const isValid = compareSync(token, passwordResetToken.token);
+  const isValid = bcrypt.compareSync(token, passwordResetToken.token);
 
   if (!isValid) {
     return new Error('Invalid or expired password reset token');
   }
 
-  const hash = hashSync(password, 10);
+  const hash = bcrypt.hashSync(password, 10);
   const user = await updateUser(userId, { password: hash });
 
   if (checkEmailConfig()) {
@@ -437,7 +444,7 @@ const resendVerificationEmail = async (req) => {
   }
 };
 
-export default {
+module.exports = {
   logoutUser,
   verifyEmail,
   registerUser,

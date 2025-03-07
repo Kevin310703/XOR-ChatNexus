@@ -1,19 +1,24 @@
-import { Router } from 'express';
-import openAI from './openAI';
-import custom from './custom';
-import google from './google';
-import anthropic from './anthropic';
-import gptPlugins from './gptPlugins';
-import { isEnabled } from '~/server/utils';
-import { EModelEndpoint } from 'librechat-data-provider';
-import _default from '~/server/middleware';
+const express = require('express');
+const openAI = require('./openAI');
+const custom = require('./custom');
+const google = require('./google');
+const anthropic = require('./anthropic');
+const gptPlugins = require('./gptPlugins');
+const { isEnabled } = require('~/server/utils');
+const { EModelEndpoint } = require('librechat-data-provider');
 const {
-  checkBan, uaParser, requireJwtAuth, messageIpLimiter, concurrentLimiter, messageUserLimiter, validateConvoAccess,
-} = _default;
+  checkBan,
+  uaParser,
+  requireJwtAuth,
+  messageIpLimiter,
+  concurrentLimiter,
+  messageUserLimiter,
+  validateConvoAccess,
+} = require('~/server/middleware');
 
 const { LIMIT_CONCURRENT_MESSAGES, LIMIT_MESSAGE_IP, LIMIT_MESSAGE_USER } = process.env ?? {};
 
-const router = Router();
+const router = express.Router();
 
 router.use(requireJwtAuth);
 router.use(checkBan);
@@ -39,4 +44,4 @@ router.use(`/${EModelEndpoint.anthropic}`, anthropic);
 router.use(`/${EModelEndpoint.google}`, google);
 router.use(`/${EModelEndpoint.custom}`, custom);
 
-export default router;
+module.exports = router;

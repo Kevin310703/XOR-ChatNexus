@@ -1,5 +1,5 @@
-import Banner from './schema/banner';
-import logger from '~/config/winston';
+const Banner = require('./schema/banner');
+const logger = require('~/config/winston');
 /**
  * Retrieves the current active banner.
  * @returns {Promise<Object|null>} The active banner object or null if no active banner is found.
@@ -24,4 +24,4 @@ const getBanner = async (user) => {
   }
 };
 
-export default { getBanner };
+module.exports = { getBanner };

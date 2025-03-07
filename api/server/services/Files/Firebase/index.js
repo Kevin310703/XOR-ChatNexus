@@ -1,8 +1,8 @@
-import crud from './crud';
-import images from './images';
-import initialize from './initialize';
+const crud = require('./crud');
+const images = require('./images');
+const initialize = require('./initialize');
 
-export default {
+module.exports = {
   ...crud,
   ...images,
   ...initialize,

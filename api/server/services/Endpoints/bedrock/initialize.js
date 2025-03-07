@@ -1,11 +1,13 @@
-import { createContentAggregator } from '@librechat/agents';
-import { EModelEndpoint, providerEndpointMap, getResponseSender } from 'librechat-data-provider';
-import callbacks from '~/server/controllers/agents/callbacks';
-const { getDefaultHandlers } = callbacks;
-import getOptions from '~/server/services/Endpoints/bedrock/options';
-import AgentClient from '~/server/controllers/agents/client';
-import _default from '~/utils';
-const { getModelMaxTokens } = _default;
+const { createContentAggregator } = require('@librechat/agents');
+const {
+  EModelEndpoint,
+  providerEndpointMap,
+  getResponseSender,
+} = require('librechat-data-provider');
+const { getDefaultHandlers } = require('~/server/controllers/agents/callbacks');
+const getOptions = require('~/server/services/Endpoints/bedrock/options');
+const AgentClient = require('~/server/controllers/agents/client');
+const { getModelMaxTokens } = require('~/utils');
 
 const initializeClient = async ({ req, res, endpointOption }) => {
   if (!endpointOption) {
@@ -72,4 +74,4 @@ const initializeClient = async ({ req, res, endpointOption }) => {
   return { client };
 };
 
-export default { initializeClient };
+module.exports = { initializeClient };

@@ -18,13 +18,13 @@ jest.mock('~/models/User', () => {
 
 jest.mock('~/server/services/PluginService', () => mockPluginService);
 
-import { BaseLLM } from '@langchain/openai';
-import { Calculator } from '@langchain/community/tools/calculator';
+const { BaseLLM } = require('@langchain/openai');
+const { Calculator } = require('@langchain/community/tools/calculator');
 
-import User from '~/models/User';
-import { updateUserPluginAuth as _updateUserPluginAuth, deleteUserPluginAuth as _deleteUserPluginAuth } from '~/server/services/PluginService';
-import { validateTools, loadTools, loadToolWithAuth } from './handleTools';
-import { StructuredSD, availableTools, DALLE3 } from '../';
+const User = require('~/models/User');
+const PluginService = require('~/server/services/PluginService');
+const { validateTools, loadTools, loadToolWithAuth } = require('./handleTools');
+const { StructuredSD, availableTools, DALLE3 } = require('../');
 
 describe('Tool Handlers', () => {
   let fakeUser;
@@ -68,7 +68,7 @@ describe('Tool Handlers', () => {
     });
     await fakeUser.save();
     for (const authConfig of authConfigs) {
-      await _updateUserPluginAuth(
+      await PluginService.updateUserPluginAuth(
         fakeUser._id,
         authConfig.authField,
         pluginKey,
@@ -80,7 +80,7 @@ describe('Tool Handlers', () => {
   afterAll(async () => {
     await mockUser.findByIdAndDelete(fakeUser._id);
     for (const authConfig of authConfigs) {
-      await _deleteUserPluginAuth(fakeUser._id, authConfig.authField);
+      await PluginService.deleteUserPluginAuth(fakeUser._id, authConfig.authField);
     }
   });
 

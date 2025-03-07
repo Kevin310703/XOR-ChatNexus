@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import staticCache from '../utils/staticCache.js';
-import { imageOutput } from '../../config/paths.js';
+const express = require('express');
+const staticCache = require('../utils/staticCache');
+const paths = require('~/config/paths');
 
-const router = Router();
-router.use(staticCache(imageOutput));
+const router = express.Router();
+router.use(staticCache(paths.imageOutput));
 
-export default router;
+module.exports = router;

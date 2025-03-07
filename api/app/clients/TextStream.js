@@ -1,5 +1,5 @@
-import { Readable } from 'stream';
-import { logger } from '~/config';
+const { Readable } = require('stream');
+const { logger } = require('~/config');
 
 class TextStream extends Readable {
   constructor(text, options = {}) {
@@ -57,4 +57,4 @@ class TextStream extends Readable {
   }
 }
 
-export default TextStream;
+module.exports = TextStream;

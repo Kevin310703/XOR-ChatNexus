@@ -1,9 +1,8 @@
 // Code Files
-import axios, { post } from 'axios';
-import FormData from 'form-data';
-import { getCodeBaseURL } from '@librechat/agents';
-import utils from '~/utils';
-const { logAxiosError } = utils;
+const axios = require('axios');
+const FormData = require('form-data');
+const { getCodeBaseURL } = require('@librechat/agents');
+const { logAxiosError } = require('~/utils');
 
 const MAX_FILE_SIZE = 150 * 1024 * 1024;
 
@@ -55,7 +54,7 @@ async function uploadCodeEnvFile({ req, stream, filename, apiKey, entity_id = ''
     form.append('file', stream, filename);
 
     const baseURL = getCodeBaseURL();
-    const response = await post(`${baseURL}/upload`, form, {
+    const response = await axios.post(`${baseURL}/upload`, form, {
       headers: {
         ...form.getHeaders(),
         'Content-Type': 'multipart/form-data',
@@ -88,4 +87,4 @@ async function uploadCodeEnvFile({ req, stream, filename, apiKey, entity_id = ''
   }
 }
 
-export default { getCodeOutputDownloadStream, uploadCodeEnvFile };
+module.exports = { getCodeOutputDownloadStream, uploadCodeEnvFile };

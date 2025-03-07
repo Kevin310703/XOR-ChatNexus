@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { speechToText } from '~/server/services/Files/Audio';
+const express = require('express');
+const { speechToText } = require('~/server/services/Files/Audio');
 
-const router = Router();
+const router = express.Router();
 
 router.post('/', speechToText);
 
-export default router;
+module.exports = router;

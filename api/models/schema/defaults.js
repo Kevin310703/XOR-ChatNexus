@@ -1,5 +1,3 @@
-import { Schema } from 'mongoose';
-
 const conversationPreset = {
   // endpoint: [azureOpenAI, openAI, anthropic, chatGPTBrowser]
   endpoint: {
@@ -26,7 +24,6 @@ const conversationPreset = {
     required: false,
   },
   // for google only
-  examples: { type: [{ type: Schema.Types.Mixed }], default: undefined },
   modelLabel: {
     type: String,
     required: false,
@@ -56,10 +53,6 @@ const conversationPreset = {
     type: Number,
     required: false,
   },
-  maxTokens: {
-    type: Number,
-    required: false,
-  },
   presence_penalty: {
     type: Number,
     required: false,
@@ -76,12 +69,6 @@ const conversationPreset = {
   /* Anthropic only */
   promptCache: {
     type: Boolean,
-  },
-  thinking: {
-    type: Boolean,
-  },
-  thinkingBudget: {
-    type: Number,
   },
   system: {
     type: String,
@@ -136,6 +123,56 @@ const conversationPreset = {
   },
 };
 
-export default {
+const agentOptions = {
+  model: {
+    type: String,
+    required: false,
+  },
+  // for azureOpenAI, openAI only
+  chatGptLabel: {
+    type: String,
+    required: false,
+  },
+  modelLabel: {
+    type: String,
+    required: false,
+  },
+  promptPrefix: {
+    type: String,
+    required: false,
+  },
+  temperature: {
+    type: Number,
+    required: false,
+  },
+  top_p: {
+    type: Number,
+    required: false,
+  },
+  // for google only
+  topP: {
+    type: Number,
+    required: false,
+  },
+  topK: {
+    type: Number,
+    required: false,
+  },
+  maxOutputTokens: {
+    type: Number,
+    required: false,
+  },
+  presence_penalty: {
+    type: Number,
+    required: false,
+  },
+  frequency_penalty: {
+    type: Number,
+    required: false,
+  },
+};
+
+module.exports = {
   conversationPreset,
+  agentOptions,
 };

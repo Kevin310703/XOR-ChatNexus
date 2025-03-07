@@ -1,17 +1,14 @@
 // Generates image using stable diffusion webui's api (automatic1111)
-import { existsSync, mkdirSync } from 'fs';
-import { z } from 'zod';
-import { join, relative } from 'path';
-import { post } from 'axios';
-import sharp from 'sharp';
-import { v4 as uuidv4 } from 'uuid';
-import { Tool } from '@langchain/core/tools';
-import { FileContext, ContentTypes } from 'librechat-data-provider';
-import paths from '~/config/paths';
-import { logger } from '~/config';
-
-const displayMessage =
-  'Stable Diffusion displayed an image. All generated images are already plainly visible, so don\'t repeat the descriptions in detail. Do not list download links as they are available in the UI already. The user may download the images by clicking on them, but do not mention anything about downloading to the user.';
+const fs = require('fs');
+const { z } = require('zod');
+const path = require('path');
+const axios = require('axios');
+const sharp = require('sharp');
+const { v4: uuidv4 } = require('uuid');
+const { Tool } = require('@langchain/core/tools');
+const { FileContext } = require('librechat-data-provider');
+const paths = require('~/config/paths');
+const { logger } = require('~/config');
 
 class StableDiffusionAPI extends Tool {
   constructor(fields) {
@@ -24,8 +21,6 @@ class StableDiffusionAPI extends Tool {
     this.override = fields.override ?? false;
     /** @type {boolean} Necessary for output to contain all image metadata. */
     this.returnMetadata = fields.returnMetadata ?? false;
-    /** @type {boolean} */
-    this.isAgent = fields.isAgent;
     if (fields.uploadImageBuffer) {
       /** @type {uploadImageBuffer} Necessary for output to contain all image metadata. */
       this.uploadImageBuffer = fields.uploadImageBuffer.bind(this);
@@ -64,20 +59,11 @@ class StableDiffusionAPI extends Tool {
   }
 
   getMarkdownImageUrl(imageName) {
-    const imageUrl = join(this.relativePath, this.userId, imageName)
+    const imageUrl = path
+      .join(this.relativePath, this.userId, imageName)
       .replace(/\\/g, '/')
       .replace('public/', '');
     return `![generated image](/${imageUrl})`;
-  }
-
-  returnValue(value) {
-    if (this.isAgent === true && typeof value === 'string') {
-      return [value, {}];
-    } else if (this.isAgent === true && typeof value === 'object') {
-      return [displayMessage, value];
-    }
-
-    return value;
   }
 
   getServerURL() {
@@ -101,7 +87,7 @@ class StableDiffusionAPI extends Tool {
     };
     let generationResponse;
     try {
-      generationResponse = await post(`${url}/sdapi/v1/txt2img`, payload);
+      generationResponse = await axios.post(`${url}/sdapi/v1/txt2img`, payload);
     } catch (error) {
       logger.error('[StableDiffusion] Error while generating image:', error);
       return 'Error making API request.';
@@ -119,33 +105,14 @@ class StableDiffusionAPI extends Tool {
     const file_id = uuidv4();
     const imageName = `${file_id}.png`;
     const { imageOutput: imageOutputPath, clientPath } = paths;
-    const filepath = join(imageOutputPath, this.userId, imageName);
-    this.relativePath = relative(clientPath, imageOutputPath);
+    const filepath = path.join(imageOutputPath, this.userId, imageName);
+    this.relativePath = path.relative(clientPath, imageOutputPath);
 
-    if (!existsSync(join(imageOutputPath, this.userId))) {
-      mkdirSync(join(imageOutputPath, this.userId), { recursive: true });
+    if (!fs.existsSync(path.join(imageOutputPath, this.userId))) {
+      fs.mkdirSync(path.join(imageOutputPath, this.userId), { recursive: true });
     }
 
     try {
-      if (this.isAgent) {
-        const content = [
-          {
-            type: ContentTypes.IMAGE_URL,
-            image_url: {
-              url: `data:image/png;base64,${image}`,
-            },
-          },
-        ];
-
-        const response = [
-          {
-            type: ContentTypes.TEXT,
-            text: displayMessage,
-          },
-        ];
-        return [response, { content }];
-      }
-
       const buffer = Buffer.from(image.split(',', 1)[0], 'base64');
       if (this.returnMetadata && this.uploadImageBuffer && this.req) {
         const file = await this.uploadImageBuffer({
@@ -187,8 +154,8 @@ class StableDiffusionAPI extends Tool {
       logger.error('[StableDiffusion] Error while saving the image:', error);
     }
 
-    return this.returnValue(this.result);
+    return this.result;
   }
 }
 
-export default StableDiffusionAPI;
+module.exports = StableDiffusionAPI;

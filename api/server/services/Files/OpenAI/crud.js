@@ -1,9 +1,7 @@
-import { createReadStream } from 'fs';
-import { FilePurpose } from 'librechat-data-provider';
-import utils from '~/server/utils';
-const { sleep } = utils;
-import _default from '~/config';
-const { logger } = _default;
+const fs = require('fs');
+const { FilePurpose } = require('librechat-data-provider');
+const { sleep } = require('~/server/utils');
+const { logger } = require('~/config');
 
 /**
  * Uploads a file that can be used across various OpenAI services.
@@ -19,7 +17,7 @@ async function uploadOpenAIFile({ req, file, openai }) {
   const { height, width } = req.body;
   const isImage = height && width;
   const uploadedFile = await openai.files.create({
-    file: createReadStream(file.path),
+    file: fs.createReadStream(file.path),
     purpose: isImage ? FilePurpose.Vision : FilePurpose.Assistants,
   });
 
@@ -80,4 +78,4 @@ async function getOpenAIFileStream(file_id, openai) {
   }
 }
 
-export default { uploadOpenAIFile, deleteOpenAIFile, getOpenAIFileStream };
+module.exports = { uploadOpenAIFile, deleteOpenAIFile, getOpenAIFileStream };

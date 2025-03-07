@@ -1,9 +1,7 @@
-import { CacheKeys } from 'librechat-data-provider';
-import conversationDefault from '~/models/Conversation';
-const { saveConvo } = conversationDefault;
-import getLogStores from '~/cache/getLogStores';
-import _default from '~/server/utils';
-const { isEnabled } = _default;
+const { CacheKeys } = require('librechat-data-provider');
+const { saveConvo } = require('~/models/Conversation');
+const getLogStores = require('~/cache/getLogStores');
+const { isEnabled } = require('~/server/utils');
 
 const addTitle = async (req, { text, responseText, conversationId, client }) => {
   const { TITLE_CONVO = 'true' } = process.env ?? {};
@@ -31,4 +29,4 @@ const addTitle = async (req, { text, responseText, conversationId, client }) => 
   );
 };
 
-export default addTitle;
+module.exports = addTitle;

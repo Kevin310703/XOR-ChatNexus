@@ -1,13 +1,13 @@
-import { config } from './EndpointService';
-import getCustomConfig from './getCustomConfig';
-import loadCustomConfig from './loadCustomConfig';
-import loadConfigModels from './loadConfigModels';
-import loadDefaultModels from './loadDefaultModels';
-import getEndpointsConfig from './getEndpointsConfig';
-import loadOverrideConfig from './loadOverrideConfig';
-import loadAsyncEndpoints from './loadAsyncEndpoints';
+const { config } = require('./EndpointService');
+const getCustomConfig = require('./getCustomConfig');
+const loadCustomConfig = require('./loadCustomConfig');
+const loadConfigModels = require('./loadConfigModels');
+const loadDefaultModels = require('./loadDefaultModels');
+const getEndpointsConfig = require('./getEndpointsConfig');
+const loadOverrideConfig = require('./loadOverrideConfig');
+const loadAsyncEndpoints = require('./loadAsyncEndpoints');
 
-export default {
+module.exports = {
   config,
   loadCustomConfig,
   loadConfigModels,

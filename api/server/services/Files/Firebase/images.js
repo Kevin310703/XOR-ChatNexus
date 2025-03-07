@@ -1,15 +1,11 @@
-import { promises as _promises } from 'fs';
-import { extname, basename } from 'path';
-import sharp from 'sharp';
-import { resizeImageBuffer } from '../images/resize';
-import userMethods from '~/models/userMethods';
-const { updateUser } = userMethods;
-import _default from './crud';
-const { saveBufferToFirebase } = _default;
-import __default from '~/models/File';
-const { updateFile } = __default;
-import ___default from '~/config';
-const { logger } = ___default;
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+const { resizeImageBuffer } = require('../images/resize');
+const { updateUser } = require('~/models/userMethods');
+const { saveBufferToFirebase } = require('./crud');
+const { updateFile } = require('~/models/File');
+const { logger } = require('~/config');
 
 /**
  * Converts an image file to the target format. The function first resizes the image based on the specified
@@ -32,33 +28,33 @@ const { logger } = ___default;
  */
 async function uploadImageToFirebase({ req, file, file_id, endpoint, resolution = 'high' }) {
   const inputFilePath = file.path;
-  const inputBuffer = await _promises.readFile(inputFilePath);
+  const inputBuffer = await fs.promises.readFile(inputFilePath);
   const {
     buffer: resizedBuffer,
     width,
     height,
   } = await resizeImageBuffer(inputBuffer, resolution, endpoint);
-  const extension = extname(inputFilePath);
+  const extension = path.extname(inputFilePath);
   const userId = req.user.id;
 
   let webPBuffer;
-  let fileName = `${file_id}__${basename(inputFilePath)}`;
+  let fileName = `${file_id}__${path.basename(inputFilePath)}`;
   const targetExtension = `.${req.app.locals.imageOutputType}`;
   if (extension.toLowerCase() === targetExtension) {
     webPBuffer = resizedBuffer;
   } else {
     webPBuffer = await sharp(resizedBuffer).toFormat(req.app.locals.imageOutputType).toBuffer();
     // Replace or append the correct extension
-    const extRegExp = new RegExp(extname(fileName) + '$');
+    const extRegExp = new RegExp(path.extname(fileName) + '$');
     fileName = fileName.replace(extRegExp, targetExtension);
-    if (!extname(fileName)) {
+    if (!path.extname(fileName)) {
       fileName += targetExtension;
     }
   }
 
   const downloadURL = await saveBufferToFirebase({ userId, buffer: webPBuffer, fileName });
 
-  await _promises.unlink(inputFilePath);
+  await fs.promises.unlink(inputFilePath);
 
   const bytes = Buffer.byteLength(webPBuffer);
   return { filepath: downloadURL, bytes, width, height };
@@ -113,4 +109,4 @@ async function processFirebaseAvatar({ buffer, userId, manual }) {
   }
 }
 
-export default { uploadImageToFirebase, prepareImageURL, processFirebaseAvatar };
+module.exports = { uploadImageToFirebase, prepareImageURL, processFirebaseAvatar };

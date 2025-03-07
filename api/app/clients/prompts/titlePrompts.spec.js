@@ -1,6 +1,4 @@
-import titlePrompts from './titlePrompts';
-const { parseParamFromPrompt } = titlePrompts;
-
+const { parseParamFromPrompt } = require('./titlePrompts');
 describe('parseParamFromPrompt', () => {
   // Original simple format tests
   test('extracts parameter from simple format', () => {

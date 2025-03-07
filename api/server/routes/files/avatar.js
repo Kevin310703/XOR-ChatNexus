@@ -1,12 +1,11 @@
-import { promises as fs } from 'fs';
-import { Router } from 'express';
-import { getStrategyFunctions } from '~/server/services/Files/strategies';
-import { resizeAvatar } from '~/server/services/Files/images/avatar';
-import { filterFile } from '~/server/services/Files/process';
-import _default from '~/config';
-const { logger } = _default;
+const fs = require('fs').promises;
+const express = require('express');
+const { getStrategyFunctions } = require('~/server/services/Files/strategies');
+const { resizeAvatar } = require('~/server/services/Files/images/avatar');
+const { filterFile } = require('~/server/services/Files/process');
+const { logger } = require('~/config');
 
-const router = Router();
+const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
@@ -45,4 +44,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

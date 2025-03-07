@@ -1,11 +1,11 @@
-import { Router } from 'express';
-import v1 from '~/server/controllers/assistants/v1';
-import { createAssistant, patchAssistant } from '~/server/controllers/assistants/v2';
-import documents from './documents';
-import actions from './actions';
-import tools from './tools';
+const express = require('express');
+const v1 = require('~/server/controllers/assistants/v1');
+const v2 = require('~/server/controllers/assistants/v2');
+const documents = require('./documents');
+const actions = require('./actions');
+const tools = require('./tools');
 
-const router = Router();
+const router = express.Router();
 
 /**
  * Assistant actions route.
@@ -33,7 +33,7 @@ router.use('/documents', documents);
  * @param {AssistantCreateParams} req.body - The assistant creation parameters.
  * @returns {Assistant} 201 - success response - application/json
  */
-router.post('/', createAssistant);
+router.post('/', v2.createAssistant);
 
 /**
  * Retrieves an assistant.
@@ -50,7 +50,7 @@ router.get('/:id', v1.retrieveAssistant);
  * @param {AssistantUpdateParams} req.body - The assistant update parameters.
  * @returns {Assistant} 200 - success response - application/json
  */
-router.patch('/:id', patchAssistant);
+router.patch('/:id', v2.patchAssistant);
 
 /**
  * Deletes an assistant.
@@ -78,4 +78,4 @@ router.get('/', v1.listAssistants);
  */
 router.post('/avatar/:assistant_id', v1.uploadAssistantAvatar);
 
-export default router;
+module.exports = router;

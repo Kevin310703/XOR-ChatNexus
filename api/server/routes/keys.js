@@ -1,8 +1,7 @@
-import { Router } from 'express';
-const router = Router();
-import { updateUserKey, deleteUserKey, getUserKeyExpiry } from '../services/UserService';
-import _default from '../middleware/';
-const { requireJwtAuth } = _default;
+const express = require('express');
+const router = express.Router();
+const { updateUserKey, deleteUserKey, getUserKeyExpiry } = require('../services/UserService');
+const { requireJwtAuth } = require('../middleware/');
 
 router.put('/', requireJwtAuth, async (req, res) => {
   await updateUserKey({ userId: req.user.id, ...req.body });
@@ -33,4 +32,4 @@ router.get('/', requireJwtAuth, async (req, res) => {
   res.status(200).send(response);
 });
 
-export default router;
+module.exports = router;

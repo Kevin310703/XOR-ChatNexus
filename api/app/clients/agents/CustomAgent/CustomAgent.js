@@ -1,6 +1,6 @@
-import { ZeroShotAgent } from 'langchain/agents';
-import { PromptTemplate, renderTemplate } from '@langchain/core/prompts';
-import { gpt3, gpt4 } from './instructions';
+const { ZeroShotAgent } = require('langchain/agents');
+const { PromptTemplate, renderTemplate } = require('@langchain/core/prompts');
+const { gpt3, gpt4 } = require('./instructions');
 
 class CustomAgent extends ZeroShotAgent {
   constructor(input) {
@@ -47,4 +47,4 @@ class CustomAgent extends ZeroShotAgent {
   }
 }
 
-export default CustomAgent;
+module.exports = CustomAgent;

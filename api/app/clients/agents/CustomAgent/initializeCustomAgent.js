@@ -1,9 +1,13 @@
-import CustomAgent from './CustomAgent';
-import { CustomOutputParser } from './outputParser';
-import { AgentExecutor } from 'langchain/agents';
-import { LLMChain } from 'langchain/chains';
-import { BufferMemory, ChatMessageHistory } from 'langchain/memory';
-import { ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate } from '@langchain/core/prompts';
+const CustomAgent = require('./CustomAgent');
+const { CustomOutputParser } = require('./outputParser');
+const { AgentExecutor } = require('langchain/agents');
+const { LLMChain } = require('langchain/chains');
+const { BufferMemory, ChatMessageHistory } = require('langchain/memory');
+const {
+  ChatPromptTemplate,
+  SystemMessagePromptTemplate,
+  HumanMessagePromptTemplate,
+} = require('@langchain/core/prompts');
 
 const initializeCustomAgent = async ({
   tools,
@@ -56,4 +60,4 @@ Query: {input}
   return AgentExecutor.fromAgentAndTools({ agent, tools, memory, ...rest });
 };
 
-export default initializeCustomAgent;
+module.exports = initializeCustomAgent;

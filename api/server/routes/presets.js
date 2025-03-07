@@ -1,12 +1,10 @@
-import { Router } from 'express';
-import { randomUUID } from 'crypto';
-import models from '~/models';
-const { getPresets, savePreset, deletePresets } = models;
-import requireJwtAuth from '~/server/middleware/requireJwtAuth';
-import _default from '~/config';
-const { logger } = _default;
+const express = require('express');
+const crypto = require('crypto');
+const { getPresets, savePreset, deletePresets } = require('~/models');
+const requireJwtAuth = require('~/server/middleware/requireJwtAuth');
+const { logger } = require('~/config');
 
-const router = Router();
+const router = express.Router();
 router.use(requireJwtAuth);
 
 router.get('/', async (req, res) => {
@@ -17,7 +15,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const update = req.body || {};
 
-  update.presetId = update?.presetId || randomUUID();
+  update.presetId = update?.presetId || crypto.randomUUID();
 
   try {
     const preset = await savePreset(req.user.id, update);
@@ -47,4 +45,4 @@ router.post('/delete', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

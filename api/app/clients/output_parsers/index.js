@@ -1,7 +1,7 @@
-import addImages from './addImages';
-import handleOutputs from './handleOutputs';
+const addImages = require('./addImages');
+const handleOutputs = require('./handleOutputs');
 
-export default {
+module.exports = {
   addImages,
   ...handleOutputs,
 };

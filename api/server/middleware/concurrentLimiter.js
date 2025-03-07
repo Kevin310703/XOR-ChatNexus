@@ -1,9 +1,8 @@
-import { Time } from 'librechat-data-provider';
-import clearPendingReq from '~/cache/clearPendingReq';
-import _default from '~/cache';
-const { logViolation, getLogStores } = _default;
-import { isEnabled } from '~/server/utils';
-import denyRequest from './denyRequest';
+const { Time } = require('librechat-data-provider');
+const clearPendingReq = require('~/cache/clearPendingReq');
+const { logViolation, getLogStores } = require('~/cache');
+const { isEnabled } = require('~/server/utils');
+const denyRequest = require('./denyRequest');
 
 const {
   USE_REDIS,
@@ -74,4 +73,4 @@ const concurrentLimiter = async (req, res, next) => {
   next();
 };
 
-export default concurrentLimiter;
+module.exports = concurrentLimiter;

@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { getAvailableTools } from '~/server/controllers/PluginController';
+const express = require('express');
+const { getAvailableTools } = require('~/server/controllers/PluginController');
 
-const router = Router();
+const router = express.Router();
 
 router.get('/', getAvailableTools);
 
-export default router;
+module.exports = router;

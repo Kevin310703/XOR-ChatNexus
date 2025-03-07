@@ -1,7 +1,6 @@
-import rateLimit from 'express-rate-limit';
-import denyRequest from '~/server/middleware/denyRequest';
-import _default from '~/cache';
-const { logViolation } = _default;
+const rateLimit = require('express-rate-limit');
+const denyRequest = require('~/server/middleware/denyRequest');
+const { logViolation } = require('~/cache');
 
 const {
   MESSAGE_IP_MAX = 40,
@@ -62,7 +61,7 @@ const messageUserLimiter = rateLimit({
   },
 });
 
-export default {
+module.exports = {
   messageIpLimiter,
   messageUserLimiter,
 };

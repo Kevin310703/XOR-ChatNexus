@@ -1,5 +1,5 @@
-import { Run, Providers } from '@librechat/agents';
-import { providerEndpointMap, KnownEndpoints } from 'librechat-data-provider';
+const { Run, Providers } = require('@librechat/agents');
+const { providerEndpointMap, KnownEndpoints } = require('librechat-data-provider');
 
 /**
  * @typedef {import('@librechat/agents').t} t
@@ -45,10 +45,7 @@ async function createRun({
 
   /** @type {'reasoning_content' | 'reasoning'} */
   let reasoningKey;
-  if (
-    llmConfig.configuration?.baseURL?.includes(KnownEndpoints.openrouter) ||
-    (agent.endpoint && agent.endpoint.toLowerCase().includes(KnownEndpoints.openrouter))
-  ) {
+  if (llmConfig.configuration?.baseURL?.includes(KnownEndpoints.openrouter)) {
     reasoningKey = 'reasoning';
   }
   if (/o1(?!-(?:mini|preview)).*$/.test(llmConfig.model)) {
@@ -79,4 +76,4 @@ async function createRun({
   });
 }
 
-export default { createRun };
+module.exports = { createRun };

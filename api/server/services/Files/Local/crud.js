@@ -1,12 +1,10 @@
-import { existsSync, mkdirSync, copyFileSync, unlinkSync, writeFileSync, promises, createReadStream } from 'fs';
-import { extname, join, posix, resolve, relative, isAbsolute, sep, basename } from 'path';
-import axios from 'axios';
-import { EModelEndpoint } from 'librechat-data-provider';
-import utils from '~/server/utils';
-const { getBufferMetadata } = utils;
-import paths, { publicPath as _publicPath } from '~/config/paths';
-import _default from '~/config';
-const { logger } = _default;
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
+const { EModelEndpoint } = require('librechat-data-provider');
+const { getBufferMetadata } = require('~/server/utils');
+const paths = require('~/config/paths');
+const { logger } = require('~/config');
 
 /**
  * Saves a file to a specified output path with a new filename.
@@ -19,15 +17,15 @@ const { logger } = _default;
  */
 async function saveLocalFile(file, outputPath, outputFilename) {
   try {
-    if (!existsSync(outputPath)) {
-      mkdirSync(outputPath, { recursive: true });
+    if (!fs.existsSync(outputPath)) {
+      fs.mkdirSync(outputPath, { recursive: true });
     }
 
-    const fileExtension = extname(file.originalname);
+    const fileExtension = path.extname(file.originalname);
     const filenameWithExt = outputFilename + fileExtension;
-    const outputFilePath = join(outputPath, filenameWithExt);
-    copyFileSync(file.path, outputFilePath);
-    unlinkSync(file.path);
+    const outputFilePath = path.join(outputPath, filenameWithExt);
+    fs.copyFileSync(file.path, outputFilePath);
+    fs.unlinkSync(file.path);
 
     return outputFilePath;
   } catch (error) {
@@ -47,7 +45,7 @@ async function saveLocalFile(file, outputPath, outputFilename) {
  */
 const saveLocalImage = async (req, file, filename) => {
   const imagePath = req.app.locals.paths.imageOutput;
-  const outputPath = join(imagePath, req.user.id ?? '');
+  const outputPath = path.join(imagePath, req.user.id ?? '');
   await saveLocalFile(file, outputPath, filename);
 };
 
@@ -66,15 +64,15 @@ async function saveLocalBuffer({ userId, buffer, fileName, basePath = 'images' }
   try {
     const { publicPath, uploads } = paths;
 
-    const directoryPath = join(basePath === 'images' ? publicPath : uploads, basePath, userId);
+    const directoryPath = path.join(basePath === 'images' ? publicPath : uploads, basePath, userId);
 
-    if (!existsSync(directoryPath)) {
-      mkdirSync(directoryPath, { recursive: true });
+    if (!fs.existsSync(directoryPath)) {
+      fs.mkdirSync(directoryPath, { recursive: true });
     }
 
-    writeFileSync(join(directoryPath, fileName), buffer);
+    fs.writeFileSync(path.join(directoryPath, fileName), buffer);
 
-    const filePath = posix.join('/', basePath, userId, fileName);
+    const filePath = path.posix.join('/', basePath, userId, fileName);
 
     return filePath;
   } catch (error) {
@@ -112,23 +110,23 @@ async function saveFileFromURL({ userId, URL, fileName, basePath = 'images' }) {
     const { bytes, type, dimensions, extension } = await getBufferMetadata(buffer);
 
     // Construct the outputPath based on the basePath and userId
-    const outputPath = join(_publicPath, basePath, userId.toString());
+    const outputPath = path.join(paths.publicPath, basePath, userId.toString());
 
     // Check if the output directory exists, if not, create it
-    if (!existsSync(outputPath)) {
-      mkdirSync(outputPath, { recursive: true });
+    if (!fs.existsSync(outputPath)) {
+      fs.mkdirSync(outputPath, { recursive: true });
     }
 
     // Replace or append the correct extension
-    const extRegExp = new RegExp(extname(fileName) + '$');
+    const extRegExp = new RegExp(path.extname(fileName) + '$');
     fileName = fileName.replace(extRegExp, `.${extension}`);
-    if (!extname(fileName)) {
+    if (!path.extname(fileName)) {
       fileName += `.${extension}`;
     }
 
     // Save the file to the output path
-    const outputFilePath = join(outputPath, fileName);
-    writeFileSync(outputFilePath, buffer);
+    const outputFilePath = path.join(outputPath, fileName);
+    fs.writeFileSync(outputFilePath, buffer);
 
     return {
       bytes,
@@ -155,7 +153,7 @@ async function saveFileFromURL({ userId, URL, fileName, basePath = 'images' }) {
  *          The constructed local file path.
  */
 async function getLocalFileURL({ fileName, basePath = 'images' }) {
-  return posix.join('/', basePath, fileName);
+  return path.posix.join('/', basePath, fileName);
 }
 
 /**
@@ -172,8 +170,8 @@ async function getLocalFileURL({ fileName, basePath = 'images' }) {
  *          Returns true if the filepath is within the specified base and subfolder, false otherwise.
  */
 const isValidPath = (req, base, subfolder, filepath) => {
-  const normalizedBase = resolve(base, subfolder, req.user.id);
-  const normalizedFilepath = resolve(filepath);
+  const normalizedBase = path.resolve(base, subfolder, req.user.id);
+  const normalizedFilepath = path.resolve(filepath);
   return normalizedFilepath.startsWith(normalizedBase);
 };
 
@@ -182,7 +180,7 @@ const isValidPath = (req, base, subfolder, filepath) => {
  */
 const unlinkFile = async (filepath) => {
   try {
-    await promises.unlink(filepath);
+    await fs.promises.unlink(filepath);
   } catch (error) {
     logger.error('Error deleting file:', error);
   }
@@ -205,7 +203,7 @@ const deleteLocalFile = async (req, file) => {
   const { publicPath, uploads } = req.app.locals.paths;
   if (file.embedded && process.env.RAG_API_URL) {
     const jwtToken = req.headers.authorization.split(' ')[1];
-    delete(`${process.env.RAG_API_URL}/documents`, {
+    axios.delete(`${process.env.RAG_API_URL}/documents`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
         'Content-Type': 'application/json',
@@ -216,17 +214,17 @@ const deleteLocalFile = async (req, file) => {
   }
 
   if (file.filepath.startsWith(`/uploads/${req.user.id}`)) {
-    const userUploadDir = join(uploads, req.user.id);
+    const userUploadDir = path.join(uploads, req.user.id);
     const basePath = file.filepath.split(`/uploads/${req.user.id}/`)[1];
 
     if (!basePath) {
       throw new Error(`Invalid file path: ${file.filepath}`);
     }
 
-    const filepath = join(userUploadDir, basePath);
+    const filepath = path.join(userUploadDir, basePath);
 
-    const rel = relative(userUploadDir, filepath);
-    if (rel.startsWith('..') || isAbsolute(rel) || rel.includes(`..${sep}`)) {
+    const rel = path.relative(userUploadDir, filepath);
+    if (rel.startsWith('..') || path.isAbsolute(rel) || rel.includes(`..${path.sep}`)) {
       throw new Error(`Invalid file path: ${file.filepath}`);
     }
 
@@ -234,13 +232,13 @@ const deleteLocalFile = async (req, file) => {
     return;
   }
 
-  const parts = file.filepath.split(sep);
+  const parts = file.filepath.split(path.sep);
   const subfolder = parts[1];
   if (!subfolder && parts[0] === EModelEndpoint.agents) {
     logger.warn(`Agent File ${file.file_id} is missing filepath, may have been deleted already`);
     return;
   }
-  const filepath = join(publicPath, file.filepath);
+  const filepath = path.join(publicPath, file.filepath);
 
   if (!isValidPath(req, publicPath, subfolder, filepath)) {
     throw new Error('Invalid file path');
@@ -266,21 +264,21 @@ const deleteLocalFile = async (req, file) => {
  */
 async function uploadLocalFile({ req, file, file_id }) {
   const inputFilePath = file.path;
-  const inputBuffer = await promises.readFile(inputFilePath);
+  const inputBuffer = await fs.promises.readFile(inputFilePath);
   const bytes = Buffer.byteLength(inputBuffer);
 
   const { uploads } = req.app.locals.paths;
-  const userPath = join(uploads, req.user.id);
+  const userPath = path.join(uploads, req.user.id);
 
-  if (!existsSync(userPath)) {
-    mkdirSync(userPath, { recursive: true });
+  if (!fs.existsSync(userPath)) {
+    fs.mkdirSync(userPath, { recursive: true });
   }
 
-  const fileName = `${file_id}__${basename(inputFilePath)}`;
-  const newPath = join(userPath, fileName);
+  const fileName = `${file_id}__${path.basename(inputFilePath)}`;
+  const newPath = path.join(userPath, fileName);
 
-  await promises.writeFile(newPath, inputBuffer);
-  const filepath = posix.join('/', 'uploads', req.user.id, basename(newPath));
+  await fs.promises.writeFile(newPath, inputBuffer);
+  const filepath = path.posix.join('/', 'uploads', req.user.id, path.basename(newPath));
 
   return { filepath, bytes };
 }
@@ -302,25 +300,25 @@ function getLocalFileStream(req, filepath) {
         throw new Error(`Invalid file path: ${filepath}`);
       }
 
-      const fullPath = join(req.app.locals.paths.uploads, basePath);
+      const fullPath = path.join(req.app.locals.paths.uploads, basePath);
       const uploadsDir = req.app.locals.paths.uploads;
 
-      const rel = relative(uploadsDir, fullPath);
-      if (rel.startsWith('..') || isAbsolute(rel) || rel.includes(`..${sep}`)) {
+      const rel = path.relative(uploadsDir, fullPath);
+      if (rel.startsWith('..') || path.isAbsolute(rel) || rel.includes(`..${path.sep}`)) {
         logger.warn(`Invalid relative file path: ${filepath}`);
         throw new Error(`Invalid file path: ${filepath}`);
       }
 
-      return createReadStream(fullPath);
+      return fs.createReadStream(fullPath);
     }
-    return createReadStream(filepath);
+    return fs.createReadStream(filepath);
   } catch (error) {
     logger.error('Error getting local file stream:', error);
     throw error;
   }
 }
 
-export default {
+module.exports = {
   saveLocalFile,
   saveLocalImage,
   saveLocalBuffer,

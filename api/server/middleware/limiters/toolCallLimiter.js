@@ -1,6 +1,6 @@
-import rateLimit from 'express-rate-limit';
-import { ViolationTypes } from 'librechat-data-provider';
-import logViolation from '~/cache/logViolation';
+const rateLimit = require('express-rate-limit');
+const { ViolationTypes } = require('librechat-data-provider');
+const logViolation = require('~/cache/logViolation');
 
 const toolCallLimiter = rateLimit({
   windowMs: 1000,
@@ -22,4 +22,4 @@ const toolCallLimiter = rateLimit({
   },
 });
 
-export default toolCallLimiter;
+module.exports = toolCallLimiter;

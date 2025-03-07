@@ -1,5 +1,5 @@
-import { v4 } from 'uuid';
-import { handleAbortError } from '~/server/middleware/abortMiddleware';
+const { v4 } = require('uuid');
+const { handleAbortError } = require('~/server/middleware/abortMiddleware');
 
 /**
  * Checks if the assistant is supported or excluded
@@ -41,4 +41,4 @@ const validateAssistant = async (req, res, next) => {
   return next();
 };
 
-export default validateAssistant;
+module.exports = validateAssistant;

@@ -27,8 +27,8 @@ jest.mock('./start/checks', () => ({
   checkAzureVariables: jest.fn(),
 }));
 
-import AppService from './AppService';
-import { loadDefaultInterface } from './start/interface';
+const AppService = require('./AppService');
+const { loadDefaultInterface } = require('./start/interface');
 
 describe('AppService interface configuration', () => {
   let app;
@@ -38,7 +38,7 @@ describe('AppService interface configuration', () => {
     app = { locals: {} };
     jest.resetModules();
     jest.clearAllMocks();
-    mockLoadCustomConfig = require('./Config/loadCustomConfig').default;
+    mockLoadCustomConfig = require('./Config/loadCustomConfig');
   });
 
   it('should set prompts and bookmarks to true when loadDefaultInterface returns true for both', async () => {

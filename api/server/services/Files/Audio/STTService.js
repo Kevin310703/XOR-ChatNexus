@@ -1,14 +1,11 @@
-import { post } from 'axios';
-import { promises as fs } from 'fs';
-import FormData from 'form-data';
-import { Readable } from 'stream';
-import { extractEnvVariable, STTProviders } from 'librechat-data-provider';
-import _default from '~/server/services/Config';
-const { getCustomConfig } = _default;
-import _default from '~/utils';
-const { genAzureEndpoint } = _default;
-import __default from '~/config';
-const { logger } = __default;
+const axios = require('axios');
+const fs = require('fs').promises;
+const FormData = require('form-data');
+const { Readable } = require('stream');
+const { extractEnvVariable, STTProviders } = require('librechat-data-provider');
+const { getCustomConfig } = require('~/server/services/Config');
+const { genAzureEndpoint } = require('~/utils');
+const { logger } = require('~/config');
 
 /**
  * Service class for handling Speech-to-Text (STT) operations.
@@ -52,7 +49,7 @@ class STTService {
 
     if (!sttSchema) {
       throw new Error(
-        'No STT schema is set. Did you configure STT in the custom config (librechat.yaml)?',
+        'No STT schema is set. Did you configure STT in the custom config (chatnexus.yaml)?',
       );
     }
 
@@ -179,7 +176,7 @@ class STTService {
     const [url, data, headers] = strategy.call(this, sttSchema, audioReadStream, audioFile);
 
     try {
-      const response = await post(url, data, { headers });
+      const response = await axios.post(url, data, { headers });
 
       if (response.status !== 200) {
         throw new Error('Invalid response from the STT API');
@@ -254,4 +251,4 @@ async function speechToText(req, res) {
   await sttService.processTextToSpeech(req, res);
 }
 
-export default { speechToText };
+module.exports = { speechToText };

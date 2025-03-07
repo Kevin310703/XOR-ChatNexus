@@ -1,12 +1,12 @@
-import { createLogger, format as _format, transports as _transports } from 'winston';
+const winston = require('winston');
 
-const logger = createLogger({
+const logger = winston.createLogger({
   level: 'info',
-  format: _format.combine(_format.timestamp(), _format.json()),
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
   transports: [
-    new _transports.Console(),
-    new _transports.File({ filename: 'login-logs.log' }),
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'login-logs.log' }),
   ],
 });
 
-export default logger;
+module.exports = logger;

@@ -3,4 +3,4 @@ async function loadOverrideConfig() {
   return false;
 }
 
-export default loadOverrideConfig;
+module.exports = loadOverrideConfig;

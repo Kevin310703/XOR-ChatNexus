@@ -1,9 +1,12 @@
-import { EModelEndpoint, validateAzureGroups, mapModelToAzureConfig } from 'librechat-data-provider';
-import _default from '../../../config/index.js';
-const { logger } = _default;
+const {
+  EModelEndpoint,
+  validateAzureGroups,
+  mapModelToAzureConfig,
+} = require('librechat-data-provider');
+const { logger } = require('~/config');
 
 /**
- * Sets up the Azure OpenAI configuration from the config (`librechat.yaml`) file.
+ * Sets up the Azure OpenAI configuration from the config (`chatnexus.yaml`) file.
  * @param {TCustomConfig} config - The loaded custom configuration.
  * @returns {TAzureConfig} The Azure OpenAI configuration.
  */
@@ -59,4 +62,4 @@ function azureConfigSetup(config) {
   };
 }
 
-export default { azureConfigSetup };
+module.exports = { azureConfigSetup };

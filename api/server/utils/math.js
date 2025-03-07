@@ -44,4 +44,4 @@ function math(str, fallbackValue) {
   return value;
 }
 
-export default math;
+module.exports = math;

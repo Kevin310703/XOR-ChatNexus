@@ -1,7 +1,7 @@
-import { mockImplementation } from 'openai';
-import DALLE3 from '../DALLE3';
+const OpenAI = require('openai');
+const DALLE3 = require('../DALLE3');
 
-import { logger } from '~/config';
+const { logger } = require('~/config');
 
 jest.mock('openai');
 
@@ -27,7 +27,7 @@ jest.mock('~/server/services/Files/images', () => ({
 }));
 
 const generate = jest.fn();
-mockImplementation(() => ({
+OpenAI.mockImplementation(() => ({
   images: {
     generate,
   },
@@ -131,7 +131,7 @@ describe('DALLE3', () => {
   it('should use the system prompt if provided', () => {
     process.env.DALLE3_SYSTEM_PROMPT = 'System prompt for testing';
     jest.resetModules(); // This will ensure the module is fresh and will read the new env var
-    const DALLE3 = require('../DALLE3').default; // Re-require after setting the env var
+    const DALLE3 = require('../DALLE3'); // Re-require after setting the env var
     const dalleWithSystemPrompt = new DALLE3();
     expect(dalleWithSystemPrompt.description_for_model).toBe('System prompt for testing');
   });

@@ -1,21 +1,21 @@
-import { existsSync, mkdirSync } from 'fs';
-import { join, extname } from 'path';
-import { randomUUID } from 'crypto';
-import multer, { diskStorage } from 'multer';
-import { fileConfig as defaultFileConfig, mergeFileConfig } from 'librechat-data-provider';
-import { sanitizeFilename } from '~/server/utils/handleText';
-import { getCustomConfig } from '~/server/services/Config';
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const multer = require('multer');
+const { fileConfig: defaultFileConfig, mergeFileConfig } = require('librechat-data-provider');
+const { sanitizeFilename } = require('~/server/utils/handleText');
+const { getCustomConfig } = require('~/server/services/Config');
 
-const storage = diskStorage({
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const outputPath = join(req.app.locals.paths.uploads, 'temp', req.user.id);
-    if (!existsSync(outputPath)) {
-      mkdirSync(outputPath, { recursive: true });
+    const outputPath = path.join(req.app.locals.paths.uploads, 'temp', req.user.id);
+    if (!fs.existsSync(outputPath)) {
+      fs.mkdirSync(outputPath, { recursive: true });
     }
     cb(null, outputPath);
   },
   filename: function (req, file, cb) {
-    req.file_id = randomUUID();
+    req.file_id = crypto.randomUUID();
     file.originalname = decodeURIComponent(file.originalname);
     const sanitizedFilename = sanitizeFilename(file.originalname);
     cb(null, sanitizedFilename);
@@ -25,7 +25,7 @@ const storage = diskStorage({
 const importFileFilter = (req, file, cb) => {
   if (file.mimetype === 'application/json') {
     cb(null, true);
-  } else if (extname(file.originalname).toLowerCase() === '.json') {
+  } else if (path.extname(file.originalname).toLowerCase() === '.json') {
     cb(null, true);
   } else {
     cb(new Error('Only JSON files are allowed'), false);
@@ -78,4 +78,4 @@ const createMulterInstance = async () => {
   });
 };
 
-export default { createMulterInstance, storage, importFileFilter };
+module.exports = { createMulterInstance, storage, importFileFilter };

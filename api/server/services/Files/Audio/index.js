@@ -1,9 +1,9 @@
-import getCustomConfigSpeech from './getCustomConfigSpeech';
-import TTSService from './TTSService';
-import STTService from './STTService';
-import getVoices from './getVoices';
+const getCustomConfigSpeech = require('./getCustomConfigSpeech');
+const TTSService = require('./TTSService');
+const STTService = require('./STTService');
+const getVoices = require('./getVoices');
 
-export default {
+module.exports = {
   getVoices,
   getCustomConfigSpeech,
   ...STTService,

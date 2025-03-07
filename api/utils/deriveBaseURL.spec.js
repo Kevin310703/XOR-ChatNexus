@@ -1,5 +1,5 @@
-import { get as _get } from 'axios';
-import deriveBaseURL from './deriveBaseURL';
+const axios = require('axios');
+const deriveBaseURL = require('./deriveBaseURL');
 jest.mock('~/utils', () => {
   const originalUtils = jest.requireActual('~/utils');
   return {
@@ -23,7 +23,7 @@ jest.mock('~/config', () => ({
   },
 }));
 
-_get.mockResolvedValue({
+axios.get.mockResolvedValue({
   data: {
     data: [{ id: 'model-1' }, { id: 'model-2' }],
   },

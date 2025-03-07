@@ -1,12 +1,15 @@
-import { Router } from 'express';
-import EditController from '~/server/controllers/EditController';
-import { initializeClient } from '~/server/services/Endpoints/google';
-import _default from '~/server/middleware';
+const express = require('express');
+const EditController = require('~/server/controllers/EditController');
+const { initializeClient } = require('~/server/services/Endpoints/google');
 const {
-  setHeaders, handleAbort, validateModel, validateEndpoint, buildEndpointOption,
-} = _default;
+  setHeaders,
+  handleAbort,
+  validateModel,
+  validateEndpoint,
+  buildEndpointOption,
+} = require('~/server/middleware');
 
-const router = Router();
+const router = express.Router();
 
 router.post('/abort', handleAbort());
 
@@ -21,4 +24,4 @@ router.post(
   },
 );
 
-export default router;
+module.exports = router;

@@ -1,5 +1,5 @@
-import { Strategy as FacebookStrategy } from 'passport-facebook';
-import socialLogin from './socialLogin.js';
+const FacebookStrategy = require('passport-facebook').Strategy;
+const socialLogin = require('./socialLogin');
 
 const getProfileDetails = ({ profile }) => ({
   email: profile.emails[0]?.value,
@@ -12,7 +12,7 @@ const getProfileDetails = ({ profile }) => ({
 
 const facebookLogin = socialLogin('facebook', getProfileDetails);
 
-export default () =>
+module.exports = () =>
   new FacebookStrategy(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,

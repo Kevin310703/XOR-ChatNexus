@@ -1,14 +1,14 @@
-import { ObjectId } from 'mongodb';
-import { SystemRoles, SystemCategories, Constants } from 'librechat-data-provider';
-import _default from './Project';
+const { ObjectId } = require('mongodb');
+const { SystemRoles, SystemCategories, Constants } = require('librechat-data-provider');
 const {
-  getProjectByName, addGroupIdsToProject, removeGroupIdsFromProject, removeGroupFromAllProjects,
-} = _default;
-import _default from './schema/promptSchema';
-const { Prompt, PromptGroup } = _default;
-import { escapeRegExp } from '~/server/utils';
-import __default from '~/config';
-const { logger } = __default;
+  getProjectByName,
+  addGroupIdsToProject,
+  removeGroupIdsFromProject,
+  removeGroupFromAllProjects,
+} = require('./Project');
+const { Prompt, PromptGroup } = require('./schema/promptSchema');
+const { escapeRegExp } = require('~/server/utils');
+const { logger } = require('~/config');
 
 /**
  * Create a pipeline for the aggregation to get prompt groups
@@ -238,7 +238,7 @@ const deletePromptGroup = async ({ _id, author, role }) => {
   return { message: 'Prompt group deleted successfully' };
 };
 
-export default {
+module.exports = {
   getPromptGroups,
   deletePromptGroup,
   getAllPromptGroups,

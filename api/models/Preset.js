@@ -1,6 +1,5 @@
-import Preset from './schema/presetSchema';
-import _default from '~/config';
-const { logger } = _default;
+const Preset = require('./schema/presetSchema');
+const { logger } = require('~/config');
 
 const getPreset = async (user, presetId) => {
   try {
@@ -11,7 +10,7 @@ const getPreset = async (user, presetId) => {
   }
 };
 
-export default {
+module.exports = {
   Preset,
   getPreset,
   getPresets: async (user, filter) => {

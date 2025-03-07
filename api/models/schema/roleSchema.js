@@ -1,7 +1,7 @@
-import { PermissionTypes, Permissions } from 'librechat-data-provider';
-import { Schema, model } from 'mongoose';
+const { PermissionTypes, Permissions } = require('librechat-data-provider');
+const mongoose = require('mongoose');
 
-const roleSchema = new Schema({
+const roleSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -62,6 +62,6 @@ const roleSchema = new Schema({
   },
 });
 
-const Role = model('Role', roleSchema);
+const Role = mongoose.model('Role', roleSchema);
 
-export default Role;
+module.exports = Role;

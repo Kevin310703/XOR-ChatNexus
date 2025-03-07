@@ -1,9 +1,9 @@
-import { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 
-const assistantSchema = Schema(
+const assistantSchema = mongoose.Schema(
   {
     user: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
@@ -38,4 +38,4 @@ const assistantSchema = Schema(
   },
 );
 
-export default assistantSchema;
+module.exports = assistantSchema;

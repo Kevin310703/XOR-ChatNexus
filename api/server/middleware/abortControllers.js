@@ -1,2 +1,2 @@
 // abortControllers.js
-export default new Map();
+module.exports = new Map();

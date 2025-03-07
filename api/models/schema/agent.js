@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 
-const agentSchema = Schema(
+const agentSchema = mongoose.Schema(
   {
     id: {
       type: String,
@@ -46,14 +46,14 @@ const agentSchema = Schema(
       default: undefined,
     },
     tool_kwargs: {
-      type: [{ type: Schema.Types.Mixed }],
+      type: [{ type: mongoose.Schema.Types.Mixed }],
     },
     actions: {
       type: [String],
       default: undefined,
     },
     author: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
@@ -79,11 +79,11 @@ const agentSchema = Schema(
       default: [],
     },
     tool_resources: {
-      type: Schema.Types.Mixed,
+      type: mongoose.Schema.Types.Mixed,
       default: {},
     },
     projectIds: {
-      type: [Schema.Types.ObjectId],
+      type: [mongoose.Schema.Types.ObjectId],
       ref: 'Project',
       index: true,
     },
@@ -93,4 +93,4 @@ const agentSchema = Schema(
   },
 );
 
-export default agentSchema;
+module.exports = agentSchema;

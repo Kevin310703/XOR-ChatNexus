@@ -1,4 +1,4 @@
-import formatGoogleInputs from './formatGoogleInputs';
+const formatGoogleInputs = require('./formatGoogleInputs');
 
 describe('formatGoogleInputs', () => {
   it('formats message correctly', () => {

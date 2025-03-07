@@ -1,4 +1,4 @@
-import TavilySearchResults from '../TavilySearchResults';
+const TavilySearchResults = require('../TavilySearchResults');
 
 jest.mock('node-fetch');
 jest.mock('@langchain/core/utils/env');

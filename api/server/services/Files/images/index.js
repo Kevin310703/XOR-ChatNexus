@@ -1,10 +1,10 @@
-import avatar from './avatar';
-import convert from './convert';
-import encode from './encode';
-import parse from './parse';
-import resize from './resize';
+const avatar = require('./avatar');
+const convert = require('./convert');
+const encode = require('./encode');
+const parse = require('./parse');
+const resize = require('./resize');
 
-export default {
+module.exports = {
   ...convert,
   ...encode,
   ...parse,

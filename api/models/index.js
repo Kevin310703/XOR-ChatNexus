@@ -1,19 +1,48 @@
-import { comparePassword, deleteUserById, generateToken, getUserById, updateUser, createUser, countUsers, findUser } from './userMethods.js';
-import _default from './File.js';
 const {
-  findFileById, createFile, updateFile, deleteFile, deleteFiles, getFiles, updateFileUsage,
-} = _default;
-import { getMessage, getMessages, saveMessage, recordMessage, updateMessage, deleteMessagesSince, deleteMessages } from './Message.js';
-import { createSession, findSession, updateExpiration, deleteSession, deleteAllUserSessions, generateRefreshToken, countActiveSessions } from './Session.js';
-import __default from './Conversation.js';
-const { getConvoTitle, getConvo, saveConvo, deleteConvos } = __default;
-import { getPreset, getPresets, savePreset, deletePresets } from './Preset.js';
-import { createToken, findToken, updateToken, deleteTokens } from './Token.js';
-import Balance from './Balance.js';
-import User from './User.js';
-import Key from './Key.js';
+  comparePassword,
+  deleteUserById,
+  generateToken,
+  getUserById,
+  updateUser,
+  createUser,
+  countUsers,
+  findUser,
+} = require('./userMethods');
+const {
+  findFileById,
+  createFile,
+  updateFile,
+  deleteFile,
+  deleteFiles,
+  getFiles,
+  updateFileUsage,
+} = require('./File');
+const {
+  getMessage,
+  getMessages,
+  saveMessage,
+  recordMessage,
+  updateMessage,
+  deleteMessagesSince,
+  deleteMessages,
+} = require('./Message');
+const {
+  createSession,
+  findSession,
+  updateExpiration,
+  deleteSession,
+  deleteAllUserSessions,
+  generateRefreshToken,
+  countActiveSessions,
+} = require('./Session');
+const { getConvoTitle, getConvo, saveConvo, deleteConvos } = require('./Conversation');
+const { getPreset, getPresets, savePreset, deletePresets } = require('./Preset');
+const { createToken, findToken, updateToken, deleteTokens } = require('./Token');
+const Balance = require('./Balance');
+const User = require('./User');
+const Key = require('./Key');
 
-export default {
+module.exports = {
   comparePassword,
   deleteUserById,
   generateToken,

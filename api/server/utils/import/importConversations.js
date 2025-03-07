@@ -1,9 +1,7 @@
-import { promises as fs } from 'fs';
-import { getImporter } from './importers';
-import db from '~/lib/db';
-const { indexSync } = db;
-import _default from '~/config';
-const { logger } = _default;
+const fs = require('fs').promises;
+const { getImporter } = require('./importers');
+const { indexSync } = require('~/lib/db');
+const { logger } = require('~/config');
 
 /**
  * Job definition for importing a conversation.
@@ -31,4 +29,4 @@ const importConversations = async (job) => {
   }
 };
 
-export default importConversations;
+module.exports = importConversations;

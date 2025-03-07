@@ -1,15 +1,12 @@
-import { Router } from 'express';
-import { CacheKeys, defaultSocialLogins, Constants } from 'librechat-data-provider';
-import { getLdapConfig } from '~/server/services/Config/ldap';
-import projectDefault from '~/models/Project';
-const { getProjectByName } = projectDefault;
-import { isEnabled } from '~/server/utils';
-import _default from '~/cache';
-const { getLogStores } = _default;
-import __default from '~/config';
-const { logger } = __default;
+const express = require('express');
+const { CacheKeys, defaultSocialLogins, Constants } = require('librechat-data-provider');
+const { getLdapConfig } = require('~/server/services/Config/ldap');
+const { getProjectByName } = require('~/models/Project');
+const { isEnabled } = require('~/server/utils');
+const { getLogStores } = require('~/cache');
+const { logger } = require('~/config');
 
-const router = Router();
+const router = express.Router();
 const emailLoginEnabled =
   process.env.ALLOW_EMAIL_LOGIN === undefined || isEnabled(process.env.ALLOW_EMAIL_LOGIN);
 const passwordResetEnabled = isEnabled(process.env.ALLOW_PASSWORD_RESET);
@@ -101,4 +98,4 @@ router.get('/', async function (req, res) {
   }
 });
 
-export default router;
+module.exports = router;

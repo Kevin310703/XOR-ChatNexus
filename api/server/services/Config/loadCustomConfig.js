@@ -1,14 +1,13 @@
-import { resolve } from 'path';
-import { CacheKeys, configSchema, EImageOutputType } from 'librechat-data-provider';
-import getLogStores from '../../../cache/getLogStores.js';
-import loadYaml from '../../../utils/loadYaml.js';
-import config from '../../../config/index.js';
-const { logger } = config;
-import { get } from 'axios';
-import { load } from 'js-yaml';
+const path = require('path');
+const { CacheKeys, configSchema, EImageOutputType } = require('librechat-data-provider');
+const getLogStores = require('~/cache/getLogStores');
+const loadYaml = require('~/utils/loadYaml');
+const { logger } = require('~/config');
+const axios = require('axios');
+const yaml = require('js-yaml');
 
-const projectRoot = resolve(__dirname, '..', '..', '..', '..');
-const defaultConfigPath = resolve(projectRoot, 'chatnexus.yaml');
+const projectRoot = path.resolve(__dirname, '..', '..', '..', '..');
+const defaultConfigPath = path.resolve(projectRoot, 'chatnexus.yaml');
 
 let i = 0;
 
@@ -26,7 +25,7 @@ async function loadCustomConfig() {
 
   if (/^https?:\/\//.test(configPath)) {
     try {
-      const response = await get(configPath);
+      const response = await axios.get(configPath);
       customConfig = response.data;
     } catch (error) {
       i === 0 && logger.error(`Failed to fetch the remote config file from ${configPath}`, error);
@@ -53,7 +52,7 @@ async function loadCustomConfig() {
 
   if (typeof customConfig === 'string') {
     try {
-      customConfig = load(customConfig);
+      customConfig = yaml.load(customConfig);
     } catch (parseError) {
       i === 0 && logger.info(`Failed to parse the YAML config from ${configPath}`, parseError);
       i === 0 && i++;
@@ -118,4 +117,4 @@ https://www.librechat.ai/docs/configuration/stt_tts`);
   return customConfig;
 }
 
-export default loadCustomConfig;
+module.exports = loadCustomConfig;

@@ -75,4 +75,4 @@ const createRunBody = ({
   return body;
 };
 
-export default { createRunBody, getDateStr, getTimeStr };
+module.exports = { createRunBody, getDateStr, getTimeStr };

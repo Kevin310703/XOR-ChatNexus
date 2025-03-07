@@ -1,5 +1,5 @@
-import getLogStores from './getLogStores.js';
-import { isEnabled } from '../server/utils/index.js';
+const getLogStores = require('./getLogStores');
+const { isEnabled } = require('../server/utils');
 const { USE_REDIS, LIMIT_CONCURRENT_MESSAGES } = process.env ?? {};
 const ttl = 1000 * 60 * 1;
 
@@ -45,4 +45,4 @@ const clearPendingReq = async ({ userId, cache: _cache }) => {
   }
 };
 
-export default clearPendingReq;
+module.exports = clearPendingReq;

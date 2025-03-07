@@ -2,12 +2,11 @@ jest.mock('axios');
 jest.mock('~/cache/getLogStores');
 jest.mock('~/utils/loadYaml');
 
-import { get } from 'axios';
-import loadCustomConfig from './loadCustomConfig';
-import getLogStores from '~/cache/getLogStores';
-import loadYaml from '~/utils/loadYaml';
-import config from '~/config';
-const { logger } = config;
+const axios = require('axios');
+const loadCustomConfig = require('./loadCustomConfig');
+const getLogStores = require('~/cache/getLogStores');
+const loadYaml = require('~/utils/loadYaml');
+const { logger } = require('~/config');
 
 describe('loadCustomConfig', () => {
   const mockSet = jest.fn();
@@ -21,7 +20,7 @@ describe('loadCustomConfig', () => {
 
   it('should return null and log error if remote config fetch fails', async () => {
     process.env.CONFIG_PATH = 'http://example.com/config.yaml';
-    get.mockRejectedValue(new Error('Network error'));
+    axios.get.mockRejectedValue(new Error('Network error'));
     const result = await loadCustomConfig();
     expect(logger.error).toHaveBeenCalledTimes(1);
     expect(result).toBeNull();
@@ -68,7 +67,7 @@ describe('loadCustomConfig', () => {
 
   it('should handle and return null on YAML parse error for a string response from remote', async () => {
     process.env.CONFIG_PATH = 'http://example.com/config.yaml';
-    get.mockResolvedValue({ data: 'invalidYAMLContent' });
+    axios.get.mockResolvedValue({ data: 'invalidYAMLContent' });
 
     const result = await loadCustomConfig();
 
@@ -90,7 +89,7 @@ describe('loadCustomConfig', () => {
       },
     };
     process.env.CONFIG_PATH = 'http://example.com/config.yaml';
-    get.mockResolvedValue({ data: mockConfig });
+    axios.get.mockResolvedValue({ data: mockConfig });
     const result = await loadCustomConfig();
     expect(result).toEqual(mockConfig);
     expect(mockSet).toHaveBeenCalledWith(expect.anything(), mockConfig);
@@ -98,7 +97,7 @@ describe('loadCustomConfig', () => {
 
   it('should return null if the remote config file is not found', async () => {
     process.env.CONFIG_PATH = 'http://example.com/config.yaml';
-    get.mockRejectedValue({ response: { status: 404 } });
+    axios.get.mockRejectedValue({ response: { status: 404 } });
     const result = await loadCustomConfig();
     expect(result).toBeNull();
   });

@@ -9,4 +9,4 @@ function setHeaders(req, res, next) {
   next();
 }
 
-export default setHeaders;
+module.exports = setHeaders;

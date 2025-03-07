@@ -1,5 +1,5 @@
-import manage from './manage';
+const manage = require('./manage');
 
-export default {
+module.exports = {
   ...manage,
 };

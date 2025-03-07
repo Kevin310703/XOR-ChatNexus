@@ -1,4 +1,4 @@
-import { isEnabled } from '~/server/utils';
+const { isEnabled } = require('~/server/utils');
 
 function validateRegistration(req, res, next) {
   if (req.invite) {
@@ -14,4 +14,4 @@ function validateRegistration(req, res, next) {
   }
 }
 
-export default validateRegistration;
+module.exports = validateRegistration;

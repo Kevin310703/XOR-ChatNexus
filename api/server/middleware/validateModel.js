@@ -1,9 +1,7 @@
-import { ViolationTypes } from 'librechat-data-provider';
-import _default from '~/server/controllers/ModelController';
-const { getModelsConfig } = _default;
-import { handleError } from '~/server/utils';
-import _default from '~/cache';
-const { logViolation } = _default;
+const { ViolationTypes } = require('librechat-data-provider');
+const { getModelsConfig } = require('~/server/controllers/ModelController');
+const { handleError } = require('~/server/utils');
+const { logViolation } = require('~/cache');
 /**
  * Validates the model of the request.
  *
@@ -46,4 +44,4 @@ const validateModel = async (req, res, next) => {
   return handleError(res, { text: 'Illegal model request' });
 };
 
-export default validateModel;
+module.exports = validateModel;

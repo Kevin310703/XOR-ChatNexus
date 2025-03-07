@@ -1,14 +1,13 @@
-import fetch from 'node-fetch';
-import { use } from 'passport';
-import jwtDecode from 'jsonwebtoken/decode.js';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import { Issuer, Strategy as OpenIDStrategy, custom } from 'openid-client';
-import { getStrategyFunctions } from '../server/services/Files/strategies.js';
-import { findUser, createUser, updateUser } from '../models/userMethods.js';
-import _default from '../server/utils/crypto.js';
-const { hashToken } = _default;
-import { isEnabled } from '../server/utils/index.js';
-import { logger } from '../config/meiliLogger.js';
+const fetch = require('node-fetch');
+const passport = require('passport');
+const jwtDecode = require('jsonwebtoken/decode');
+const { HttpsProxyAgent } = require('https-proxy-agent');
+const { Issuer, Strategy: OpenIDStrategy, custom } = require('openid-client');
+const { getStrategyFunctions } = require('~/server/services/Files/strategies');
+const { findUser, createUser, updateUser } = require('~/models/userMethods');
+const { hashToken } = require('~/server/utils/crypto');
+const { isEnabled } = require('~/server/utils');
+const { logger } = require('~/config');
 
 let crypto;
 try {
@@ -266,10 +265,10 @@ async function setupOpenId() {
       },
     );
 
-    use('openid', openidLogin);
+    passport.use('openid', openidLogin);
   } catch (err) {
     logger.error('[openidStrategy]', err);
   }
 }
 
-export default setupOpenId;
+module.exports = setupOpenId;

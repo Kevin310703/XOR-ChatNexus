@@ -1,4 +1,4 @@
-import { instructions, imageInstructions, errorInstructions } from '../prompts';
+const { instructions, imageInstructions, errorInstructions } = require('../prompts');
 
 function getActions(actions = [], functionsAgent = false) {
   let output = 'Internal thoughts & actions taken:\n"';
@@ -82,7 +82,7 @@ Only respond with your conversational reply to the following User Message:
 "${message}"`;
 }
 
-export default {
+module.exports = {
   buildErrorInput,
   buildPromptPrefix,
 };

@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { post } from 'axios';
-import { tool } from '@langchain/core/tools';
-import { Tools, EToolResources } from 'librechat-data-provider';
-import { getFiles } from '~/models/File';
-import { logger } from '~/config';
+const { z } = require('zod');
+const axios = require('axios');
+const { tool } = require('@langchain/core/tools');
+const { Tools, EToolResources } = require('librechat-data-provider');
+const { getFiles } = require('~/models/File');
+const { logger } = require('~/config');
 
 /**
  *
@@ -84,7 +84,8 @@ const createFileSearchTool = async ({ req, files, entity_id }) => {
       };
 
       const queryPromises = files.map((file) =>
-        post(`${process.env.RAG_API_URL}/query`, createQueryBody(file), {
+        axios
+          .post(`${process.env.RAG_API_URL}/query`, createQueryBody(file), {
             headers: {
               Authorization: `Bearer ${jwtToken}`,
               'Content-Type': 'application/json',
@@ -141,4 +142,4 @@ const createFileSearchTool = async ({ req, files, entity_id }) => {
   );
 };
 
-export default { createFileSearchTool, primeFiles };
+module.exports = { createFileSearchTool, primeFiles };

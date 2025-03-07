@@ -1,7 +1,7 @@
 /**
  * Anthropic API: Adds cache control to the appropriate user messages in the payload.
- * @param {Array<AnthropicMessage | BaseMessage>} messages - The array of message objects.
- * @returns {Array<AnthropicMessage | BaseMessage>} - The updated array of message objects with cache control added.
+ * @param {Array<AnthropicMessage>} messages - The array of message objects.
+ * @returns {Array<AnthropicMessage>} - The updated array of message objects with cache control added.
  */
 function addCacheControl(messages) {
   if (!Array.isArray(messages) || messages.length < 2) {
@@ -13,9 +13,7 @@ function addCacheControl(messages) {
 
   for (let i = updatedMessages.length - 1; i >= 0 && userMessagesModified < 2; i--) {
     const message = updatedMessages[i];
-    if (message.getType != null && message.getType() !== 'human') {
-      continue;
-    } else if (message.getType == null && message.role !== 'user') {
+    if (message.role !== 'user') {
       continue;
     }
 
@@ -42,4 +40,4 @@ function addCacheControl(messages) {
   return updatedMessages;
 }
 
-export default addCacheControl;
+module.exports = addCacheControl;

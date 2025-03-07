@@ -1,6 +1,6 @@
-import Conversation from './schema/convoSchema';
-import { getMessages, deleteMessages } from './Message';
-import logger from '~/config/winston';
+const Conversation = require('./schema/convoSchema');
+const { getMessages, deleteMessages } = require('./Message');
+const logger = require('~/config/winston');
 
 /**
  * Searches for a conversation by conversationId and returns a lean document with only conversationId and user.
@@ -73,7 +73,7 @@ const deleteNullOrEmptyConversations = async () => {
   }
 };
 
-export default {
+module.exports = {
   Conversation,
   getConvoFiles,
   searchConversation,
@@ -104,16 +104,10 @@ export default {
         update.expiredAt = null;
       }
 
-      /** @type {{ $set: Partial<TConversation>; $unset?: Record<keyof TConversation, number> }} */
-      const updateOperation = { $set: update };
-      if (metadata && metadata.unsetFields && Object.keys(metadata.unsetFields).length > 0) {
-        updateOperation.$unset = metadata.unsetFields;
-      }
-
       /** Note: the resulting Model object is necessary for Meilisearch operations */
       const conversation = await Conversation.findOneAndUpdate(
         { conversationId, user: req.user.id },
-        updateOperation,
+        update,
         {
           new: true,
           upsert: true,

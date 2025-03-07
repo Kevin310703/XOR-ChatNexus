@@ -1,8 +1,7 @@
-import { randomUUID } from 'crypto';
-import { getResponseSender, Constants } from 'librechat-data-provider';
-import { sendMessage, sendError } from '~/server/utils';
-import _default from '~/models';
-const { saveMessage } = _default;
+const crypto = require('crypto');
+const { getResponseSender, Constants } = require('librechat-data-provider');
+const { sendMessage, sendError } = require('~/server/utils');
+const { saveMessage } = require('~/models');
 
 /**
  * Denies a request by sending an error message and optionally saves the user's message.
@@ -27,11 +26,11 @@ const denyRequest = async (req, res, errorMessage) => {
   }
 
   const { messageId, conversationId: _convoId, parentMessageId, text } = req.body;
-  const conversationId = _convoId ?? randomUUID();
+  const conversationId = _convoId ?? crypto.randomUUID();
 
   const userMessage = {
     sender: 'User',
-    messageId: messageId ?? randomUUID(),
+    messageId: messageId ?? crypto.randomUUID(),
     parentMessageId,
     conversationId,
     isCreatedByUser: true,
@@ -51,7 +50,7 @@ const denyRequest = async (req, res, errorMessage) => {
 
   return await sendError(req, res, {
     sender: getResponseSender(req.body),
-    messageId: randomUUID(),
+    messageId: crypto.randomUUID(),
     conversationId,
     parentMessageId: userMessage.messageId,
     text: responseText,
@@ -60,4 +59,4 @@ const denyRequest = async (req, res, errorMessage) => {
   });
 };
 
-export default denyRequest;
+module.exports = denyRequest;

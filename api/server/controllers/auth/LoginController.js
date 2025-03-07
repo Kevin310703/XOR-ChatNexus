@@ -1,7 +1,6 @@
-import { generate2FATempToken } from '~/server/services/twoFactorService';
-import { setAuthTokens } from '~/server/services/AuthService';
-import _default from '~/config';
-const { logger } = _default;
+const { generate2FATempToken } = require('~/server/services/twoFactorService');
+const { setAuthTokens } = require('~/server/services/AuthService');
+const { logger } = require('~/config');
 
 const loginController = async (req, res) => {
   try {
@@ -26,6 +25,6 @@ const loginController = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   loginController,
 };

@@ -1,5 +1,5 @@
-import { authenticate } from 'passport';
+const passport = require('passport');
 
-const requireJwtAuth = authenticate('jwt', { session: false });
+const requireJwtAuth = passport.authenticate('jwt', { session: false });
 
-export default requireJwtAuth;
+module.exports = requireJwtAuth;

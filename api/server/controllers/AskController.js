@@ -1,10 +1,8 @@
-import { getResponseSender, Constants } from 'librechat-data-provider';
-import { createAbortController, handleAbortError } from '~/server/middleware';
-import { sendMessage, createOnProgress } from '~/server/utils';
-import models from '~/models';
-const { saveMessage } = models;
-import _default from '~/config';
-const { logger } = _default;
+const { getResponseSender, Constants } = require('librechat-data-provider');
+const { createAbortController, handleAbortError } = require('~/server/middleware');
+const { sendMessage, createOnProgress } = require('~/server/utils');
+const { saveMessage } = require('~/models');
+const { logger } = require('~/config');
 
 const AskController = async (req, res, next, initializeClient, addTitle) => {
   let {
@@ -163,4 +161,4 @@ const AskController = async (req, res, next, initializeClient, addTitle) => {
   }
 };
 
-export default AskController;
+module.exports = AskController;

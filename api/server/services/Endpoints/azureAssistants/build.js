@@ -1,7 +1,6 @@
-import { removeNullishValues } from 'librechat-data-provider';
-import generateArtifactsPrompt from '~/app/clients/prompts/artifacts';
-import assistantDefault from '~/models/Assistant';
-const { getAssistant } = assistantDefault;
+const { removeNullishValues } = require('librechat-data-provider');
+const generateArtifactsPrompt = require('~/app/clients/prompts/artifacts');
+const { getAssistant } = require('~/models/Assistant');
 
 const buildOptions = async (endpoint, parsedBody) => {
 
@@ -37,4 +36,4 @@ const buildOptions = async (endpoint, parsedBody) => {
   return endpointOption;
 };
 
-export default buildOptions;
+module.exports = buildOptions;

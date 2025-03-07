@@ -1,7 +1,7 @@
-import { authenticate } from 'passport';
+const passport = require('passport');
 
 const requireLdapAuth = (req, res, next) => {
-  authenticate('ldapauth', (err, user, info) => {
+  passport.authenticate('ldapauth', (err, user, info) => {
     if (err) {
       console.log({
         title: '(requireLdapAuth) Error at passport.authenticate',
@@ -19,4 +19,4 @@ const requireLdapAuth = (req, res, next) => {
     next();
   })(req, res, next);
 };
-export default requireLdapAuth;
+module.exports = requireLdapAuth;

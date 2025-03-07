@@ -1,7 +1,5 @@
-import inviteUserDefault from '~/models/inviteUser';
-const { getInvite } = inviteUserDefault;
-import _default from '~/models/Token';
-const { deleteTokens } = _default;
+const { getInvite } = require('~/models/inviteUser');
+const { deleteTokens } = require('~/models/Token');
 
 async function checkInviteUser(req, res, next) {
   const token = req.body.token;
@@ -26,4 +24,4 @@ async function checkInviteUser(req, res, next) {
   }
 }
 
-export default checkInviteUser;
+module.exports = checkInviteUser;

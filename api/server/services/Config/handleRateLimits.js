@@ -1,4 +1,4 @@
-import { RateLimitPrefix } from 'librechat-data-provider';
+const { RateLimitPrefix } = require('librechat-data-provider');
 
 /**
  *
@@ -45,4 +45,4 @@ const setRateLimitEnvVars = (prefix, rateLimit) => {
   });
 };
 
-export default handleRateLimits;
+module.exports = handleRateLimits;

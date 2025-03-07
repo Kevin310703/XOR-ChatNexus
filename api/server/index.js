@@ -1,29 +1,26 @@
 require('dotenv').config();
-import { resolve, join } from 'path';
-require('module-alias')({ base: resolve(__dirname, '..') });
-import cors from 'cors';
-import { defaults } from 'axios';
-import express, { json, urlencoded } from 'express';
-import compression from 'compression';
-import { initialize, use } from 'passport';
-import mongoSanitize from 'express-mongo-sanitize';
-import { readFileSync } from 'fs';
-import cookieParser from 'cookie-parser';
-import { jwtLogin, passportLogin } from '../strategies/index.js';
-import { connectDb, indexSync } from '../lib/db/index.js';
-import { isEnabled } from './utils/index.js';
-import { ldapLogin } from '../strategies/index.js';
-import { logger } from '../config/index.js';
-import validateImageRequest from './middleware/validateImageRequest.js';
-import errorController from './controllers/ErrorController.js';
-import configureSocialLogins from './socialLogins.js';
-import AppService from './services/AppService.js';
-import { staticCache } from './utils/staticCache.js';
-import noIndex from './middleware/noIndex.js';
-import { oauth, auth, actions, keys, user, search, ask, edit, messages, convos,
-   presets, prompts, categories, tokenizer, endpoints, balance, models, plugins, 
-   config, assistants, files, staticRoute, share, roles, agents, banner, bedrock, tags }
-   from './routes/index.js';
+const path = require('path');
+require('module-alias')({ base: path.resolve(__dirname, '..') });
+const cors = require('cors');
+const axios = require('axios');
+const express = require('express');
+const compression = require('compression');
+const passport = require('passport');
+const mongoSanitize = require('express-mongo-sanitize');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const { jwtLogin, passportLogin } = require('~/strategies');
+const { connectDb, indexSync } = require('~/lib/db');
+const { isEnabled } = require('~/server/utils');
+const { ldapLogin } = require('~/strategies');
+const { logger } = require('~/config');
+const validateImageRequest = require('./middleware/validateImageRequest');
+const errorController = require('./controllers/ErrorController');
+const configureSocialLogins = require('./socialLogins');
+const AppService = require('./services/AppService');
+const staticCache = require('./utils/staticCache');
+const noIndex = require('./middleware/noIndex');
+const routes = require('./routes');
 
 const { PORT, HOST, ALLOW_SOCIAL_LOGIN, DISABLE_COMPRESSION, TRUST_PROXY } = process.env ?? {};
 
@@ -33,7 +30,7 @@ const trusted_proxy = Number(TRUST_PROXY) || 1; /* trust first proxy by default 
 
 const startServer = async () => {
   if (typeof Bun !== 'undefined') {
-    defaults.headers.common['Accept-Encoding'] = 'gzip';
+    axios.defaults.headers.common['Accept-Encoding'] = 'gzip';
   }
   await connectDb();
   logger.info('Connected to MongoDB');
@@ -43,17 +40,17 @@ const startServer = async () => {
   app.disable('x-powered-by');
   await AppService(app);
 
-  const indexPath = join(app.locals.paths.dist, 'index.html');
-  const indexHTML = readFileSync(indexPath, 'utf8');
+  const indexPath = path.join(app.locals.paths.dist, 'index.html');
+  const indexHTML = fs.readFileSync(indexPath, 'utf8');
 
   app.get('/health', (_req, res) => res.status(200).send('OK'));
 
   /* Middleware */
   app.use(noIndex);
   app.use(errorController);
-  app.use(json({ limit: '3mb' }));
+  app.use(express.json({ limit: '3mb' }));
   app.use(mongoSanitize());
-  app.use(urlencoded({ extended: true, limit: '3mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '3mb' }));
   app.use(staticCache(app.locals.paths.dist));
   app.use(staticCache(app.locals.paths.fonts));
   app.use(staticCache(app.locals.paths.assets));
@@ -72,49 +69,49 @@ const startServer = async () => {
   }
 
   /* OAUTH */
-  app.use(initialize());
-  use(await jwtLogin());
-  use(passportLogin());
+  app.use(passport.initialize());
+  passport.use(await jwtLogin());
+  passport.use(passportLogin());
 
   /* LDAP Auth */
   if (process.env.LDAP_URL && process.env.LDAP_USER_SEARCH_BASE) {
-    use(ldapLogin);
+    passport.use(ldapLogin);
   }
 
   if (isEnabled(ALLOW_SOCIAL_LOGIN)) {
     configureSocialLogins(app);
   }
 
-  app.use('/oauth', oauth);
+  app.use('/oauth', routes.oauth);
   /* API Endpoints */
-  app.use('/api/auth', auth);
-  app.use('/api/actions', actions);
-  app.use('/api/keys', keys);
-  app.use('/api/user', user);
-  app.use('/api/search', search);
-  app.use('/api/ask', ask);
-  app.use('/api/edit', edit);
-  app.use('/api/messages', messages);
-  app.use('/api/convos', convos);
-  app.use('/api/presets', presets);
-  app.use('/api/prompts', prompts);
-  app.use('/api/categories', categories);
-  app.use('/api/tokenizer', tokenizer);
-  app.use('/api/endpoints', endpoints);
-  app.use('/api/balance', balance);
-  app.use('/api/models', models);
-  app.use('/api/plugins', plugins);
-  app.use('/api/config', config);
-  app.use('/api/assistants', assistants);
-  app.use('/api/files', await files.initialize());
-  app.use('/images/', validateImageRequest, staticRoute);
-  app.use('/api/share', share);
-  app.use('/api/roles', roles);
-  app.use('/api/agents', agents);
-  app.use('/api/banner', banner);
-  app.use('/api/bedrock', bedrock);
+  app.use('/api/auth', routes.auth);
+  app.use('/api/actions', routes.actions);
+  app.use('/api/keys', routes.keys);
+  app.use('/api/user', routes.user);
+  app.use('/api/search', routes.search);
+  app.use('/api/ask', routes.ask);
+  app.use('/api/edit', routes.edit);
+  app.use('/api/messages', routes.messages);
+  app.use('/api/convos', routes.convos);
+  app.use('/api/presets', routes.presets);
+  app.use('/api/prompts', routes.prompts);
+  app.use('/api/categories', routes.categories);
+  app.use('/api/tokenizer', routes.tokenizer);
+  app.use('/api/endpoints', routes.endpoints);
+  app.use('/api/balance', routes.balance);
+  app.use('/api/models', routes.models);
+  app.use('/api/plugins', routes.plugins);
+  app.use('/api/config', routes.config);
+  app.use('/api/assistants', routes.assistants);
+  app.use('/api/files', await routes.files.initialize());
+  app.use('/images/', validateImageRequest, routes.staticRoute);
+  app.use('/api/share', routes.share);
+  app.use('/api/roles', routes.roles);
+  app.use('/api/agents', routes.agents);
+  app.use('/api/banner', routes.banner);
+  app.use('/api/bedrock', routes.bedrock);
 
-  app.use('/api/tags', tags);
+  app.use('/api/tags', routes.tags);
 
   app.use((req, res) => {
     res.set({
@@ -138,6 +135,8 @@ const startServer = async () => {
     } else {
       logger.info(`Server listening at http://${host == '0.0.0.0' ? 'localhost' : host}:${port}`);
     }
+
+    console.log(`Server listening at http://${host == '0.0.0.0' ? 'localhost' : host}:${port}`)
   });
 };
 

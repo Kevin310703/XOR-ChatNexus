@@ -1,12 +1,16 @@
-import { Constants, StepTypes, ContentTypes, ToolCallTypes, MessageContentTypes, AssistantStreamEvents } from 'librechat-data-provider';
-import { retrieveAndProcessFile } from '~/server/services/Files/process';
-import { processRequiredActions } from '~/server/services/ToolService';
-import utils from '~/server/utils';
-const { createOnProgress, sendMessage, sleep } = utils;
-import _default from '~/server/services/Threads';
-const { processMessages } = _default;
-import __default from '~/config';
-const { logger } = __default;
+const {
+  Constants,
+  StepTypes,
+  ContentTypes,
+  ToolCallTypes,
+  MessageContentTypes,
+  AssistantStreamEvents,
+} = require('librechat-data-provider');
+const { retrieveAndProcessFile } = require('~/server/services/Files/process');
+const { processRequiredActions } = require('~/server/services/ToolService');
+const { createOnProgress, sendMessage, sleep } = require('~/server/utils');
+const { processMessages } = require('~/server/services/Threads');
+const { logger } = require('~/config');
 
 /**
  * Implements the StreamRunManager functionality for managing the streaming
@@ -690,4 +694,4 @@ class StreamRunManager {
   }
 }
 
-export default StreamRunManager;
+module.exports = StreamRunManager;

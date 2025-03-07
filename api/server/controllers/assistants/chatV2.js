@@ -1,20 +1,36 @@
-import { v4 } from 'uuid';
-import { Time, Constants, RunStatus, CacheKeys, ContentTypes, ToolCallTypes, EModelEndpoint, retrievalMimeTypes, AssistantStreamEvents } from 'librechat-data-provider';
-import { initThread, recordUsage, saveUserMessage, addThreadMetadata, saveAssistantMessage } from '~/server/services/Threads';
-import { runAssistant, createOnTextProgress } from '~/server/services/AssistantService';
-import { sendMessage, sleep, isEnabled, countTokens } from '~/server/utils';
-import { createErrorHandler } from '~/server/controllers/assistants/errors';
-import validateAuthor from '~/server/middleware/assistants/validateAuthor';
-import { createRun, StreamRunManager } from '~/server/services/Runs';
-import { addTitle } from '~/server/services/Endpoints/assistants';
-import { createRunBody } from '~/server/services/createRunBody';
-import { getTransactions } from '~/models/Transaction';
-import checkBalance from '~/models/checkBalance';
-import { getConvo } from '~/models/Conversation';
-import getLogStores from '~/cache/getLogStores';
-import { getModelMaxTokens } from '~/utils';
-import { getOpenAIClient } from './helpers';
-import { logger } from '~/config';
+const { v4 } = require('uuid');
+const {
+  Time,
+  Constants,
+  RunStatus,
+  CacheKeys,
+  ContentTypes,
+  ToolCallTypes,
+  EModelEndpoint,
+  retrievalMimeTypes,
+  AssistantStreamEvents,
+} = require('librechat-data-provider');
+const {
+  initThread,
+  recordUsage,
+  saveUserMessage,
+  addThreadMetadata,
+  saveAssistantMessage,
+} = require('~/server/services/Threads');
+const { runAssistant, createOnTextProgress } = require('~/server/services/AssistantService');
+const { sendMessage, sleep, isEnabled, countTokens } = require('~/server/utils');
+const { createErrorHandler } = require('~/server/controllers/assistants/errors');
+const validateAuthor = require('~/server/middleware/assistants/validateAuthor');
+const { createRun, StreamRunManager } = require('~/server/services/Runs');
+const { addTitle } = require('~/server/services/Endpoints/assistants');
+const { createRunBody } = require('~/server/services/createRunBody');
+const { getTransactions } = require('~/models/Transaction');
+const checkBalance = require('~/models/checkBalance');
+const { getConvo } = require('~/models/Conversation');
+const getLogStores = require('~/cache/getLogStores');
+const { getModelMaxTokens } = require('~/utils');
+const { getOpenAIClient } = require('./helpers');
+const { logger } = require('~/config');
 
 /**
  * @route POST /
@@ -468,4 +484,4 @@ const chatV2 = async (req, res) => {
   }
 };
 
-export default chatV2;
+module.exports = chatV2;

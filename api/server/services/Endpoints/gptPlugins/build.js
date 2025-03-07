@@ -1,5 +1,5 @@
-import { removeNullishValues } from 'librechat-data-provider';
-import generateArtifactsPrompt from '~/app/clients/prompts/artifacts';
+const { removeNullishValues } = require('librechat-data-provider');
+const generateArtifactsPrompt = require('~/app/clients/prompts/artifacts');
 
 const buildOptions = (endpoint, parsedBody) => {
   const {
@@ -38,4 +38,4 @@ const buildOptions = (endpoint, parsedBody) => {
   return endpointOption;
 };
 
-export default buildOptions;
+module.exports = buildOptions;

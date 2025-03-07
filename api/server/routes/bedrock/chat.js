@@ -1,16 +1,16 @@
-import { Router } from 'express';
+const express = require('express');
 
-const router = Router();
-import _default from '~/server/middleware';
+const router = express.Router();
 const {
-  setHeaders, handleAbort,
+  setHeaders,
+  handleAbort,
   // validateModel,
   // validateEndpoint,
   buildEndpointOption,
-} = _default;
-import { initializeClient } from '~/server/services/Endpoints/bedrock';
-import AgentController from '~/server/controllers/agents/request';
-import addTitle from '~/server/services/Endpoints/agents/title';
+} = require('~/server/middleware');
+const { initializeClient } = require('~/server/services/Endpoints/bedrock');
+const AgentController = require('~/server/controllers/agents/request');
+const addTitle = require('~/server/services/Endpoints/agents/title');
 
 router.post('/abort', handleAbort());
 
@@ -33,4 +33,4 @@ router.post(
   },
 );
 
-export default router;
+module.exports = router;

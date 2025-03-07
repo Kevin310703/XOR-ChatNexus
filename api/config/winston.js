@@ -1,10 +1,9 @@
-import { join } from 'path';
-import { addColors, format as _format, transports as _transports, createLogger } from 'winston';
-import 'winston-daily-rotate-file';
-import parsers from './parsers.js';
-const { redactFormat, redactMessage, debugTraverse, jsonTruncateFormat } = parsers;
+const path = require('path');
+const winston = require('winston');
+require('winston-daily-rotate-file');
+const { redactFormat, redactMessage, debugTraverse, jsonTruncateFormat } = require('./parsers');
 
-const logDir = join(__dirname, '..', 'logs');
+const logDir = path.join(__dirname, '..', 'logs');
 
 const { NODE_ENV, DEBUG_LOGGING = true, DEBUG_CONSOLE = false, CONSOLE_JSON = false } = process.env;
 
@@ -27,7 +26,7 @@ const levels = {
   silly: 7,
 };
 
-addColors({
+winston.addColors({
   info: 'green', // fontStyle color
   warn: 'italic yellow',
   error: 'red',
@@ -40,16 +39,16 @@ const level = () => {
   return isDevelopment ? 'debug' : 'warn';
 };
 
-const fileFormat = _format.combine(
+const fileFormat = winston.format.combine(
   redactFormat(),
-  _format.timestamp({ format: () => new Date().toISOString() }),
-  _format.errors({ stack: true }),
-  _format.splat(),
+  winston.format.timestamp({ format: () => new Date().toISOString() }),
+  winston.format.errors({ stack: true }),
+  winston.format.splat(),
   // redactErrors(),
 );
 
 const transports = [
-  new _transports.DailyRotateFile({
+  new winston.transports.DailyRotateFile({
     level: 'error',
     filename: `${logDir}/error-%DATE%.log`,
     datePattern: 'YYYY-MM-DD',
@@ -81,24 +80,24 @@ if (
   DEBUG_LOGGING === true
 ) {
   transports.push(
-    new _transports.DailyRotateFile({
+    new winston.transports.DailyRotateFile({
       level: 'debug',
       filename: `${logDir}/debug-%DATE%.log`,
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
       maxSize: '20m',
       maxFiles: '14d',
-      format: _format.combine(fileFormat, debugTraverse),
+      format: winston.format.combine(fileFormat, debugTraverse),
     }),
   );
 }
 
-const consoleFormat = _format.combine(
+const consoleFormat = winston.format.combine(
   redactFormat(),
-  _format.colorize({ all: true }),
-  _format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.colorize({ all: true }),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   // redactErrors(),
-  _format.printf((info) => {
+  winston.format.printf((info) => {
     const message = `${info.timestamp} ${info.level}: ${info.message}`;
     if (info.level.includes('error')) {
       return redactMessage(message);
@@ -110,33 +109,33 @@ const consoleFormat = _format.combine(
 
 if (useDebugConsole) {
   transports.push(
-    new _transports.Console({
+    new winston.transports.Console({
       level: 'debug',
       format: useConsoleJson
-        ? _format.combine(fileFormat, jsonTruncateFormat(), _format.json())
-        : _format.combine(fileFormat, debugTraverse),
+        ? winston.format.combine(fileFormat, jsonTruncateFormat(), winston.format.json())
+        : winston.format.combine(fileFormat, debugTraverse),
     }),
   );
 } else if (useConsoleJson) {
   transports.push(
-    new _transports.Console({
+    new winston.transports.Console({
       level: 'info',
-      format: _format.combine(fileFormat, jsonTruncateFormat(), _format.json()),
+      format: winston.format.combine(fileFormat, jsonTruncateFormat(), winston.format.json()),
     }),
   );
 } else {
   transports.push(
-    new _transports.Console({
+    new winston.transports.Console({
       level: 'info',
       format: consoleFormat,
     }),
   );
 }
 
-const logger = createLogger({
+const logger = winston.createLogger({
   level: level(),
   levels,
   transports,
 });
 
-export default logger;
+module.exports = logger;

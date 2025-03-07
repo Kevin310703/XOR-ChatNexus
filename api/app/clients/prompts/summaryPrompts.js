@@ -1,4 +1,4 @@
-import { PromptTemplate } from '@langchain/core/prompts';
+const { PromptTemplate } = require('@langchain/core/prompts');
 /*
  * Without `{summary}` and `{new_lines}`, token count is 98
  * We are counting this towards the max context tokens for summaries, +3 for the assistant label (101)
@@ -47,7 +47,7 @@ const CUT_OFF_PROMPT = new PromptTemplate({
   template: _CUT_OFF_SUMMARIZER,
 });
 
-export default {
+module.exports = {
   SUMMARY_PROMPT,
   CUT_OFF_PROMPT,
 };

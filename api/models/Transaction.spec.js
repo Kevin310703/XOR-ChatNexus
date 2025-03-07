@@ -1,33 +1,31 @@
-import { connect, disconnect, connection, Types } from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import _default from './Transaction';
-const { Transaction } = _default;
-import Balance from './Balance';
-import __default from './spendTokens';
-const { spendTokens, spendStructuredTokens } = __default;
-import { getMultiplier, getCacheMultiplier } from './tx';
+const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const { Transaction } = require('./Transaction');
+const Balance = require('./Balance');
+const { spendTokens, spendStructuredTokens } = require('./spendTokens');
+const { getMultiplier, getCacheMultiplier } = require('./tx');
 
 let mongoServer;
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
-  await connect(mongoUri);
+  await mongoose.connect(mongoUri);
 });
 
 afterAll(async () => {
-  await disconnect();
+  await mongoose.disconnect();
   await mongoServer.stop();
 });
 
 beforeEach(async () => {
-  await connection.dropDatabase();
+  await mongoose.connection.dropDatabase();
 });
 
 describe('Regular Token Spending Tests', () => {
   test('Balance should decrease when spending tokens with spendTokens', async () => {
     // Arrange
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 10000000; // $10.00
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -72,7 +70,7 @@ describe('Regular Token Spending Tests', () => {
 
   test('spendTokens should handle zero completion tokens', async () => {
     // Arrange
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 10000000; // $10.00
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -107,7 +105,7 @@ describe('Regular Token Spending Tests', () => {
   });
 
   test('spendTokens should handle undefined token counts', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 10000000; // $10.00
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -128,7 +126,7 @@ describe('Regular Token Spending Tests', () => {
   });
 
   test('spendTokens should handle only prompt tokens', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 10000000; // $10.00
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -156,7 +154,7 @@ describe('Regular Token Spending Tests', () => {
 describe('Structured Token Spending Tests', () => {
   test('Balance should decrease and rawAmount should be set when spending a large number of structured tokens', async () => {
     // Arrange
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 17613154.55; // $17.61
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -239,7 +237,7 @@ describe('Structured Token Spending Tests', () => {
   });
 
   test('should handle zero completion tokens in structured spending', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 17613154.55;
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -269,7 +267,7 @@ describe('Structured Token Spending Tests', () => {
   });
 
   test('should handle only prompt tokens in structured spending', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 17613154.55;
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -298,7 +296,7 @@ describe('Structured Token Spending Tests', () => {
   });
 
   test('should handle undefined token counts in structured spending', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 17613154.55;
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -322,7 +320,7 @@ describe('Structured Token Spending Tests', () => {
   });
 
   test('should handle incomplete context for completion tokens', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 17613154.55;
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 
@@ -352,7 +350,7 @@ describe('Structured Token Spending Tests', () => {
 
 describe('NaN Handling Tests', () => {
   test('should skip transaction creation when rawAmount is NaN', async () => {
-    const userId = new Types.ObjectId();
+    const userId = new mongoose.Types.ObjectId();
     const initialBalance = 10000000;
     await Balance.create({ user: userId, tokenCredits: initialBalance });
 

@@ -1,7 +1,7 @@
-import { model } from 'mongoose';
-import actionSchema from './schema/action';
+const mongoose = require('mongoose');
+const actionSchema = require('./schema/action');
 
-const Action = model('action', actionSchema);
+const Action = mongoose.model('action', actionSchema);
 
 /**
  * Update an action with new data without overwriting existing properties,
@@ -72,7 +72,7 @@ const deleteActions = async (searchParams) => {
   return result.deletedCount;
 };
 
-export default {
+module.exports = {
   getActions,
   updateAction,
   deleteAction,

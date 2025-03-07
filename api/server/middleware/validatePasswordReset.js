@@ -1,6 +1,5 @@
-import { isEnabled } from '~/server/utils';
-import _default from '~/config';
-const { logger } = _default;
+const { isEnabled } = require('~/server/utils');
+const { logger } = require('~/config');
 
 function validatePasswordReset(req, res, next) {
   if (isEnabled(process.env.ALLOW_PASSWORD_RESET)) {
@@ -11,4 +10,4 @@ function validatePasswordReset(req, res, next) {
   }
 }
 
-export default validatePasswordReset;
+module.exports = validatePasswordReset;

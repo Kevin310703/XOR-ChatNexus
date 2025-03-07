@@ -1,8 +1,6 @@
-import { promises } from 'fs';
-import loadSpecsDefault from './loadSpecs';
-const { validateJson, loadSpecs, ManifestDefinition } = loadSpecsDefault;
-import _default from '../dynamic/OpenAPIPlugin';
-const { createOpenAPIPlugin } = _default;
+const fs = require('fs');
+const { validateJson, loadSpecs, ManifestDefinition } = require('./loadSpecs');
+const { createOpenAPIPlugin } = require('../dynamic/OpenAPIPlugin');
 
 jest.mock('../dynamic/OpenAPIPlugin');
 
@@ -68,8 +66,8 @@ describe('validateJson', () => {
 
 describe('loadSpecs', () => {
   beforeEach(() => {
-    jest.spyOn(promises, 'readdir').mockResolvedValue(['test.json']);
-    jest.spyOn(promises, 'readFile').mockResolvedValue(
+    jest.spyOn(fs.promises, 'readdir').mockResolvedValue(['test.json']);
+    jest.spyOn(fs.promises, 'readFile').mockResolvedValue(
       JSON.stringify({
         name_for_human: 'Test',
         name_for_model: 'Test',

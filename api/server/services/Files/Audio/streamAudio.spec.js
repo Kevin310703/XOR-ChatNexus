@@ -1,5 +1,4 @@
-import _default from './streamAudio';
-const { createChunkProcessor, splitTextIntoChunks } = _default;
+const { createChunkProcessor, splitTextIntoChunks } = require('./streamAudio');
 
 jest.mock('keyv');
 
@@ -66,7 +65,7 @@ describe('processChunks', () => {
       get: jest.fn(),
       set: jest.fn(),
     };
-    require('~/cache/getLogStores').default.mockReturnValue(mockMessageCache);
+    require('~/cache/getLogStores').mockReturnValue(mockMessageCache);
     processChunks = createChunkProcessor('userId', 'message-id');
   });
 

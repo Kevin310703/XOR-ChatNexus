@@ -1,29 +1,39 @@
-import { createReadStream } from 'fs';
-import { basename as __basename, extname } from 'path';
-import { getType, getExtension } from 'mime';
-import { v4 } from 'uuid';
-import { isUUID, megabyte, FileContext, FileSources, imageExtRegex, EModelEndpoint, EToolResources, mergeFileConfig, hostImageIdSuffix, AgentCapabilities, checkOpenAIStorage, removeNullishValues, hostImageNamePrefix, isAssistantsEndpoint } from 'librechat-data-provider';
-import { EnvVar } from '@librechat/agents';
-import { convertImage, resizeAndConvert, resizeImageBuffer } from '~/server/services/Files/images';
-import v2 from '~/server/controllers/assistants/v2';
-const { addResourceFileId, deleteResourceFileId } = v2;
-import _default from '~/models/Agent';
-const { addAgentResourceFile, removeAgentResourceFiles } = _default;
-import __default from '~/server/controllers/assistants/helpers';
-const { getOpenAIClient } = __default;
-import ___default from '~/models/File';
-const { createFile, updateFileUsage, deleteFiles } = ___default;
-import ____default from '~/server/services/Config';
-const { getEndpointsConfig } = ____default;
-import _____default from '~/app/clients/tools/util';
-const { loadAuthValues } = _____default;
-import ______default from '~/server/utils/queue';
-const { LB_QueueAsyncCall } = ______default;
-import { getStrategyFunctions } from './strategies';
-import _______default from '~/server/utils';
-const { determineFileType } = _______default;
-import ________default from '~/config';
-const { logger } = ________default;
+const fs = require('fs');
+const path = require('path');
+const mime = require('mime');
+const { v4 } = require('uuid');
+const {
+  isUUID,
+  megabyte,
+  FileContext,
+  FileSources,
+  imageExtRegex,
+  EModelEndpoint,
+  EToolResources,
+  mergeFileConfig,
+  hostImageIdSuffix,
+  AgentCapabilities,
+  checkOpenAIStorage,
+  removeNullishValues,
+  hostImageNamePrefix,
+  isAssistantsEndpoint,
+} = require('librechat-data-provider');
+const { EnvVar } = require('@librechat/agents');
+const {
+  convertImage,
+  resizeAndConvert,
+  resizeImageBuffer,
+} = require('~/server/services/Files/images');
+const { addResourceFileId, deleteResourceFileId } = require('~/server/controllers/assistants/v2');
+const { addAgentResourceFile, removeAgentResourceFiles } = require('~/models/Agent');
+const { getOpenAIClient } = require('~/server/controllers/assistants/helpers');
+const { createFile, updateFileUsage, deleteFiles } = require('~/models/File');
+const { getEndpointsConfig } = require('~/server/services/Config');
+const { loadAuthValues } = require('~/app/clients/tools/util');
+const { LB_QueueAsyncCall } = require('~/server/utils/queue');
+const { getStrategyFunctions } = require('./strategies');
+const { determineFileType } = require('~/server/utils');
+const { logger } = require('~/config');
 
 /**
  *
@@ -333,7 +343,7 @@ const uploadImageBuffer = async ({ req, context, metadata = {}, resize = true })
       inputBuffer: buffer,
       desiredFormat: req.app.locals.imageOutputType,
     }));
-    filename = `${__basename(req.file.originalname, extname(req.file.originalname))}.${
+    filename = `${path.basename(req.file.originalname, path.extname(req.file.originalname))}.${
       req.app.locals.imageOutputType
     }`;
   }
@@ -497,7 +507,7 @@ const processAgentFileUpload = async ({ req, res, metadata }) => {
     }
     const { handleFileUpload: uploadCodeEnvFile } = getStrategyFunctions(FileSources.execute_code);
     const result = await loadAuthValues({ userId: req.user.id, authFields: [EnvVar.CODE_API_KEY] });
-    const stream = createReadStream(file.path);
+    const stream = fs.createReadStream(file.path);
     const fileIdentifier = await uploadCodeEnvFile({
       req,
       stream,
@@ -595,11 +605,11 @@ const processOpenAIFile = async ({
   updateUsage = false,
 }) => {
   const _file = await openai.files.retrieve(file_id);
-  const originalName = filename ?? (_file.filename ? __basename(_file.filename) : undefined);
+  const originalName = filename ?? (_file.filename ? path.basename(_file.filename) : undefined);
   const filepath = `${openai.baseURL}/files/${userId}/${file_id}${
     originalName ? `/${originalName}` : ''
   }`;
-  const type = getType(originalName ?? file_id);
+  const type = mime.getType(originalName ?? file_id);
   const source =
     openai.req.body.endpoint === EModelEndpoint.azureAssistants
       ? FileSources.azure
@@ -665,7 +675,7 @@ const processOpenAIImageOutput = async ({ req, buffer, file_id, filename, fileEx
       file_id,
       filename,
       source,
-      type: getType(fileExt),
+      type: mime.getType(fileExt),
     },
     true,
   );
@@ -703,7 +713,7 @@ async function retrieveAndProcessFile({
     return await processOpenAIFile({ ...processArgs, saveFile: true });
   }
 
-  const fileExt = extname(basename);
+  const fileExt = path.extname(basename);
   if (client.attachedFileIds?.has(file_id) || client.processedFileIds?.has(file_id)) {
     return processOpenAIFile({ ...processArgs, updateUsage: true });
   }
@@ -793,8 +803,8 @@ async function saveBase64Image(
   const file_id = _file_id ?? v4();
   let filename = `${file_id}-${_filename}`;
   const { buffer: inputBuffer, type } = base64ToBuffer(url);
-  if (!extname(_filename)) {
-    const extension = getExtension(type);
+  if (!path.extname(_filename)) {
+    const extension = mime.getExtension(type);
     if (extension) {
       filename += `.${extension}`;
     } else {
@@ -897,7 +907,7 @@ function filterFile({ req, image, isAvatar }) {
   }
 }
 
-export default {
+module.exports = {
   filterFile,
   processFiles,
   processFileURL,

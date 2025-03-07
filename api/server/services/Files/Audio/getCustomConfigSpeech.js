@@ -1,7 +1,5 @@
-import __default from '~/server/services/Config';
-const { getCustomConfig } = __default;
-import _default from '~/config';
-const { logger } = _default;
+const { getCustomConfig } = require('~/server/services/Config');
+const { logger } = require('~/config');
 
 /**
  * This function retrieves the speechTab settings from the custom configuration
@@ -65,4 +63,4 @@ async function getCustomConfigSpeech(req, res) {
   }
 }
 
-export default getCustomConfigSpeech;
+module.exports = getCustomConfigSpeech;

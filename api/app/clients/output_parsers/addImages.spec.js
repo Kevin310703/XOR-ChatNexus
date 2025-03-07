@@ -1,4 +1,4 @@
-import addImages from './addImages';
+let addImages = require('./addImages');
 
 describe('addImages', () => {
   let intermediateSteps;

@@ -1,10 +1,8 @@
-import { verify } from 'jsonwebtoken';
-import { verifyTOTP, verifyBackupCode, getTOTPSecret } from '~/server/services/twoFactorService';
-import { setAuthTokens } from '~/server/services/AuthService';
-import userMethods from '~/models/userMethods';
-const { getUserById } = userMethods;
-import _default from '~/config';
-const { logger } = _default;
+const jwt = require('jsonwebtoken');
+const { verifyTOTP, verifyBackupCode, getTOTPSecret } = require('~/server/services/twoFactorService');
+const { setAuthTokens } = require('~/server/services/AuthService');
+const { getUserById } = require('~/models/userMethods');
+const { logger } = require('~/config');
 
 const verify2FA = async (req, res) => {
   try {
@@ -15,7 +13,7 @@ const verify2FA = async (req, res) => {
 
     let payload;
     try {
-      payload = verify(tempToken, process.env.JWT_SECRET);
+      payload = jwt.verify(tempToken, process.env.JWT_SECRET);
     } catch (err) {
       return res.status(401).json({ message: 'Invalid or expired temporary token' });
     }
@@ -57,4 +55,4 @@ const verify2FA = async (req, res) => {
   }
 };
 
-export default { verify2FA };
+module.exports = { verify2FA };

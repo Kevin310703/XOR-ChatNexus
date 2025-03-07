@@ -1,12 +1,9 @@
-import { Router } from 'express';
-import toolDefault from '~/server/controllers/tools';
-const { callTool, verifyToolAuth, getToolCalls } = toolDefault;
-import _default from '~/server/controllers/PluginController';
-const { getAvailableTools } = _default;
-import __default from '~/server/middleware/limiters';
-const { toolCallLimiter } = __default;
+const express = require('express');
+const { callTool, verifyToolAuth, getToolCalls } = require('~/server/controllers/tools');
+const { getAvailableTools } = require('~/server/controllers/PluginController');
+const { toolCallLimiter } = require('~/server/middleware/limiters');
 
-const router = Router();
+const router = express.Router();
 
 /**
  * Get a list of available tools for agents.
@@ -39,4 +36,4 @@ router.get('/:toolId/auth', verifyToolAuth);
  */
 router.post('/:toolId/call', toolCallLimiter, callTool);
 
-export default router;
+module.exports = router;

@@ -5,13 +5,12 @@
  * Make sure to install `tiktoken` and have it configured properly.
  */
 
-import Tokenizer from './Tokenizer'; // <-- Adjust path to your singleton file
-import _default from '~/config';
-const { logger } = _default;
+const Tokenizer = require('./Tokenizer'); // <-- Adjust path to your singleton file
+const { logger } = require('~/config');
 
 describe('Tokenizer', () => {
   it('should be a singleton (same instance)', () => {
-    const AnotherTokenizer = require('./Tokenizer').default; // same path
+    const AnotherTokenizer = require('./Tokenizer'); // same path
     expect(Tokenizer).toBe(AnotherTokenizer);
   });
 

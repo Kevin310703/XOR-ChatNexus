@@ -1,4 +1,4 @@
-import expressStaticGzip from 'express-static-gzip';
+const expressStaticGzip = require('express-static-gzip');
 
 const oneDayInSeconds = 24 * 60 * 60;
 
@@ -16,4 +16,4 @@ const staticCache = (staticPath) =>
     },
   });
 
-export default staticCache;
+module.exports = staticCache;

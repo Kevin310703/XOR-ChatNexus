@@ -1,9 +1,7 @@
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import { KnownEndpoints } from 'librechat-data-provider';
-import __default from '~/utils';
-const { sanitizeModelName, constructAzureURL } = __default;
-import _default from '~/server/utils';
-const { isEnabled } = _default;
+const { HttpsProxyAgent } = require('https-proxy-agent');
+const { KnownEndpoints } = require('librechat-data-provider');
+const { sanitizeModelName, constructAzureURL } = require('~/utils');
+const { isEnabled } = require('~/server/utils');
 
 /**
  * Generates configuration options for creating a language model (LLM) instance.
@@ -25,13 +23,13 @@ const { isEnabled } = _default;
  * @param {boolean} [options.streaming] - Whether to use streaming mode.
  * @param {Object} [options.addParams] - Additional parameters to add to the model options.
  * @param {string[]} [options.dropParams] - Parameters to remove from the model options.
- * @param {string|null} [endpoint=null] - The endpoint name
  * @returns {Object} Configuration options for creating an LLM instance.
  */
-function getLLMConfig(apiKey, options = {}, endpoint = null) {
+function getLLMConfig(apiKey, options = {}) {
   const {
     modelOptions = {},
     reverseProxyUrl,
+    useOpenRouter,
     defaultQuery,
     headers,
     proxy,
@@ -58,14 +56,9 @@ function getLLMConfig(apiKey, options = {}, endpoint = null) {
     });
   }
 
-  let useOpenRouter;
   /** @type {OpenAIClientOptions['configuration']} */
   const configOptions = {};
-  if (
-    (reverseProxyUrl && reverseProxyUrl.includes(KnownEndpoints.openrouter)) ||
-    (endpoint && endpoint.toLowerCase().includes(KnownEndpoints.openrouter))
-  ) {
-    useOpenRouter = true;
+  if (useOpenRouter || (reverseProxyUrl && reverseProxyUrl.includes(KnownEndpoints.openrouter))) {
     llmConfig.include_reasoning = true;
     configOptions.baseURL = reverseProxyUrl;
     configOptions.defaultHeaders = Object.assign(
@@ -125,13 +118,6 @@ function getLLMConfig(apiKey, options = {}, endpoint = null) {
     llmConfig.organization = process.env.OPENAI_ORGANIZATION;
   }
 
-  if (useOpenRouter && llmConfig.reasoning_effort != null) {
-    llmConfig.reasoning = {
-      effort: llmConfig.reasoning_effort,
-    };
-    delete llmConfig.reasoning_effort;
-  }
-
   return {
     /** @type {OpenAIClientOptions} */
     llmConfig,
@@ -140,4 +126,4 @@ function getLLMConfig(apiKey, options = {}, endpoint = null) {
   };
 }
 
-export default { getLLMConfig };
+module.exports = { getLLMConfig };

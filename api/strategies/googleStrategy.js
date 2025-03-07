@@ -1,5 +1,5 @@
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import socialLogin from './socialLogin.js';
+const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
+const socialLogin = require('./socialLogin');
 
 const getProfileDetails = ({ profile }) => ({
   email: profile.emails[0].value,
@@ -12,7 +12,7 @@ const getProfileDetails = ({ profile }) => ({
 
 const googleLogin = socialLogin('google', getProfileDetails);
 
-export default () =>
+module.exports = () =>
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,

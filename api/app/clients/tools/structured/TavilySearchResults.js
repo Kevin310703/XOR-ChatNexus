@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { Tool } from '@langchain/core/tools';
-import { getEnvironmentVariable } from '@langchain/core/utils/env';
+const { z } = require('zod');
+const { Tool } = require('@langchain/core/tools');
+const { getEnvironmentVariable } = require('@langchain/core/utils/env');
 
 class TavilySearchResults extends Tool {
   static lc_name() {
@@ -91,4 +91,4 @@ class TavilySearchResults extends Tool {
   }
 }
 
-export default TavilySearchResults;
+module.exports = TavilySearchResults;

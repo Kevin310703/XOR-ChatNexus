@@ -1,7 +1,6 @@
-import { parse } from 'cookie';
-import pkg from 'jsonwebtoken';
-const { verify } = pkg;
-import logger from '../../config/meiliLogger.js';
+const cookies = require('cookie');
+const jwt = require('jsonwebtoken');
+const { logger } = require('~/config');
 
 const OBJECT_ID_LENGTH = 24;
 const OBJECT_ID_PATTERN = /^[0-9a-f]{24}$/i;
@@ -30,7 +29,7 @@ function validateImageRequest(req, res, next) {
     return next();
   }
 
-  const refreshToken = req.headers.cookie ? parse(req.headers.cookie).refreshToken : null;
+  const refreshToken = req.headers.cookie ? cookies.parse(req.headers.cookie).refreshToken : null;
   if (!refreshToken) {
     logger.warn('[validateImageRequest] Refresh token not provided');
     return res.status(401).send('Unauthorized');
@@ -38,7 +37,7 @@ function validateImageRequest(req, res, next) {
 
   let payload;
   try {
-    payload = verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
   } catch (err) {
     logger.warn('[validateImageRequest]', err);
     return res.status(403).send('Access Denied');
@@ -67,4 +66,4 @@ function validateImageRequest(req, res, next) {
   }
 }
 
-export default validateImageRequest;
+module.exports = validateImageRequest;

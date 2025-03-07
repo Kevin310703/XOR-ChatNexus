@@ -1,12 +1,12 @@
-import loadYaml from './loadYaml';
-import axiosHelpers from './axios';
-import tokenHelpers from './tokens';
-import azureUtils from './azureUtils';
-import deriveBaseURL from './deriveBaseURL';
-import extractBaseURL from './extractBaseURL';
-import findMessageContent from './findMessageContent';
+const loadYaml = require('./loadYaml');
+const axiosHelpers = require('./axios');
+const tokenHelpers = require('./tokens');
+const azureUtils = require('./azureUtils');
+const deriveBaseURL = require('./deriveBaseURL');
+const extractBaseURL = require('./extractBaseURL');
+const findMessageContent = require('./findMessageContent');
 
-export default {
+module.exports = {
   loadYaml,
   deriveBaseURL,
   extractBaseURL,

@@ -1,5 +1,5 @@
-import { object, string, number, array } from 'zod';
-import { EModelEndpoint } from 'librechat-data-provider';
+const z = require('zod');
+const { EModelEndpoint } = require('librechat-data-provider');
 
 const openAIModels = {
   'o3-mini': 195000, // -5000 from max
@@ -13,7 +13,6 @@ const openAIModels = {
   'gpt-4-32k-0613': 32758, // -10 from max
   'gpt-4-1106': 127500, // -500 from max
   'gpt-4-0125': 127500, // -500 from max
-  'gpt-4.5': 127500, // -500 from max
   'gpt-4o': 127500, // -500 from max
   'gpt-4o-mini': 127500, // -500 from max
   'gpt-4o-2024-05-13': 127500, // -500 from max
@@ -75,7 +74,6 @@ const anthropicModels = {
   'claude-instant': 100000,
   'claude-2': 100000,
   'claude-2.1': 200000,
-  'claude-3': 200000,
   'claude-3-haiku': 200000,
   'claude-3-sonnet': 200000,
   'claude-3-opus': 200000,
@@ -83,8 +81,6 @@ const anthropicModels = {
   'claude-3-5-haiku': 200000,
   'claude-3-5-sonnet': 200000,
   'claude-3.5-sonnet': 200000,
-  'claude-3-7-sonnet': 200000,
-  'claude-3.7-sonnet': 200000,
   'claude-3-5-sonnet-latest': 200000,
   'claude-3.5-sonnet-latest': 200000,
 };
@@ -187,18 +183,7 @@ const bedrockModels = {
   ...amazonModels,
 };
 
-const xAIModels = {
-  'grok-beta': 131072,
-  'grok-vision-beta': 8192,
-  'grok-2': 131072,
-  'grok-2-latest': 131072,
-  'grok-2-1212': 131072,
-  'grok-2-vision': 32768,
-  'grok-2-vision-latest': 32768,
-  'grok-2-vision-1212': 32768,
-};
-
-const aggregateModels = { ...openAIModels, ...googleModels, ...bedrockModels, ...xAIModels };
+const aggregateModels = { ...openAIModels, ...googleModels, ...bedrockModels };
 
 const maxTokensMap = {
   [EModelEndpoint.azureOpenAI]: openAIModels,
@@ -338,17 +323,17 @@ function matchModelName(modelName, endpoint = EModelEndpoint.openAI) {
   return matchedPattern || modelName;
 }
 
-const modelSchema = object({
-  id: string(),
-  pricing: object({
-    prompt: string(),
-    completion: string(),
+const modelSchema = z.object({
+  id: z.string(),
+  pricing: z.object({
+    prompt: z.string(),
+    completion: z.string(),
   }),
-  context_length: number(),
+  context_length: z.number(),
 });
 
-const inputSchema = object({
-  data: array(modelSchema),
+const inputSchema = z.object({
+  data: z.array(modelSchema),
 });
 
 /**
@@ -426,7 +411,7 @@ const tiktokenModels = new Set([
   'gpt-3.5-turbo-0301',
 ]);
 
-export default {
+module.exports = {
   tiktokenModels,
   maxTokensMap,
   inputSchema,

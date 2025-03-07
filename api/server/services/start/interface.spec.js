@@ -1,8 +1,6 @@
-import { SystemRoles, Permissions, PermissionTypes } from 'librechat-data-provider';
-import __default from '../../../models/Role.js';
-const { updateAccessPermissions } = __default;
-import _default from './interface.js';
-const { loadDefaultInterface } = _default;
+const { SystemRoles, Permissions, PermissionTypes } = require('librechat-data-provider');
+const { updateAccessPermissions } = require('~/models/Role');
+const { loadDefaultInterface } = require('./interface');
 
 jest.mock('~/models/Role', () => ({
   updateAccessPermissions: jest.fn(),

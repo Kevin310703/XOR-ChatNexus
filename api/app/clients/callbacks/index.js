@@ -1,5 +1,5 @@
-import createStartHandler from './createStartHandler';
+const createStartHandler = require('./createStartHandler');
 
-export default {
+module.exports = {
   createStartHandler,
 };

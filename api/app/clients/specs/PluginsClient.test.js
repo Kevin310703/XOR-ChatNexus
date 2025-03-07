@@ -1,7 +1,7 @@
-import { randomUUID } from 'crypto';
-import { Constants } from 'librechat-data-provider';
-import { HumanMessage, AIMessage } from '@langchain/core/messages';
-import PluginsClient, { prototype } from '../PluginsClient';
+const crypto = require('crypto');
+const { Constants } = require('librechat-data-provider');
+const { HumanMessage, AIMessage } = require('@langchain/core/messages');
+const PluginsClient = require('../PluginsClient');
 
 jest.mock('~/lib/db/connectDb');
 jest.mock('~/models/Conversation', () => {
@@ -66,9 +66,9 @@ describe('PluginsClient', () => {
       if (opts && typeof opts === 'object') {
         TestAgent.setOptions(opts);
       }
-      const conversationId = opts.conversationId || randomUUID();
+      const conversationId = opts.conversationId || crypto.randomUUID();
       const parentMessageId = opts.parentMessageId || Constants.NO_PARENT;
-      const userMessageId = opts.overrideParentMessageId || randomUUID();
+      const userMessageId = opts.overrideParentMessageId || crypto.randomUUID();
       this.pastMessages = await TestAgent.loadHistory(
         conversationId,
         TestAgent.options?.parentMessageId,
@@ -87,7 +87,7 @@ describe('PluginsClient', () => {
         sender: 'ChatGPT',
         text: 'Hello, User!',
         isCreatedByUser: false,
-        messageId: randomUUID(),
+        messageId: crypto.randomUUID(),
         parentMessageId: userMessage.messageId,
         conversationId,
       };
@@ -203,7 +203,7 @@ describe('PluginsClient', () => {
     // });
 
     test('should not call getFunctionModelName when azure options are set', () => {
-      const spy = jest.spyOn(prototype, 'getFunctionModelName');
+      const spy = jest.spyOn(PluginsClient.prototype, 'getFunctionModelName');
       const model = 'gpt-4-turbo';
 
       // note, without the azure change in PR #1766, `getFunctionModelName` is called twice

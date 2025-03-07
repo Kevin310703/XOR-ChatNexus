@@ -1,10 +1,16 @@
-import { Router } from 'express';
+const express = require('express');
 
-const router = Router();
-import { setHeaders, handleAbort, validateModel, buildEndpointOption } from '~/server/middleware';
-import validateConvoAccess from '~/server/middleware/validate/convoAccess';
-import validateAssistant from '~/server/middleware/assistants/validate';
-import chatController from '~/server/controllers/assistants/chatV1';
+const router = express.Router();
+const {
+  setHeaders,
+  handleAbort,
+  validateModel,
+  // validateEndpoint,
+  buildEndpointOption,
+} = require('~/server/middleware');
+const validateConvoAccess = require('~/server/middleware/validate/convoAccess');
+const validateAssistant = require('~/server/middleware/assistants/validate');
+const chatController = require('~/server/controllers/assistants/chatV1');
 
 router.post('/abort', handleAbort());
 
@@ -26,4 +32,4 @@ router.post(
   chatController,
 );
 
-export default router;
+module.exports = router;

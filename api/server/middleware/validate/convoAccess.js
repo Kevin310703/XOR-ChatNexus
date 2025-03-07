@@ -1,10 +1,8 @@
-import { Constants, ViolationTypes, Time } from 'librechat-data-provider';
-import conversationDefault from '~/models/Conversation';
-const { searchConversation } = conversationDefault;
-import denyRequest from '~/server/middleware/denyRequest';
-import _default from '~/cache';
-const { logViolation, getLogStores } = _default;
-import { isEnabled } from '~/server/utils';
+const { Constants, ViolationTypes, Time } = require('librechat-data-provider');
+const { searchConversation } = require('~/models/Conversation');
+const denyRequest = require('~/server/middleware/denyRequest');
+const { logViolation, getLogStores } = require('~/cache');
+const { isEnabled } = require('~/server/utils');
 
 const { USE_REDIS, CONVO_ACCESS_VIOLATION_SCORE: score = 0 } = process.env ?? {};
 
@@ -72,4 +70,4 @@ const validateConvoAccess = async (req, res, next) => {
   }
 };
 
-export default validateConvoAccess;
+module.exports = validateConvoAccess;

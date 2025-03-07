@@ -2,14 +2,9 @@
   "name": "@chatnexus/backend",
   "version": "v0.7.7-rc1",
   "description": "",
-  "type": "module",
-  "imports": {
-    "#root/*": "./*"
-  },
   "scripts": {
     "start": "echo 'please run this from the root directory'",
     "server-dev": "echo 'please run this from the root directory'",
-    "backend:dev": "cross-env NODE_ENV=development npx nodemon server/index.js",
     "test": "cross-env NODE_ENV=test jest",
     "b:test": "NODE_ENV=test bun jest",
     "test:ci": "jest --ci",
@@ -23,28 +18,34 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kevin310703/XOR-ChatNexus"
+    "url": "git+https://github.com/danny-avila/LibreChat.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "_moduleAliases": {
+    "~": "."
+  },
+  "imports": {
+    "~/*": "./*"
+  },
   "bugs": {
     "url": "https://github.com/danny-avila/LibreChat/issues"
   },
   "homepage": "https://librechat.ai",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.37.0",
+    "@anthropic-ai/sdk": "^0.32.1",
     "@azure/search-documents": "^12.0.0",
-    "@google/generative-ai": "^0.23.0",
+    "@google/generative-ai": "^0.21.0",
     "@googleapis/youtube": "^20.0.0",
     "@keyv/mongo": "^2.1.8",
     "@keyv/redis": "^2.8.1",
     "@langchain/community": "^0.3.14",
-    "@langchain/core": "^0.3.40",
-    "@langchain/google-genai": "^0.1.9",
-    "@langchain/google-vertexai": "^0.2.0",
+    "@langchain/core": "^0.3.37",
+    "@langchain/google-genai": "^0.1.7",
+    "@langchain/google-vertexai": "^0.1.8",
     "@langchain/textsplitters": "^0.1.0",
-    "@librechat/agents": "^2.1.8",
+    "@librechat/agents": "^2.1.2",
     "@waylaidwanderer/fetch-event-source": "^3.0.1",
     "axios": "1.7.8",
     "bcryptjs": "^2.4.3",
@@ -56,7 +57,6 @@
     "cors": "^2.8.5",
     "dedent": "^1.5.3",
     "dotenv": "^16.0.3",
-    "eventsource": "^3.0.2",
     "express": "^4.21.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.4.1",

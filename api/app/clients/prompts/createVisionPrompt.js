@@ -31,4 +31,4 @@ const createVisionPrompt = (pluralized = false) => {
   Be as specific and descriptive as possible while maintaining clarity and concision.`;
 };
 
-export default createVisionPrompt;
+module.exports = createVisionPrompt;

@@ -1,4 +1,4 @@
-import Balance from '~/models/Balance';
+const Balance = require('~/models/Balance');
 
 async function balanceController(req, res) {
   const { tokenCredits: balance = '' } =
@@ -6,4 +6,4 @@ async function balanceController(req, res) {
   res.status(200).send('' + balance);
 }
 
-export default balanceController;
+module.exports = balanceController;

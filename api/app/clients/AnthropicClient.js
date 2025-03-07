@@ -1,32 +1,30 @@
-import Anthropic from '@anthropic-ai/sdk';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import { Constants, EModelEndpoint, anthropicSettings, getResponseSender, validateVisionModel } from 'librechat-data-provider';
-import { SplitStreamHandler as _Handler, GraphEvents } from '@librechat/agents';
-import promptsDefault from './prompts';
+const Anthropic = require('@anthropic-ai/sdk');
+const { HttpsProxyAgent } = require('https-proxy-agent');
 const {
-  truncateText, formatMessage, addCacheControl, titleFunctionPrompt, parseParamFromPrompt, createContextHandlers,
-} = promptsDefault;
-import { getClaudeHeaders, configureReasoning, checkPromptCacheSupport } from '~/server/services/Endpoints/anthropic/helpers';
-import _default from '~/utils';
-const { getModelMaxTokens, getModelMaxOutputTokens, matchModelName } = _default;
-import { spendTokens, spendStructuredTokens } from '~/models/spendTokens';
-import { encodeAndFormat } from '~/server/services/Files/images/encode';
-import { getTokenCount as _getTokenCount } from '~/server/services/Tokenizer';
-import { logger, sendEvent } from '~/config';
-import { sleep } from '~/server/utils';
-import BaseClient from './BaseClient';
+  Constants,
+  EModelEndpoint,
+  anthropicSettings,
+  getResponseSender,
+  validateVisionModel,
+} = require('librechat-data-provider');
+const { encodeAndFormat } = require('~/server/services/Files/images/encode');
+const {
+  truncateText,
+  formatMessage,
+  addCacheControl,
+  titleFunctionPrompt,
+  parseParamFromPrompt,
+  createContextHandlers,
+} = require('./prompts');
+const { getModelMaxTokens, getModelMaxOutputTokens, matchModelName } = require('~/utils');
+const { spendTokens, spendStructuredTokens } = require('~/models/spendTokens');
+const Tokenizer = require('~/server/services/Tokenizer');
+const { sleep } = require('~/server/utils');
+const BaseClient = require('./BaseClient');
+const { logger } = require('~/config');
 
 const HUMAN_PROMPT = '\n\nHuman:';
 const AI_PROMPT = '\n\nAssistant:';
-
-class SplitStreamHandler extends _Handler {
-  getDeltaContent(chunk) {
-    return (chunk?.delta?.text ?? chunk?.completion) || '';
-  }
-  getReasoningDelta(chunk) {
-    return chunk?.delta?.thinking || '';
-  }
-}
 
 /** Helper function to introduce a delay before retrying */
 function delayBeforeRetry(attempts, baseDelay = 1000) {
@@ -70,8 +68,6 @@ class AnthropicClient extends BaseClient {
     /** The key for the usage object's output tokens
      * @type {string} */
     this.outputTokensKey = 'output_tokens';
-    /** @type {SplitStreamHandler | undefined} */
-    this.streamHandler;
   }
 
   setOptions(options) {
@@ -101,10 +97,9 @@ class AnthropicClient extends BaseClient {
 
     const modelMatch = matchModelName(this.modelOptions.model, EModelEndpoint.anthropic);
     this.isClaude3 = modelMatch.includes('claude-3');
-    this.isLegacyOutput = !(
-      /claude-3[-.]5-sonnet/.test(modelMatch) || /claude-3[-.]7/.test(modelMatch)
-    );
-    this.supportsCacheControl = this.options.promptCache && checkPromptCacheSupport(modelMatch);
+    this.isLegacyOutput = !modelMatch.includes('claude-3-5-sonnet');
+    this.supportsCacheControl =
+      this.options.promptCache && this.checkPromptCacheSupport(modelMatch);
 
     if (
       this.isLegacyOutput &&
@@ -130,7 +125,7 @@ class AnthropicClient extends BaseClient {
         this.options.endpointType ?? this.options.endpoint,
         this.options.endpointTokenConfig,
       ) ??
-      anthropicSettings.maxOutputTokens.reset(this.modelOptions.model);
+      1500;
     this.maxPromptTokens =
       this.options.maxPromptTokens || this.maxContextTokens - this.maxResponseTokens;
 
@@ -176,9 +171,18 @@ class AnthropicClient extends BaseClient {
       options.baseURL = this.options.reverseProxyUrl;
     }
 
-    const headers = getClaudeHeaders(requestOptions?.model, this.supportsCacheControl);
-    if (headers) {
-      options.defaultHeaders = headers;
+    if (
+      this.supportsCacheControl &&
+      requestOptions?.model &&
+      requestOptions.model.includes('claude-3-5-sonnet')
+    ) {
+      options.defaultHeaders = {
+        'anthropic-beta': 'max-tokens-3-5-sonnet-2024-07-15,prompt-caching-2024-07-31',
+      };
+    } else if (this.supportsCacheControl) {
+      options.defaultHeaders = {
+        'anthropic-beta': 'prompt-caching-2024-07-31',
+      };
     }
 
     return new Anthropic(options);
@@ -664,38 +668,29 @@ class AnthropicClient extends BaseClient {
    * @returns {Promise<Anthropic.default.Message | Anthropic.default.Completion>} The response from the Anthropic client.
    */
   async createResponse(client, options, useMessages) {
-    return (useMessages ?? this.useMessages)
+    return useMessages ?? this.useMessages
       ? await client.messages.create(options)
       : await client.completions.create(options);
   }
 
-  getMessageMapMethod() {
-    /**
-     * @param {TMessage} msg
-     */
-    return (msg) => {
-      if (msg.text != null && msg.text && msg.text.startsWith(':::thinking')) {
-        msg.text = msg.text.replace(/:::thinking.*?:::/gs, '').trim();
-      }
-
-      return msg;
-    };
-  }
-
   /**
-   * @param {string[]} [intermediateReply]
-   * @returns {string}
+   * @param {string} modelName
+   * @returns {boolean}
    */
-  getStreamText(intermediateReply) {
-    if (!this.streamHandler) {
-      return intermediateReply?.join('') ?? '';
+  checkPromptCacheSupport(modelName) {
+    const modelMatch = matchModelName(modelName, EModelEndpoint.anthropic);
+    if (modelMatch.includes('claude-3-5-sonnet-latest')) {
+      return false;
     }
-
-    const reasoningText = this.streamHandler.reasoningTokens.join('');
-
-    const reasoningBlock = reasoningText.length > 0 ? `:::thinking\n${reasoningText}\n:::\n` : '';
-
-    return `${reasoningBlock}${this.streamHandler.tokens.join('')}`;
+    if (
+      modelMatch === 'claude-3-5-sonnet' ||
+      modelMatch === 'claude-3-5-haiku' ||
+      modelMatch === 'claude-3-haiku' ||
+      modelMatch === 'claude-3-opus'
+    ) {
+      return true;
+    }
+    return false;
   }
 
   async sendCompletion(payload, { onProgress, abortController }) {
@@ -715,6 +710,7 @@ class AnthropicClient extends BaseClient {
       user_id: this.user,
     };
 
+    let text = '';
     const {
       stream,
       model,
@@ -725,34 +721,22 @@ class AnthropicClient extends BaseClient {
       topK: top_k,
     } = this.modelOptions;
 
-    let requestOptions = {
+    const requestOptions = {
       model,
       stream: stream || true,
       stop_sequences,
       temperature,
       metadata,
+      top_p,
+      top_k,
     };
 
     if (this.useMessages) {
       requestOptions.messages = payload;
-      requestOptions.max_tokens =
-        maxOutputTokens || anthropicSettings.maxOutputTokens.reset(requestOptions.model);
+      requestOptions.max_tokens = maxOutputTokens || legacy.maxOutputTokens.default;
     } else {
       requestOptions.prompt = payload;
-      requestOptions.max_tokens_to_sample = maxOutputTokens || legacy.maxOutputTokens.default;
-    }
-
-    requestOptions = configureReasoning(requestOptions, {
-      thinking: this.options.thinking,
-      thinkingBudget: this.options.thinkingBudget,
-    });
-
-    if (!/claude-3[-.]7/.test(model)) {
-      requestOptions.top_p = top_p;
-      requestOptions.top_k = top_k;
-    } else if (requestOptions.thinking == null) {
-      requestOptions.topP = top_p;
-      requestOptions.topK = top_k;
+      requestOptions.max_tokens_to_sample = maxOutputTokens || 1500;
     }
 
     if (this.systemMessage && this.supportsCacheControl === true) {
@@ -772,17 +756,13 @@ class AnthropicClient extends BaseClient {
     }
 
     logger.debug('[AnthropicClient]', { ...requestOptions });
-    this.streamHandler = new SplitStreamHandler({
-      accumulate: true,
-      runId: this.responseMessageId,
-      handlers: {
-        [GraphEvents.ON_RUN_STEP]: (event) => sendEvent(this.options.res, event),
-        [GraphEvents.ON_MESSAGE_DELTA]: (event) => sendEvent(this.options.res, event),
-        [GraphEvents.ON_REASONING_DELTA]: (event) => sendEvent(this.options.res, event),
-      },
-    });
 
-    let intermediateReply = this.streamHandler.tokens;
+    const handleChunk = (currentChunk) => {
+      if (currentChunk) {
+        text += currentChunk;
+        onProgress(currentChunk);
+      }
+    };
 
     const maxRetries = 3;
     const streamRate = this.options.streamRate ?? Constants.DEFAULT_STREAM_RATE;
@@ -803,15 +783,22 @@ class AnthropicClient extends BaseClient {
           });
 
           for await (const completion of response) {
+            // Handle each completion as before
             const type = completion?.type ?? '';
             if (tokenEventTypes.has(type)) {
               logger.debug(`[AnthropicClient] ${type}`, completion);
               this[type] = completion;
             }
-            this.streamHandler.handle(completion);
+            if (completion?.delta?.text) {
+              handleChunk(completion.delta.text);
+            } else if (completion.completion) {
+              handleChunk(completion.completion);
+            }
+
             await sleep(streamRate);
           }
 
+          // Successful processing, exit loop
           break;
         } catch (error) {
           attempts += 1;
@@ -821,10 +808,6 @@ class AnthropicClient extends BaseClient {
 
           if (attempts < maxRetries) {
             await delayBeforeRetry(attempts, 350);
-          } else if (this.streamHandler && this.streamHandler.reasoningTokens.length) {
-            return this.getStreamText();
-          } else if (intermediateReply.length > 0) {
-            return this.getStreamText(intermediateReply);
           } else {
             throw new Error(`Operation failed after ${maxRetries} attempts: ${error.message}`);
           }
@@ -840,7 +823,8 @@ class AnthropicClient extends BaseClient {
     }
 
     await processResponse.bind(this)();
-    return this.getStreamText(intermediateReply);
+
+    return text.trim();
   }
 
   getSaveOptions() {
@@ -850,8 +834,6 @@ class AnthropicClient extends BaseClient {
       promptPrefix: this.options.promptPrefix,
       modelLabel: this.options.modelLabel,
       promptCache: this.options.promptCache,
-      thinking: this.options.thinking,
-      thinkingBudget: this.options.thinkingBudget,
       resendFiles: this.options.resendFiles,
       iconURL: this.options.iconURL,
       greeting: this.options.greeting,
@@ -875,7 +857,7 @@ class AnthropicClient extends BaseClient {
    */
   getTokenCount(text) {
     const encoding = this.getEncoding();
-    return _getTokenCount(text, encoding);
+    return Tokenizer.getTokenCount(text, encoding);
   }
 
   /**
@@ -957,4 +939,4 @@ class AnthropicClient extends BaseClient {
   }
 }
 
-export default AnthropicClient;
+module.exports = AnthropicClient;
