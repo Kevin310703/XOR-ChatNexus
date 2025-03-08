@@ -29,6 +29,7 @@ services:
       - ./uploads:/app/uploads
       - ./logs:/app/api/logs
       - ./chatnexus.yaml:/app/chatnexus.yaml  # Thêm dòng này để mount file cấu hình
+      - ~/ChatNexus:/home/user/ChatNexus
       # - ./api:/app/api  # Mount backend để hot reload
       # - ./client:/app/client  # Mount frontend để hot reload
       # - ./packages:/app/packages  # Mount packages để hot reload 

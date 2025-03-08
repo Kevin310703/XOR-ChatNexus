@@ -11,7 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     if: |
-      github.repository == 'danny-avila/LibreChat' &&
+      github.repository == 'Kevin310703/XOR-ChatNexus' &&
       (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
     steps:
     - name: Checkout repository
@@ -30,7 +30,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no ${DO_USER}@${DO_HOST} << EOF
         sudo -i -u danny bash << EEOF
-        cd ~/LibreChat && \
+        cd ~/XOR-ChatNexus && \
         git fetch origin main && \
         npm run update:deployed && \
         git checkout do-deploy && \
