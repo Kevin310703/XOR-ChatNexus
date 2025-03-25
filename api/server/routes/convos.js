@@ -57,23 +57,72 @@ router.get('/:conversationId', async (req, res) => {
 });
 
 router.post('/gen_title', async (req, res) => {
-  const { conversationId } = req.body;
-  const titleCache = getLogStores(CacheKeys.GEN_TITLE);
-  const key = `${req.user.id}-${conversationId}`;
-  let title = await titleCache.get(key);
+  const { conversationId, messages: providedMessages } = req.body;
+  console.log('Conversation ID:', conversationId);
 
-  if (!title) {
-    await sleep(2500);
-    title = await titleCache.get(key);
+  if (!conversationId) {
+    return res.status(400).json({ message: 'conversationId is required' });
   }
 
-  if (title) {
-    await titleCache.delete(key);
-    res.status(200).json({ title });
-  } else {
-    res.status(404).json({
-      message: 'Title not found or method not implemented for the conversation\'s endpoint',
-    });
+  // Lấy hội thoại từ MongoDB và populate messages
+  const existingConvo = await getConvo(req.user.id, conversationId, true);
+  const messages = providedMessages && Array.isArray(providedMessages) && providedMessages.length > 0
+    ? providedMessages
+    : existingConvo?.messages?.map(msg => ({
+        role: msg.isCreatedByUser ? 'user' : (msg.sender || 'assistant'), // Ưu tiên sender, nếu không có thì mặc định 'assistant'
+        content: msg.text || (msg.content && msg.content.length > 0 ? msg.content[0].text : '') // Lấy từ text hoặc content
+      })) || [];
+
+  // Kiểm tra messages có nội dung hợp lệ không
+  const validMessages = messages.filter(msg => msg.role && msg.content);
+  console.log('Valid Messages:', validMessages);
+
+  if (validMessages.length === 0) {
+    return res.status(400).json({ message: 'Valid messages are required to generate title' });
+  }
+
+  try {
+    let title = existingConvo?.title || 'New Chat';
+    console.log('Title:', title);
+
+    if (!title || title === 'New Chat') {
+      // Gọi FastAPI để tạo tiêu đề
+      const response = await axios.post('https://chat.xgpt.io.vn:5393/v1/title', {
+        messages: validMessages,
+        max_tokens: 10,
+        temperature: 0.7,
+      }, {
+        headers: {
+          'Authorization': `Bearer dummy`, // Thay bằng API key thực tế
+          'Content-Type': 'application/json',
+        },
+      });
+
+      title = response.data.title;
+      console.log('Generated title from FastAPI:', title);
+
+      // Cập nhật tiêu đề vào MongoDB
+      if (title) {
+        await saveConvo(req, {
+          conversationId,
+          title,
+        }, { context: `POST /api/convos/gen_title ${conversationId}` });
+        console.log('Title updated in MongoDB:', title);
+      }
+    } else {
+      console.log('Using existing title:', title);
+    }
+
+    if (title) {
+      res.status(200).json({ title });
+    } else {
+      res.status(404).json({
+        message: 'Title not found or method not implemented for the conversation\'s endpoint',
+      });
+    }
+  } catch (error) {
+    logger.error('Error generating or saving title:', error.message);
+    res.status(500).json({ message: 'Failed to generate or save title' });
   }
 });
 

@@ -78,7 +78,7 @@
   "bugs": {
     "url": "https://github.com/danny-avila/LibreChat/issues"
   },
-  "homepage": "https://librechat.ai/",
+  "homepage": "https://x-or.cloud/",
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",
     "@eslint/compat": "^1.2.6",
@@ -139,7 +139,9 @@
     ]
   },
   "dependencies": {
+    "@keyv/redis": "^4.3.1",
     "esbuild": "^0.24.2",
+    "redis": "^4.7.0",
     "tiktoken": "^1.0.20"
   }
 }

@@ -35,9 +35,14 @@ const getConvoFiles = async (conversationId) => {
  * @param {string} conversationId - The conversation's ID.
  * @returns {Promise<TConversation>} The conversation object.
  */
-const getConvo = async (user, conversationId) => {
+const getConvo = async (user, conversationId, populateMessages = false) => {
   try {
-    return await Conversation.findOne({ user, conversationId }).lean();
+    let query = Conversation.findOne({ user, conversationId });
+    if (populateMessages) {
+      query = query.populate('messages'); // Populate messages để lấy role, content
+    }
+    const convo = await query.lean();
+    return convo;
   } catch (error) {
     logger.error('[getConvo] Error getting single conversation', error);
     return { message: 'Error getting single conversation' };

@@ -21,6 +21,11 @@ const messageSchema = mongoose.Schema(
       required: true,
       default: null,
     },
+    role: {
+      type: String,
+      enum: ['user', 'assistant', 'system'], // Các giá trị có thể
+      required: true,
+    },
     model: {
       type: String,
       default: null,

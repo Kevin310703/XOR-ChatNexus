@@ -63,7 +63,7 @@ function getLLMConfig(apiKey, options = {}) {
     configOptions.baseURL = reverseProxyUrl;
     configOptions.defaultHeaders = Object.assign(
       {
-        'HTTP-Referer': 'https://librechat.ai',
+        'HTTP-Referer': 'https://x-or.cloud',
         'X-Title': 'LibreChat',
       },
       headers,

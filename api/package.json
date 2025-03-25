@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/danny-avila/LibreChat/issues"
   },
-  "homepage": "https://librechat.ai",
+  "homepage": "https://x-or.cloud",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
     "@azure/search-documents": "^12.0.0",

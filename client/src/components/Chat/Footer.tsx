@@ -39,7 +39,7 @@ export default function Footer({ className }: { className?: string }) {
       ? config.customFooter
       : '[ChatNexus ' +
         Constants.VERSION +
-        '](https://librechat.ai) - ' +
+        '](https://x-or.cloud) - ' +
         localize('com_ui_latest_footer')
   ).split('|');
 
