@@ -6,6 +6,7 @@ import type { TRegisterUser, TError } from 'librechat-data-provider';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from './ErrorMessage';
 import { Spinner } from '~/components/svg';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useLocalize, TranslationKeys } from '~/hooks';
 
 const Registration: React.FC = () => {
@@ -24,6 +25,8 @@ const Registration: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countdown, setCountdown] = useState<number>(3);
+  const [showPassword, setShowPassword] = useState<boolean>(false); // State cho password
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -61,7 +64,11 @@ const Registration: React.FC = () => {
       <div className="relative">
         <input
           id={id}
-          type={type}
+          type={
+            id === 'password' || id === 'confirm_password'
+              ? (id === 'password' ? (showPassword ? 'text' : 'password') : (showConfirmPassword ? 'text' : 'password'))
+              : type
+          } // Chuyển đổi type cho password và confirm_password
           autoComplete={id}
           aria-label={localize(label)}
           {...register(
@@ -87,6 +94,16 @@ const Registration: React.FC = () => {
         >
           {localize(label)}
         </label>
+        {(id === 'password' || id === 'confirm_password') && (
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            onClick={() => (id === 'password' ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword))}
+            aria-label={id === 'password' ? (showPassword ? 'Hide password' : 'Show password') : (showConfirmPassword ? 'Hide confirm password' : 'Show confirm password')}
+          >
+            {id === 'password' ? (showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />) : (showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />)}
+          </button>
+        )}
       </div>
       {errors[id] && (
         <span role="alert" className="mt-1 text-sm text-red-500">
