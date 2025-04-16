@@ -1,1 +1,1 @@
-# ChatNexus by X-OR Cloud
+# ChatNexus
